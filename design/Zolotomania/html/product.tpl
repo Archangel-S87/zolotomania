@@ -276,6 +276,15 @@
 				</div>
 			</form>
 			{* Выбор варианта товара (The End) *}
+
+			{* Расположение товара - город *}
+			{foreach $product->variants as $v}
+				{if !empty($v->shop->city)}
+					<div class="variant-city">{$v->shop->city}</div>
+				{/if}
+			{/foreach}
+
+
 			{if !empty($brand->name)}<div class="annot-brand"><span>Производитель:</span> <a class="bluelink" style="font-weight:700;" href="brands/{$brand->url}">{$brand->name|escape}</a></div>{/if}
 		
 			{else}

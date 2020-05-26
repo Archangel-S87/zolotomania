@@ -13,8 +13,6 @@ body:not(.mainview) .footer {
     background: #bcd4e4;
 }
 body:not(.mainview) #content{
-    
-    padding-top: 70px;
     padding-bottom: 70px;
 }
 header{
@@ -191,9 +189,19 @@ h1{
     display: block;
     text-decoration: none;
     padding: 180px 0;
-    background-size: cover !important;
-    background-position: 0 0 !important;
     border-bottom: 5px solid #d24a46;
+    position: relative;
+}
+.main__gold img, .main__silver img {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    z-index: -1;
 }
 .main__silver{
     border:none;
@@ -404,29 +412,27 @@ body.wishlistview .tiny_products .product_info {
                 transform: none;
 }
 #purchases1 .remove{
-        width: 30px;
+    width: 30px;
 }
 .breadcrumb{
-        padding: 20px 0;
-         border-bottom: 2px solid #d24a43;
+    padding: 40px 0 10px;
+    border-bottom: 2px solid #d24a43;
+    margin-bottom: 20px;
 }
-.breadcrumb > div > span{
+.breadcrumb > div > span {
+    text-transform: uppercase;
     font-size: 28px;
     font-weight: 600;
-    margin-right: 35px;
-    
+    margin-right: 15px;
 }
-.breadcrumb > div > span:hover{
-    border-bottom: 3px solid #bcd4e4;
+.breadcrumb > div > span.breadcrumb-separator {
+    color: #26244c;
 }
 .breadcrumb > div > span a:hover{
     text-decoration: none;
     color: #bcd4e4;
 }
 .breadcrumb .home{
-    display: none;
-}
-.breadcrumb > div > span:last-child{
     display: none;
 }
 

@@ -40,7 +40,7 @@ smarty_cache_lifetime = 0;
 smarty_debugging = true;
 smarty_html_minify = true;
 error_reporting = true;
- 
+
 [images]
 
 ;Использовать imagemagick для обработки изображений (вместо gd)
@@ -114,4 +114,4 @@ downloads_dir = files/downloads/;
 cms_files_dir = files/files/;
 
 [debug]
-debug = false;
+debug = true;

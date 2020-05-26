@@ -52,6 +52,8 @@ class ProductView extends View
 				$ids[0][$v->name1][] = $v->id;
 				$ids[1][$v->name2][] = $v->id;
 			}
+			// Привязка к магазину
+			if ($v->shop_id) $v->shop = $this->variants->get_shop($v->shop_id);
 		}
 		$classes=array();
 		for($i=0;$i<2;$i++) 

@@ -41,28 +41,28 @@
 			{$seo_description = $page->header|cat:$settings->seo_description|cat:" ✩ "|cat:$settings->site_name|cat:" ✩"}
 		{/if}
 	{/if}
-	<title>{if !empty($meta_title)}{$meta_title|escape}{elseif !empty($seo_title)}{$seo_title|escape}{/if}{if !empty($current_page_num) && $current_page_num>1} - страница {$current_page_num}{/if}</title>    
+	<title>{if !empty($meta_title)}{$meta_title|escape}{elseif !empty($seo_title)}{$seo_title|escape}{/if}{if !empty($current_page_num) && $current_page_num>1} - страница {$current_page_num}{/if}</title>
 	<meta name="description" content="{if !empty($meta_description)}{$meta_description|escape}{elseif !empty($seo_description)}{$seo_description|escape}{/if}" />
-	<meta name="keywords" content="{if !empty($meta_keywords)}{$meta_keywords|escape}{/if}" /> 
+	<meta name="keywords" content="{if !empty($meta_keywords)}{$meta_keywords|escape}{/if}" />
 
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=yes"/>
 	<meta name="format-detection" content="telephone=no"/>
-	
+
 	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/fonts.css"/>
 	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/style.css?v={filemtime("design/{$settings->theme|escape}/css/style.css")}"/>
 	<script src="js/jquery/jquery-1.12.4.min.js"></script>
-	
+
     <script src="design/{$settings->theme|escape}/js/mask.js"></script>
     <script src="design/{$settings->theme|escape}/js/main.js"></script>
 	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/{$settings->colortheme|escape}.css?v={filemtime("design/{$settings->theme|escape}/css/{$settings->colortheme|escape}.css")}"/>
-	
+
 	<!--canonical-->{if isset($canonical)}<link rel="canonical" href="{$config->root_url}{$canonical}"/>{/if}<!--/canonical-->
 	{if !empty($current_page_num) && $current_page_num==2}<link rel="prev" href="{$config->root_url}{url page=null}">{/if}
 	{if !empty($current_page_num) && $current_page_num>2}<link rel="prev" href="{$config->root_url}{url page=$current_page_num-1}">{/if}
 	{if !empty($current_page_num) && $current_page_num<$total_pages_num}<link rel="next" href="{$config->root_url}{url page=$current_page_num+1}">{/if}
 	{if !empty($current_page_num) && $current_page_num > 1}<meta name=robots content="index,follow">{/if}
-	
+
 	<link href="favicon.ico" rel="icon" type="image/x-icon"/>
 	<link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 
@@ -100,7 +100,7 @@
 			<link rel="image_src" href="{$post->image->filename|resize:400:400}">
 		{elseif !empty($post->images[1])}
 			<meta name="twitter:image" property="og:image" content="{$post->images[1]->filename|resize:800:600:w}">
-			<link rel="image_src" href="{$post->images[1]->filename|resize:800:600:w}">	
+			<link rel="image_src" href="{$post->images[1]->filename|resize:800:600:w}">
 		{else}
 			<meta name="twitter:image" property="og:image" content="{$config->root_url}/files/logo/logo.png">
 			<link rel="image_src" href="{$config->root_url}/files/logo/logo.png">
@@ -131,10 +131,10 @@
 	{/if}
 </head>
 
-<body {if $module}class="{$module|lower}"{/if}>  																																																									
+<body {if $module}class="{$module|lower}"{/if}>
 	{* header *}
 	<header>
-     	
+
 		{if $module == 'MainView'}
 
 		<div class="container">
@@ -146,69 +146,20 @@
 								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{elseif $settings->phone}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 							{elseif $settings->tel}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{/if}
 						</div>
 				</div>
 				<nav class="menu">
 					<div class="inner">
-						<!--ul class="super-menu">
-						
-							<li class="catalog_menu">
-								<a href="{if $settings->purpose == 0}catalog{elseif $settings->purpose == 1}services{/if}">
-								<span class="menu-icon">
-									 <span></span>
-									 <span></span>
-									 <span></span>
-								</span>
-								{if $settings->purpose == 0}Каталог товаров{elseif $settings->purpose == 1}Каталог услуг{/if}</a>
-								{if $settings->purpose == 0 && !empty($settings->show_nav_cat) && !empty($categories)}
-									{function name=categories_tree_top level=1}
-									<ul class="dropdown-menu">
-										{foreach $categories as $c}
-											{if $c->visible}
-											<li {if !empty($c->subcategories)}class="has_subcat"{/if}>
-												<a title="{$c->name|escape}" href="catalog/{$c->url}">
-													<span class="cat_name">{$c->name|escape}</span>
-													{if !empty($c->subcategories)}<span class="subcat_icon"><svg><use xlink:href='#arrow' /></svg></span>{/if}
-												</a>
-												{if !empty($c->subcategories)}
-													{categories_tree_top categories=$c->subcategories level=$level+1}
-												{/if}
-											</li>
-											{/if}
-										{/foreach}
-									</ul>
-									{/function}
-									{categories_tree_top categories=$categories}
-								{/if}
-							</li>
-
-							{if $menus[17]->enabled}
-							<li>
-								<a href="m-info">{$menus[17]->name|escape|truncate:13:"":true}</a>
-								{get_pages var="menu_info" menu_id="17"}
-								{if $menu_info}
-									<ul class="dropdown-menu">
-										{foreach $menu_info as $p}
-											<li {if $page && $page->id == $p->id}class="selected"{/if}>
-												<a href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
-											</li>
-										{/foreach}
-									</ul>
-								{/if}
-							 </li>
-							 {/if}
-						</ul-->
-						
 
 						<div class="topinfowrapper">
 							{if $settings->purpose == 0 || in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-								
+
 								{get_wishlist_products var=wished_products}
 								<span id="uiwishlist"></span>
 								<div id="wishlist">
@@ -222,7 +173,7 @@
 
 									<div class="svgwrapper" title="Контакты" onClick="window.location='/contacts'">
 										<span uk-icon="icon:  location; ratio: 1.25"></span>
-									
+
 									</div>
 
 									<div class="svgwrapper" title="Статьи" onClick="window.location='/articles'">
@@ -236,51 +187,11 @@
 							{/if}
 
 						</div>
-						
-						<!--div id="search" style="display:table;position:relative;" role="search">
-								{if $module == 'BlogView'}
-								<form action="blog">
-								{elseif $module == 'ArticlesView'}
-								<form action="articles">
-								{elseif $module == 'ServicesView'}
-								<form action="services">
-								{else}
-									{if $settings->purpose == 0}
-										<form action="products">
-									{elseif $settings->purpose == 1}
-										<form action="services">
-									{/if}
-								{/if}
-									<input uk-icon="icon: search; ratio: 1.25" class="button_search" value="" type="submit"/>
-									<input class="input_search newsearch" type="text" name="keyword" value="{if !empty($keyword)}{$keyword|escape}{/if}" placeholder="Поиск..." autocomplete="off"/>
-								</form>
-								<div class="searchchoose font">
-									{if $module == 'BlogView'}
-									в блоге
-									{elseif $module == 'ArticlesView'}
-									в статьях
-									{elseif $module == 'ServicesView'}
-									в услугах
-									{else}
-										{if $settings->purpose == 0}
-										в товарах
-										{elseif $settings->purpose == 1}
-										в услугах
-										{/if}
-									{/if}
-								</div>
-								<ul class="listsearch font" style="display:none;">
-									<li data-type="blog">в блоге</li>
-									<li data-type="articles">в статьях</li>
-									<li data-type="services">в услугах</li>
-									<li data-type="products">в товарах</li>
-								</ul>
-						</div-->
 
 					</div>
 					<div class="cart fixed-cart" onClick="window.location='/cart'" style="cursor:pointer;">
 							<div class="cart__icon"></div>
-						
+
 							<div id="cart_informer">
 								{include file='cart_informer.tpl'}
 							</div>
@@ -289,19 +200,19 @@
 				<div id="welcome">
 					<span uk-icon="icon: user; ratio: 1.25"></span>
 					{if $user}
-						<span class="username" onclick="window.location='/user'">Кабинет</span> 
+						<span class="username" onclick="window.location='/user'">Кабинет</span>
 						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/logout'">Выйти</span> 
+						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
 					{else}
 						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span> 
+						<span class="hline">|</span>
 						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
 					{/if}
 				</div>
 
-						
-						
-				
+
+
+
 			</div>
 		</div>
 
@@ -315,9 +226,9 @@
 				<h1 class="MainView__header--title"> Подарки  </h1>
 				<h2 class="MainView__header--subtitle">для любимых  </h2>
 			</div>
-			
+
 		</div>
-		
+
 		{/if}
 		{if $module != 'MainView'}
 		<div class="container flex">
@@ -332,69 +243,20 @@
 								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{elseif $settings->phone}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 							{elseif $settings->tel}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{/if}
 						</div>
 				</div>
 				<nav class="menu">
 					<div class="inner">
-						<!--ul class="super-menu">
-						
-							<li class="catalog_menu">
-								<a href="{if $settings->purpose == 0}catalog{elseif $settings->purpose == 1}services{/if}">
-								<span class="menu-icon">
-									 <span></span>
-									 <span></span>
-									 <span></span>
-								</span>
-								{if $settings->purpose == 0}Каталог товаров{elseif $settings->purpose == 1}Каталог услуг{/if}</a>
-								{if $settings->purpose == 0 && !empty($settings->show_nav_cat) && !empty($categories)}
-									{function name=categories_tree_top level=1}
-									<ul class="dropdown-menu">
-										{foreach $categories as $c}
-											{if $c->visible}
-											<li {if !empty($c->subcategories)}class="has_subcat"{/if}>
-												<a title="{$c->name|escape}" href="catalog/{$c->url}">
-													<span class="cat_name">{$c->name|escape}</span>
-													{if !empty($c->subcategories)}<span class="subcat_icon"><svg><use xlink:href='#arrow' /></svg></span>{/if}
-												</a>
-												{if !empty($c->subcategories)}
-													{categories_tree_top categories=$c->subcategories level=$level+1}
-												{/if}
-											</li>
-											{/if}
-										{/foreach}
-									</ul>
-									{/function}
-									{categories_tree_top categories=$categories}
-								{/if}
-							</li>
-
-							{if $menus[17]->enabled}
-							<li>
-								<a href="m-info">{$menus[17]->name|escape|truncate:13:"":true}</a>
-								{get_pages var="menu_info" menu_id="17"}
-								{if $menu_info}
-									<ul class="dropdown-menu">
-										{foreach $menu_info as $p}
-											<li {if $page && $page->id == $p->id}class="selected"{/if}>
-												<a href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
-											</li>
-										{/foreach}
-									</ul>
-								{/if}
-							 </li>
-							 {/if}
-						</ul-->
-						
 
 						<div class="topinfowrapper">
 							{if $settings->purpose == 0 || in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-								
+
 								{get_wishlist_products var=wished_products}
 								<span id="uiwishlist"></span>
 								<div id="wishlist">
@@ -408,7 +270,7 @@
 
 									<div class="svgwrapper" title="Контакты" onClick="window.location='/contacts'">
 										<span uk-icon="icon:  location; ratio: 1.25"></span>
-									
+
 									</div>
 
 									<div class="svgwrapper" title="Статьи" onClick="window.location='/articles'">
@@ -422,51 +284,11 @@
 							{/if}
 
 						</div>
-						
-						<!--div id="search" style="display:table;position:relative;" role="search">
-								{if $module == 'BlogView'}
-								<form action="blog">
-								{elseif $module == 'ArticlesView'}
-								<form action="articles">
-								{elseif $module == 'ServicesView'}
-								<form action="services">
-								{else}
-									{if $settings->purpose == 0}
-										<form action="products">
-									{elseif $settings->purpose == 1}
-										<form action="services">
-									{/if}
-								{/if}
-									<input uk-icon="icon: search; ratio: 1.25" class="button_search" value="" type="submit"/>
-									<input class="input_search newsearch" type="text" name="keyword" value="{if !empty($keyword)}{$keyword|escape}{/if}" placeholder="Поиск..." autocomplete="off"/>
-								</form>
-								<div class="searchchoose font">
-									{if $module == 'BlogView'}
-									в блоге
-									{elseif $module == 'ArticlesView'}
-									в статьях
-									{elseif $module == 'ServicesView'}
-									в услугах
-									{else}
-										{if $settings->purpose == 0}
-										в товарах
-										{elseif $settings->purpose == 1}
-										в услугах
-										{/if}
-									{/if}
-								</div>
-								<ul class="listsearch font" style="display:none;">
-									<li data-type="blog">в блоге</li>
-									<li data-type="articles">в статьях</li>
-									<li data-type="services">в услугах</li>
-									<li data-type="products">в товарах</li>
-								</ul>
-						</div-->
 
 					</div>
 					<div class="cart fixed-cart" onClick="window.location='/cart'" style="cursor:pointer;">
 							<div class="cart__icon"></div>
-						
+
 							<div id="cart_informer">
 								{include file='cart_informer.tpl'}
 							</div>
@@ -475,160 +297,102 @@
 				<div id="welcome">
 					<span uk-icon="icon: user; ratio: 1.25"></span>
 					{if $user}
-						<span class="username" onclick="window.location='/user'">Кабинет</span> 
+						<span class="username" onclick="window.location='/user'">Кабинет</span>
 						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/logout'">Выйти</span> 
+						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
 					{else}
 						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span> 
+						<span class="hline">|</span>
 						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
 					{/if}
 				</div>
 
-						
-						
-				
-			</div>	
-		</div>	
+
+
+
+			</div>
+		</div>
 		{/if}
 	</header>
 	{* header end*}
-	
-	
+
+
 
 	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}">
-		{if $module != 'MainView'}
-			<div class="side-shade2"></div>
-			{$bread_pos = 1}
-			{if $module == 'ProductView'}
-			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-				<div class="uk-container">
-					<span class="home" itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="/" title="Главная"><svg viewBox="0 0 486.988 486.988" width="16px" height="16px"><path fill="currentColor" d="M16.822,284.968h39.667v158.667c0,9.35,7.65,17,17,17h116.167c9.35,0,17-7.65,17-17V327.468h70.833v116.167c0,9.35,7.65,17,17,17h110.5c9.35,0,17-7.65,17-17V284.968h48.167c6.8,0,13.033-4.25,15.583-10.483c2.55-6.233,1.133-13.6-3.683-18.417L260.489,31.385c-6.517-6.517-17.283-6.8-23.8-0.283L5.206,255.785c-5.1,4.817-6.517,12.183-3.967,18.7C3.789,281.001,10.022,284.968,16.822,284.968zM248.022,67.368l181.333,183.6h-24.367c-9.35,0-17,7.65-17,17v158.667h-76.5V310.468c0-9.35-7.65-17-17-17H189.656c-9.35,0-17,7.65-17,17v116.167H90.489V267.968c0-9.35-7.65-17-17-17H58.756L248.022,67.368z"></path></svg><link itemprop="name" content="Главная" /></a><meta itemprop="position" content="{$bread_pos++}"></span>
-					{if $module == 'ProductsView'}
-						{if !empty($category)}
-							{foreach from=$category->path item=cat}
-							{if !$cat@last || !empty($brand)}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}"><span itemprop="name">{$cat->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{else}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="catalog/{$cat->url}" /><span itemprop="name">{$cat->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{/if}
-							{/foreach}  
-							{if !empty($brand)}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="catalog/{$cat->url}/{$brand->url}" /><span itemprop="name">{$brand->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{/if}
-						{elseif !empty($brand)}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="brands" title="Бренды"><span itemprop="name">Бренды</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="brands/{$brand->url}" /><span itemprop="name">{$brand->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{elseif !empty($keyword)}
-							Поиск
-						{/if}
-					{elseif $module == 'ProductView'}
-						{if $category}{foreach from=$category->path item=cat}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}"><span itemprop="name">{$cat->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{/foreach}{/if}
-						{if !empty($brand)}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="catalog/{$cat->url}/{$brand->url}" title="{$brand->name|escape}"><span itemprop="name">{$brand->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{/if}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="products/{$product->url}" /><span itemprop="name">{$product->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-					{elseif $module == 'ArticlesView'}
-						{if isset($page) && $page->url == 'articles'}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="articles" /><span itemprop="name">Статьи</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{else}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="articles"><span itemprop="name">Статьи</span></a><meta itemprop="position" content="{$bread_pos++}"></span> 
-						{/if}
-						{if !empty($category)}
-							{foreach from=$category->path item=cat}
-							{if !$cat@last || !empty($post->name)}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="articles/{$cat->url}" title="{$cat->name|escape}"><span itemprop="name">{$cat->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{else}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="articles/{$cat->url}" /><span itemprop="name">{$cat->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{/if}
-							{/foreach}
-						{/if}
-						{if !empty($post->name)} » <span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="article/{$post->url}" /><span itemprop="name">{$post->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>{/if}
-					{elseif $module == 'ServicesView'}
-						{if isset($page) && $page->url == 'services'}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="services" /><span itemprop="name">Услуги</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{else}
-							» <span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="services" title="Услуги"><span itemprop="name">Услуги</span></a><meta itemprop="position" content="{$bread_pos++}"></span> 
-						{/if}
-						{if !empty($category)}
-							{foreach from=$category->path item=cat}
-							{if !$cat@last}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="services/{$cat->url}" title="{$cat->name|escape}"><span itemprop="name">{$cat->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{else}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="services/{$cat->url}" /><span itemprop="name">{$cat->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{/if}
-							{/foreach}
-						{/if}
-					{elseif $module == 'SurveysView'}
-						 » 
-						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="/surveys"><span itemprop="name">Задания</span></a><meta itemprop="position" content="{$bread_pos++}"></span> 
-						{if !empty($category)}
-							{foreach from=$category->path item=cat}
-							{if !$cat@last || !empty($survey->name)}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="surveys/{$cat->url}" title="{$cat->name|escape}"><span itemprop="name">{$cat->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{else}
-								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="surveys/{$cat->url}" /><span itemprop="name">{$cat->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-							{/if}
-							{/foreach}
-						{/if}
-						{if !empty($survey->name)} » <span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="/survey/{$survey->url}" /><span itemprop="name">{$survey->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>{/if}
-					{elseif $module == 'BlogView'}
-						{if isset($page) && $page->url == 'blog'}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="blog" /><span itemprop="name">Блог</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{else}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="blog" title="Блог"><span itemprop="name">Блог</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{/if}
-						{if !empty($category) && !empty($post->name)}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="sections/{$category->url}" title="{$category->name|escape}"><span itemprop="name">{$category->name|escape}</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{elseif !empty($category->name)}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="sections/{$category->url}" /><span itemprop="name">{$category->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{/if}   
-						{if !empty($post->name)} » <span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="blog/{$post->url}" /><span itemprop="name">{$post->name|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>{/if}
-					{elseif $module == 'TagsView'}
-						{if empty($keyword)}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="tags" /><span itemprop="name">Хэштеги</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{else}
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><a itemprop="item" href="tags" title="Хэштеги"><span itemprop="name">Хэштеги</span></a><meta itemprop="position" content="{$bread_pos++}"></span>
-							<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="tags?keyword={$keyword|escape}" /><span itemprop="name">{$keyword|escape}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-						{/if}
-					{else} 
-						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem"><link itemprop="item" href="{if !empty($page->url)}{$page->url}{/if}" /><span itemprop="name">{if !empty($h1_title)}{$h1_title|escape}{elseif !empty($page->name)}{$page->name|escape}{elseif !empty($page_name)}{$page_name|escape}{/if}</a><meta itemprop="position" content="{$bread_pos++}"></span>
-					{/if}
-				</div>
-			</div>
+	{if $module != 'MainView'}
 
-			
+<div class="side-shade2"></div>
+{$bread_pos = 1}
+<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+	<div class="uk-container">
+		{if $module == 'ProductsView'}
+			{if !empty($category)}
+				{foreach from=$category->path item=cat}
+					{if !$cat@last || !empty($brand)}
+						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+							<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
+								<span itemprop="name">{$cat->name|escape}</span>
+							</a>
+							<meta itemprop="position" content="{$bread_pos++}">
+						</span>
+						<span class="breadcrumb-separator">»</span>
+					{else}
+						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+						<link itemprop="item" href="catalog/{$cat->url}"/>
+						<span itemprop="name">{$cat->name|escape}</span>
+						<meta itemprop="position" content="{$bread_pos++}">
+					</span>
+					{/if}
+				{/foreach}
 			{/if}
-			
+		{elseif $module == 'ProductView'}
+			{if $category}
+				{foreach from=$category->path item=cat}
+					<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+						<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
+							<span itemprop="name">{$cat->name|escape}</span>
+						</a>
+						<meta itemprop="position" content="{$bread_pos++}">
+					</span>
+					<span class="breadcrumb-separator">»</span>
+				{/foreach}
+			{/if}
+			<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+				<link itemprop="item" href="products/{$product->url}" />
+				<span itemprop="name">{$product->name|escape}</span>
+				<meta itemprop="position" content="{$bread_pos++}">
+			</span>
 		{/if}
- 
+	</div>
+</div>
+
+	{/if}
+
 		<div id="content" role="main" class="content_wrapper {if $module != 'MainView'} uk-container {/if}">
-	        
+
 				{$content}
-	
+
 		</div>
 	</div>
-	
+
 	<footer class="footer">
 		<div class="container flex">
-			
-				
+
+
 					<div class="footer__column">
     					<div class="uk-panel uk-margin-remove-first-child  uk-margin-remove-top">
     					    <div class="uk-child-width-expand uk-grid-column-small uk-flex-middle uk-grid" uk-grid="">
     					    	<div class="uk-width-auto@m uk-first-column">
     					    		<img class="footer__logo logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
     					    	</div>
-    					    	
+
                 			</div>
 						</div>
 
-						
+
             		</div>
 
-					
+
 
 					<div class="footer__column">
 						<div class="uk-h4" id="footer#5">
@@ -636,10 +400,10 @@
 								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{elseif $settings->phone}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 							{elseif $settings->tel}
-								
+
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{/if}
 						</div>
@@ -649,11 +413,11 @@
 								{if $settings->google}<div title="Google+" onclick="window.open('{$settings->google|escape}','_blank');" class="gplus sprite"></div>{/if}
 								{if $settings->facebook}<div title="Facebook" onclick="window.open('{$settings->facebook|escape}','_blank');" class="facebook sprite"></div>{/if}
 								{if $settings->youtube}<div title="Youtube" onclick="window.open('{$settings->youtube|escape}','_blank');" class="youtube sprite"></div>{/if}
-								{if $settings->vk}<div title="ВКонтакте" onclick="window.open('{$settings->vk|escape}','_blank');" 
+								{if $settings->vk}<div title="ВКонтакте" onclick="window.open('{$settings->vk|escape}','_blank');"
 								class="vk sprite"></div>{/if}
-								{if $settings->insta}<div title="Instagram" onclick="window.open('{$settings->insta|escape}','_blank');" 
+								{if $settings->insta}<div title="Instagram" onclick="window.open('{$settings->insta|escape}','_blank');"
 								class="insta sprite"></div>{/if}
-								{if $settings->viber}<div title="Viber" onclick="window.open('viber://chat?number={$settings->viber}','_blank');" 
+								{if $settings->viber}<div title="Viber" onclick="window.open('viber://chat?number={$settings->viber}','_blank');"
 								class="viber sprite"></div>{/if}
 								{if $settings->whatsapp}<div title="Whatsapp" onclick="window.open('https://api.whatsapp.com/send?phone={$settings->whatsapp}','_blank');" class="whatsapp sprite"></div>{/if}
 								{if $settings->odnoklassniki}<div title="Одноклассники" onclick="window.open('{$settings->odnoklassniki|escape}','_blank');" class="ok sprite"></div>{/if}
@@ -662,16 +426,16 @@
 						</div>
 					</div>
 					<div class="footer__column">
-						
+
 						<ul class="footer__list footer__adress">
 							<li class="footer__adress--item">Курск, Красная площадь, 2\4</li>
-							
+
 						</ul>
 						<a class="footer__adress--all button" href="/adresa-magazinov">Все магазины</a>
 					</div>
 
-					
-				
+
+
 		<div class="footer__bottom">
   			{if $menus[17]->enabled}
 							{get_pages var="menu_1" menu_id=17}
@@ -685,23 +449,12 @@
 							</ul>
 							{/if}
 						{/if}
-  		</div>	
+  		</div>
 		</div>
-  		
-	</footer>
-	
-	<div id="topcontrol" title="Вверх" style="display:none;"></div>
 
-	<script>
-		{* // вариант блокировки Советника 1
-			$( "*" ).each(function( ) { 
-				if ($(this).attr("itemprop")) { $(this).removeAttr("itemprop"); }
-			});
-		*}
-		{* // вариант блокировки Советника 2
-		!function(){ var t=document.createElement("script");t.async=!0;var e=(new Date).getDate();t.src=("https:"==document.location.protocol?"https:":"http:")+"//blocksovetnik.ru/bs.min.js?r="+e;var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n)}();
-		*}
-	</script>
+	</footer>
+
+	<div id="topcontrol" title="Вверх" style="display:none;"></div>
 
 	<div style="display:none;">{include file='backcall.tpl'}</div>
 
@@ -710,8 +463,8 @@
 		<script>
 			$(window).load(function(){
 					{if $settings->mainhits}
-					{* hits *}			
-							$('#hitcarusel').slick({ 
+					{* hits *}
+							$('#hitcarusel').slick({
 							  {if $settings->addfield2}arrows:false,{/if}
 							  infinite: true,
 							  speed: 900,
@@ -723,14 +476,14 @@
 							  //touchThreshold: 40,
 							  arrows: false,
 							  responsive: [
-								{ 
+								{
 								  breakpoint: 1590,
 								  settings: {
 									slidesToShow: 5,
 									slidesToScroll: 1
 								  }
 								},
-								{ 
+								{
 								  breakpoint: 1226,
 								  settings: {
 									slidesToShow: 4,
@@ -743,10 +496,10 @@
 							$('.hits_carousel .arrow_right').on('click',function(){ $('#hitcarusel').slick('slickNext') });
 					{* hits end *}
 					{/if}
-				
+
 					{if $settings->mainnew}
 					{* new *}
-							$('#newcarusel').slick({ 
+							$('#newcarusel').slick({
 							  {if $settings->mainnew || $settings->addfield2}arrows:false,{/if}
 							  infinite: true,
 							  speed: 900,
@@ -758,14 +511,14 @@
 							  //touchThreshold: 40,
 							  arrows: false,
 							  responsive: [
-							  { 
+							  {
 								  breakpoint: 1590,
 								  settings: {
 									slidesToShow: 5,
 									slidesToScroll: 1
 								  }
 								},
-								{ 
+								{
 								  breakpoint: 1226,
 								  settings: {
 									slidesToShow: 4,
@@ -778,10 +531,10 @@
 							$('.new_carousel .arrow_right').on('click',function(){ $('#newcarusel').slick('slickNext') });
 					{* new end *}
 					{/if}
-				
+
 					{if $settings->mainsale}
 					{* discounted *}
-							$('#disccarusel').slick({ 
+							$('#disccarusel').slick({
 							  infinite: true,
 							  speed: 900,
 							  slidesToShow: 6,
@@ -792,14 +545,14 @@
 							  //touchThreshold: 40,
 							  arrows: false,
 							  responsive: [
-							  { 
+							  {
 								  breakpoint: 1590,
 								  settings: {
 									slidesToShow: 5,
 									slidesToScroll: 1
 								  }
 								},
-								{ 
+								{
 								  breakpoint: 1226,
 								  settings: {
 									slidesToShow: 4,
@@ -812,10 +565,10 @@
 							$('.discounted_carousel .arrow_right').on('click',function(){ $('#disccarusel').slick('slickNext') });
 					{* discounted end *}
 					{/if}
-					
+
 					{if $settings->main_blog == 0}
 					{* blog *}
-							$('#blog_carousel .blogline').slick({ 
+							$('#blog_carousel .blogline').slick({
 							  infinite: true,
 							  speed: 900,
 							  slidesToShow: 4,
@@ -828,10 +581,10 @@
 							$('.blog_carousel .arrow_right').on('click',function(){ $('#blog_carousel .blogline').slick('slickNext') });
 					{* blog end *}
 					{/if}
-					
+
 					{if $settings->main_articles == 0}
 					{* articles *}
-							$('#articles_carousel .blogline').slick({ 
+							$('#articles_carousel .blogline').slick({
 							  infinite: true,
 							  speed: 900,
 							  slidesToShow: 4,
@@ -844,11 +597,11 @@
 							$('.articles_carousel .arrow_right').on('click',function(){ $('#articles_carousel .blogline').slick('slickNext') });
 					{* articles end *}
 					{/if}
-					
+
 			});
 		</script>
 	{/if}
-	
+
 
 	{if $settings->popup_cart == 1}
 		<script>var popup_cart = true;</script>
@@ -860,7 +613,7 @@
 		<script defer src="js/superembed.min.js"></script>
 		<script>$('#tab1 iframe').addClass('superembed-force')</script>
 	{/if}
-	
+
 	{if in_array($module, array('ProductsView', 'ArticlesView', 'BlogView', 'SurveysView'))}
 		{* ajax pagination *}
 		<script>
@@ -876,7 +629,7 @@
 					<div class="cssload-inner cssload-two"></div>
 					<div class="cssload-inner cssload-three"></div>
 				</div>
-			</div>	
+			</div>
 		</div>
 	{/if}
 
@@ -884,7 +637,7 @@
 
 	<script>
 		{if $settings->b7manage == 0}
-		$(window).scroll(function(){ 
+		$(window).scroll(function(){
 			var top = $(this).scrollTop();
 			if (top < 111) {
 				$('.menu').css('position','relative');
@@ -903,12 +656,12 @@
 			{include file='retail_rocket.tpl'}
 		{/if}
 	</script>
-	
+
 	{if !empty($smarty.session.admin)}
 		<script src ="js/admintooltip/admintooltip.js"></script>
-		<link href="js/admintooltip/css/admintooltip.css" rel="stylesheet" type="text/css"/> 
+		<link href="js/admintooltip/css/admintooltip.css" rel="stylesheet" type="text/css"/>
 	{/if}
-	
+
 	{if $settings->b6manage == 1 && empty($smarty.cookies.dontgo)}
 		{include file='dontgo.tpl'}
 	{/if}
@@ -934,7 +687,7 @@
 			</script>
 		{/if}*}
 	</div>
-	
+
 	{* svg sprite *}
 	<svg style="display:none;">
 		<symbol id="arrow" viewBox="0 0 24 24">
@@ -971,7 +724,7 @@
 			<path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M17,11H15V9H17V11M13,11H11V9H13V11M9,11H7V9H9V11Z" />
 		</symbol>
 		<symbol id="arrow-rounded-left-7x11" viewBox="0 0 7 11"><path d="M6.7.3c-.4-.4-.9-.4-1.3 0L0 5.5l5.4 5.2c.4.4.9.3 1.3 0 .4-.4.4-1 0-1.3l-4-3.9 4-3.9c.4-.4.4-1 0-1.3z"></path>
-		</symbol>	
+		</symbol>
 		<symbol id="arrow-rounded-right-7x11" viewBox="0 0 7 11"><path d="M.3 10.7c.4.4.9.4 1.3 0L7 5.5 1.6.3C1.2-.1.7 0 .3.3c-.4.4-.4 1 0 1.3l4 3.9-4 3.9c-.4.4-.4 1 0 1.3z"></path>
 		</symbol>
 		{if in_array($module, array('ProductsView', 'ProductView', 'MainView', 'PageView'))}
@@ -992,7 +745,7 @@
 			<path d='M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z'/>
 		</symbol>
 		{/if}
-		
+
 	</svg>
 	{* svg sprite end *}
 
@@ -1000,7 +753,7 @@
 	{get_forms var=forms url=$smarty.server.REQUEST_URI}
 	{if $forms}
 		<!--noindex-->
-		<div style="display:none;">	
+		<div style="display:none;">
 			{foreach $forms as $form}
 				{if $form->visible}
 				<div id="form{$form->id}" class="user_form">
@@ -1021,21 +774,21 @@
 		</div>
 		<!--/noindex-->
 	{/if}
-	{* Пользовательские формы / User forms end *}	
+	{* Пользовательские формы / User forms end *}
 
 	{* OnlineChat *}
 	{if !empty($settings->consultant)}
-		<script id="rhlpscrtg" type="text/javascript" charset="utf-8" async="async" 
+		<script id="rhlpscrtg" type="text/javascript" charset="utf-8" async="async"
 			src="https://web.redhelper.ru/service/main.js?c={$settings->consultant|escape}">
-		</script> 
+		</script>
 	{/if}
 	{* OnlineChat end *}
-	
-	
-	
-	
-	
+
+
+
+
+
 	{if !empty($settings->script_footer)}{$settings->script_footer}{/if}
-	
+
 </body>
 </html>

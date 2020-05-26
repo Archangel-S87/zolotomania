@@ -123,7 +123,7 @@
     	{$meta_description = $md scope=root}
     {/if}
 {else}
-	<h1 {if !empty($category->id)}data-category="{$category->id}"{elseif !empty($brand->id)}data-brand="{$brand->id}"{/if}><!--h1-->{if !empty($category->name)}{$category->name|escape}{/if} {if !empty($brand->name)}{$brand->name|escape}{/if} {if !empty($keyword)}{$keyword|escape}{/if}<!--/h1--></h1>
+{*	<h1 {if !empty($category->id)}data-category="{$category->id}"{elseif !empty($brand->id)}data-brand="{$brand->id}"{/if}><!--h1-->{if !empty($category->name)}{$category->name|escape}{/if} {if !empty($brand->name)}{$brand->name|escape}{/if} {if !empty($keyword)}{$keyword|escape}{/if}<!--/h1--></h1>*}
 {/if}
 
 {* subcat start *}
