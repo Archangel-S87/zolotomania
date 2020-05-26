@@ -1,0 +1,35 @@
+### Авторизация
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=check_auth
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+###
+
+### Загрузка файлоа
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_B41B_d3.zip
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+
+< E:/OpenServer/domains/zolotomania.loc/_temp/v8_B41B_d3.zip
+###
+
+### Импорт категорий
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=import_categories&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###ё
+
+### Импорт товаров
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=import_products&filename=import_products.json&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###
+
+### Импорт вариантов
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=import_variants&filename=import_variants.json&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###
