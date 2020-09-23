@@ -37,15 +37,20 @@ class Dictionary
         $callback = $object == 'dictionary' ? 'add_section' : 'add_category';
 
         $reader = new JsonReader();
-        $reader->open($this->file);
 
-        if ($reader->read($object)) {
-            $depth = $reader->depth();
-            $reader->read();
-            do {
-                call_user_func_array([$this, $callback], [$reader->name(), $reader->value()]);
-            } while ($reader->next() && $reader->depth() > $depth);
-        } else return;
+        try {
+            $reader->open($this->file);
+
+            if ($reader->read($object)) {
+                $depth = $reader->depth();
+                $reader->read();
+                do {
+                    call_user_func_array([$this, $callback], [$reader->name(), $reader->value()]);
+                } while ($reader->next() && $reader->depth() > $depth);
+            } else return;
+        } catch (Exception $exception) {
+            Exchange::error_read_file($this->file, $exception);
+        }
 
         $reader->close();
     }
@@ -53,18 +58,23 @@ class Dictionary
     public function read_dictionary_shops()
     {
         $reader = new JsonReader();
-        $reader->open($this->file);
 
-        if ($reader->read('shops')) {
-            $depth = $reader->depth();
-            $reader->read();
-            do {
-                $shop = $reader->value();
-                if (!$id = $shop['id'] ?? '') continue;
-                unset($shop['id']);
-                $this->shops['shops'][$id] = $shop;
-            } while ($reader->next() && $reader->depth() > $depth);
-        } else return;
+        try {
+            $reader->open($this->file);
+
+            if ($reader->read('shops')) {
+                $depth = $reader->depth();
+                $reader->read();
+                do {
+                    $shop = $reader->value();
+                    if (!$id = $shop['id'] ?? '') continue;
+                    unset($shop['id']);
+                    $this->shops['shops'][$id] = $shop;
+                } while ($reader->next() && $reader->depth() > $depth);
+            } else return;
+        } catch (Exception $exception) {
+            Exchange::error_read_file($this->file, $exception);
+        }
 
         $reader->close();
     }

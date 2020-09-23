@@ -46,37 +46,41 @@ class ExchangeUsers extends Exchange
         require_once JSON_READER . 'autoload.php';
         $reader = new pcrov\JsonReader\JsonReader();
 
-        $reader->open($this->temp_dir . $filename);
+        try {
+            $reader->open($this->temp_dir . $filename);
 
-        // Обновление списка групп
-        if ($reader->read('Groups')) {
+            // Обновление списка групп
+            if ($reader->read('Groups')) {
 
-            $depth = $reader->depth();
-            $reader->read();
+                $depth = $reader->depth();
+                $reader->read();
 
-            $import_group_ids = [];
+                $import_group_ids = [];
 
-            do {
-                $import_group_ids[] = $this->import_group($reader->value());
-            } while ($reader->next() && $reader->depth() > $depth);
+                do {
+                    $import_group_ids[] = $this->import_group($reader->value());
+                } while ($reader->next() && $reader->depth() > $depth);
 
-            // Удаляю не нужные группы
-            if ($import_group_ids) {
-                $this->db->query('DELETE FROM __groups WHERE id NOT IN (?@)', $import_group_ids);
+                // Удаляю не нужные группы
+                if ($import_group_ids) {
+                    $this->db->query('DELETE FROM __groups WHERE id NOT IN (?@)', $import_group_ids);
+                }
             }
-        }
 
-        // Обновлени пользователей
-        if ($reader->read('Users')) {
+            // Обновлени пользователей
+            if ($reader->read('Users')) {
 
-            $depth = $reader->depth();
-            $reader->read();
+                $depth = $reader->depth();
+                $reader->read();
 
-            $this->groups = $this->users->get_groups();
+                $this->groups = $this->users->get_groups();
 
-            do {
-                $this->import_user($reader->value());
-            } while ($reader->next() && $reader->depth() > $depth);
+                do {
+                    $this->import_user($reader->value());
+                } while ($reader->next() && $reader->depth() > $depth);
+            }
+        } catch (Exception $exception) {
+            Exchange::error_read_file($filename, $exception);
         }
 
         $reader->close();

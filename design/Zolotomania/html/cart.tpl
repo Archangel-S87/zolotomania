@@ -3,7 +3,7 @@
 {$meta_title = "Корзина" scope=root}
 {$page_name = "Корзина" scope=root}
 
-<h1>Корзина</h1>
+<h1 style="margin-top: 20px;">Корзина</h1>
 
 {if $cart->purchases}
     <form class="main_cart_form" method="post" name="cart"

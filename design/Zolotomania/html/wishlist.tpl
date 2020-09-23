@@ -1,6 +1,6 @@
 {$meta_title = "Избранное" scope=root}
 {$page_name = "Избранное" scope=root}
-<h1>Список желаний</h1>
+<h1 style="margin-top: 20px;">Список желаний</h1>
 
 {if $wished_products|count}
     <div class="tiny_products relcontent">
@@ -83,10 +83,18 @@
 
                 {* Описание товара *}
                 <div class="description {if empty($notinstock)}border_wrapper{/if}">
+
                     {if empty($notinstock)}
-                        {if $settings->showsku == 1}<p
-                                class="sku">{if $product->variant->sku}Артикул: {$product->variant->sku}{/if}</p>{/if}
+                        {if $settings->showsku == 1}
+                            {* Расположение товара - склад *}
+                            <p class="sku">
+                                {if $product->variant->sku && !empty($product->variant->shop->name)}
+                                    <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                                {/if}
+                            </p>
+                        {/if}
                     {/if}
+
                     <h1 class="product__title" data-product="{$product->id}">{$product->name|escape}</h1>
                     {* schema *}
                     {if $product->annotation}{$descr = $product->annotation|strip_tags:true}{elseif $product->body}{$descr = $product->body|strip_tags:true}{elseif !empty($seo_description)}{$descr = $seo_description}{elseif $meta_description}{$descr = $meta_description|escape}{else}{$descr = $product->name|escape}{/if}
@@ -156,7 +164,7 @@
                                     {if $settings->showstock == 1}<span class="stockblock">На складе: <span
                                                 class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span>
                                         </span>{/if}
-                                    <div class="variants-wrap flex" style=" margin-bottom: 15px;">
+                                    <div class="variants-wrap flex" style="display: none; margin-bottom: 15px;">
                                         <select name="variant1"
                                                 class="p0"{if $cntname1 == 0} style="display:none;"{/if}>
                                             {foreach $product->vproperties[0] as $pname => $pclass}
@@ -267,7 +275,7 @@
                                         </div>
                                     </div>
                                     <input onmousedown="try { rrApi.addToBasket({$product->variant->id}) } catch(e) {}"
-                                           style="float: left;" type="submit"
+                                           style="margin-right: 15px;" type="submit"
                                            class="button button-default button-red add-to-cart" value="Беру!"
                                            data-result-text="В корзине"/>
                                 </div>

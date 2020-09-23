@@ -568,8 +568,12 @@ ul.tiny_products.parentscat li.product:hover{
     margin: 15px -10px;
 }
 .tiny_products input[type="submit"] {
+    width: 110px;
     margin-top: 0;
-    padding: 6px 6%;
+    margin-right: 14px;
+    padding: 0;
+    font-size: 13px;
+    line-height: 26px;
 }
 .productsview .add-to-cart:hover{
     color:#fff;
@@ -652,9 +656,17 @@ ul.tiny_products.parentscat li.product:hover{
 .product .button-default.button-blue{
     border: 2px solid #bcd4e4;
     margin: 0;
+    line-height: 26px;
+    font-size: 13px;
+    padding: 0;
+    width: 110px;
 }
 .product .button-default.button-red{
     border: 2px solid #d24a46;
+    line-height: 26px;
+    font-size: 13px;
+    padding: 0;
+    width: 110px;
 }
 .product .button-default:hover{
     background-color: #d24a43;
@@ -734,6 +746,17 @@ ul.tiny_products.parentscat li.product:hover{
 }
 #container.catid15 .pagination, #container.catid28 .pagination{
     display: none;
+}
+
+.form-back-page {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 30px;
+    height: 30px;
+    background: transparent url('/js/jquery/fancybox.png') -40px 0;
+    cursor: pointer;
+    z-index: 1103;
 }
 
 /*login*/

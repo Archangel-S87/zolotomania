@@ -39,7 +39,7 @@ class UpdateDB extends Fivecms
     {
         if ($this->check_table('shops')) return;
         $table_name = $this->config->db_prefix . 'shops';
-        $this->db->query("CREATE TABLE {$table_name} (`id` INT(11) NOT NULL AUTO_INCREMENT, `external_id` VARCHAR(74) NOT NULL, `address` VARCHAR(200) NOT NULL, `city` VARCHAR(50) NOT NULL, PRIMARY KEY (`id`)) ENGINE = MyISAM;");
+        $this->db->query("CREATE TABLE {$table_name} (`id` INT(11) NOT NULL AUTO_INCREMENT, `external_id` VARCHAR(74) NOT NULL, `name` VARCHAR(100) NOT NULL, `address` VARCHAR(200) NOT NULL, `city` VARCHAR(50) NOT NULL, PRIMARY KEY (`id`)) ENGINE = MyISAM;");
     }
 
     private function update_table_orders()

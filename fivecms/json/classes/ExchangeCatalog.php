@@ -49,21 +49,26 @@ class ExchangeCatalog extends Exchange
         $this->update_shops();
 
         $reader = new JsonReader();
-        $reader->open($this->temp_dir . $filename);
 
-        if ($reader->read('variants')) {
+        try {
+            $reader->open($this->temp_dir . $filename);
 
-            $depth = $reader->depth();
-            $reader->read();
+            if ($reader->read('variants')) {
 
-            $old_product_id = null;
+                $depth = $reader->depth();
+                $reader->read();
 
-            do {
-                $this->import_variant($reader->value(), $old_product_id, $is_update);
-            } while ($reader->next() && $reader->depth() > $depth);
+                $old_product_id = null;
 
-        } else {
-            Exchange::error('Variants not found');
+                do {
+                    $this->import_variant($reader->value(), $old_product_id, $is_update);
+                } while ($reader->next() && $reader->depth() > $depth);
+
+            } else {
+                Exchange::error('Variants not found');
+            }
+        } catch (Exception $exception) {
+            Exchange::error_read_file($filename, $exception);
         }
 
         $reader->close();
@@ -81,7 +86,7 @@ class ExchangeCatalog extends Exchange
 
         $this->db->query('SELECT id FROM __products WHERE external_id=?', $product_1c_id);
         if (!$product_id = $this->db->result('id')) {
-            Exchange::add_warning("Product with product_id {$product_id} not found");
+            Exchange::add_warning("Product with product_id {$product_1c_id} not found");
             return;
         }
 
@@ -95,7 +100,7 @@ class ExchangeCatalog extends Exchange
         $name = [];
 
         $size = $this->dictionary->get_section_by_name('size');
-        $name1 = $this->dictionary->get_property_value_by_id($size['external_id'], $json_variant['size']);
+        $name1 = $this->dictionary->get_property_value_by_id($size['external_id'], $json_variant['size'] ?? null);
         if ($name1) {
             $name1 = ($size['prefix'] ?? '') . " {$name1} " . ($size['suffix'] ?? '');
             $name1 = trim($name1);
@@ -126,6 +131,7 @@ class ExchangeCatalog extends Exchange
 
         if (!$is_update) {
             $this->db->query('TRUNCATE TABLE __products');
+            $this->db->query('TRUNCATE TABLE __products_categories');
             $this->db->query('TRUNCATE TABLE __images');
             $this->db->query('TRUNCATE TABLE __options');
             $this->db->query('TRUNCATE TABLE __related_products');
@@ -141,16 +147,21 @@ class ExchangeCatalog extends Exchange
         $this->dictionary->read_dictionary('dictionary');
 
         $reader = new JsonReader();
-        $reader->open($this->temp_dir . $filename);
 
-        if ($reader->read('products')) {
-            $depth = $reader->depth();
-            $reader->read();
-            do {
-                $this->import_product($reader->value(), $is_update);
-            } while ($reader->next() && $reader->depth() > $depth);
-        } else {
-            Exchange::error('Products not found');
+        try {
+            $reader->open($this->temp_dir . $filename);
+
+            if ($reader->read('products')) {
+                $depth = $reader->depth();
+                $reader->read();
+                do {
+                    $this->import_product($reader->value(), $is_update);
+                } while ($reader->next() && $reader->depth() > $depth);
+            } else {
+                Exchange::error('Products not found');
+            }
+        } catch (Exception $exception) {
+            Exchange::error_read_file($filename, $exception);
         }
 
         $reader->close();
@@ -211,7 +222,6 @@ class ExchangeCatalog extends Exchange
             }
 
             // Удаляю все прикреплённые изображения
-            unset($json_product['images']);
             if (isset($json_product['images'])) {
                 $this->db->query('SELECT id FROM __images WHERE product_id=? ORDER BY position', $product_id);
                 $img_ids = $this->db->results('id');
@@ -223,19 +233,24 @@ class ExchangeCatalog extends Exchange
         }
 
         // Добавляем изображения к товару
-        $images_dir = $this->config->original_images_dir;
-        if (!$this->settings->oneimages && is_writable($images_dir)) {
-            foreach ($json_product['images'] ?? [] as $img) {
-                if (!$img || !is_file($this->temp_dir . $img)) continue;
-                $image = basename($img);
-                rename($this->temp_dir . $img, $images_dir . $image);
-                $this->products->add_image($product_id, $image);
-            }
-        } else {
-            foreach ($json_product['images'] ?? [] as $img) {
-                $image = basename($img);
-                if (!$image || !is_file($images_dir . $image)) continue;
-                $this->products->add_image($product_id, $image);
+        if (isset($json_product['images'])) {
+            $images_dir = $this->config->original_images_dir;
+            if (!$this->settings->oneimages && is_writable($images_dir)) {
+                foreach ($json_product['images'] ?? [] as $img) {
+                    if (!$img || !is_file($this->temp_dir . $img)) continue;
+                    $image = basename($img);
+                    rename($this->temp_dir . $img, $images_dir . $image);
+                    $this->products->add_image($product_id, $image);
+                }
+            } else {
+                foreach ($json_product['images'] ?? [] as $img) {
+                    $image = basename($img);
+                    if (!$image || !is_file($images_dir . $image)) {
+                        if (!$img || !is_file($this->temp_dir . $img)) continue;
+                        rename($this->temp_dir . $img, $images_dir . $image);
+                    }
+                    $this->products->add_image($product_id, $image);
+                }
             }
         }
 
@@ -348,13 +363,35 @@ class ExchangeCatalog extends Exchange
             $new_category['parent_id'] = 0;
         }
 
+        // Добавляем изображения к товару
+        $image = null;
+        if (isset($category['image']) && $category['image']) {
+            $images_dir = $this->config->categories_images_dir;
+            $image = basename($category['image']);
+
+            if ($image && is_file($this->temp_dir . $category['image'])) {
+                rename($this->temp_dir . $category['image'], $images_dir . $image);
+            }
+
+            if (!$image || !is_file($images_dir . $image)) {
+                $image = null;
+            }
+        }
+
         if (isset($new_category['parent_id'])) {
 
             if ($is_update && $category_id = $this->find_category_id($category['external_id'])) {
                 // Обновление категории
+                if ($image) {
+                    $this->categories->delete_image($category_id);
+                    $new_category['image'] = $image;
+                }
                 $this->categories->update_category($category_id, $new_category);
             } else {
                 $new_category['external_id'] = $category['external_id'];
+                if ($image) {
+                    $new_category['image'] = $image;
+                }
                 $category_id = $this->categories->add_category($new_category);
             }
 
@@ -416,9 +453,10 @@ class ExchangeCatalog extends Exchange
     {
         foreach ($this->dictionary->get_shops() as $external_id => $shop) {
             $json_shop = [
-                'address' => $shop['address'],
+                'address' => $shop['address'] ?? '',
                 'external_id' => $external_id,
-                'city' => $shop['city'] ?? ''
+                'city' => $shop['city'] ?? '',
+                'name' => $shop['name'] ?? ''
             ];
 
             $this->db->query('SELECT id FROM __shops WHERE external_id=? LIMIT 1', $external_id);

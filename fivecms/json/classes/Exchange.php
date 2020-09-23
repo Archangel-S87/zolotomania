@@ -153,6 +153,11 @@ class Exchange extends Fivecms
         exit;
     }
 
+    public static function error_read_file($file, Exception $exception) {
+        $file = basename($file);
+        self::error("При чтении файла $file произошла ошибка " . $exception->getMessage());
+    }
+
     /**
      * @param $val
      * @return int|string

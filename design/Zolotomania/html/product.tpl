@@ -92,8 +92,16 @@
 	{* Описание товара *}
 	<div class="description {if empty($notinstock)}border_wrapper{/if}">
      	{if empty($notinstock)}
-     		{if $settings->showsku == 1}<p class="sku">{if $product->variant->sku}Артикул: {$product->variant->sku}{/if}</p>{/if}
+     		{if $settings->showsku == 1}
+				{* Расположение товара - склад *}
+				<p class="sku">
+					{if $product->variant->sku && !empty($product->variant->shop->name)}
+						<span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+					{/if}
+				</p>
+			{/if}
      	{/if}
+
 		<h1 class="product__title" data-product="{$product->id}">{$product->name|escape}</h1>
 		{* schema *}
 		{if $product->annotation}{$descr = $product->annotation|strip_tags:true}{elseif $product->body}{$descr = $product->body|strip_tags:true}{elseif !empty($seo_description)}{$descr = $seo_description}{elseif $meta_description}{$descr = $meta_description|escape}{else}{$descr = $product->name|escape}{/if}
@@ -276,14 +284,6 @@
 				</div>
 			</form>
 			{* Выбор варианта товара (The End) *}
-
-			{* Расположение товара - город *}
-			{foreach $product->variants as $v}
-				{if !empty($v->shop->city)}
-					<div class="variant-city">{$v->shop->city}</div>
-				{/if}
-			{/foreach}
-
 
 			{if !empty($brand->name)}<div class="annot-brand"><span>Производитель:</span> <a class="bluelink" style="font-weight:700;" href="brands/{$brand->url}">{$brand->name|escape}</a></div>{/if}
 		

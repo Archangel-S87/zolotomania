@@ -1,35 +1,35 @@
 ### Авторизация
-POST https://zolotoy-telets.store/fivecms/json/1c_exchange.php?type=catalog&mode=check_auth
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=check_auth
 Cache-Control: no-cache
-Authorization: Basic YWRtaW46N2RGMjFiakw=
+Authorization: Basic YWRtaW46djRpNmsxaWc5
 ###
 
 ### Загрузка файлоа
-POST https://zolotoy-telets.store/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_B933_661.zip
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_B933_661.zip
 Cache-Control: no-cache
-Authorization: Basic YWRtaW46N2RGMjFiakw=
-Cookie: PHPSESSID=6eb6bec554a545c299b440b94164ae00;
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 
 < E:/OpenServer/domains/zolotoy-telets.loc/_temp/v8_B933_661.zip
 ###
 
 ### Импорт категорий
-POST https://zolotoy-telets.store/fivecms/json/1c_exchange.php?type=catalog&mode=import_categories&update=false
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_categories&update=false
 Cache-Control: no-cache
-Authorization: Basic YWRtaW46N2RGMjFiakw=
-Cookie: PHPSESSID=6eb6bec554a545c299b440b94164ae00;
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 ###
 
 ### Импорт товаров
-POST https://zolotoy-telets.store/fivecms/json/1c_exchange.php?type=catalog&mode=import_products&filename=import_products.json&update=false
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_products&filename=import_products.json&update=false
 Cache-Control: no-cache
-Authorization: Basic YWRtaW46N2RGMjFiakw=
-Cookie: PHPSESSID=6eb6bec554a545c299b440b94164ae00;
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 ###
 
 ### Импорт вариантов
-POST https://zolotoy-telets.store/fivecms/json/1c_exchange.php?type=catalog&mode=import_variants&filename=import_variants.json&update=false
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_variants&filename=import_variants.json&update=false
 Cache-Control: no-cache
-Authorization: Basic YWRtaW46N2RGMjFiakw=
-Cookie: PHPSESSID=6eb6bec554a545c299b440b94164ae00;
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 ###

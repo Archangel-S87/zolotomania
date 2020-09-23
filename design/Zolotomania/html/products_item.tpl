@@ -23,8 +23,20 @@
         {/if}
     </div>
     <div class="product_info product_item">
-        <h3 class="product_title"><a title="{$product->name|escape}" data-product="{$product->id}"
-                                     href="products/{$product->url}">{$product->name|escape}</a></h3>
+        <h3 class="product_title">
+            <a title="{$product->name|escape}" data-product="{$product->id}" href="products/{$product->url}">
+                {$product->name|escape}
+            </a>
+        </h3>
+        {if $settings->showsku == 1}
+            {* Расположение товара - склад *}
+            <p class="sku">
+                {if $product->variant->sku && !empty($product->variant->shop->name)}
+                    <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                {/if}
+            </p>
+        {/if}
+
         {if !empty($smarty.cookies.view) && $smarty.cookies.view == 'table' && $mod == 'ProductsView'}
             <div class="annotation">
                 {if $product->brand}

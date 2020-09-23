@@ -1,4 +1,4 @@
 ### Обновление базы данных
-POST http://mmark.beget.tech/fivecms/update-db.php
-Authorization: Basic YWRtaW46N2RGMjFiakw=
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/update-db.php
+Authorization: Basic YWRtaW46djRpNmsxaWc5
 ###

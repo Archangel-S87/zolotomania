@@ -320,58 +320,71 @@
 
 	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}">
 	{if $module != 'MainView'}
+		<div class="side-shade2"></div>
+		{$bread_pos = 1}
 
-<div class="side-shade2"></div>
-{$bread_pos = 1}
-<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-	<div class="uk-container">
-		{if $module == 'ProductsView'}
-			{if !empty($category)}
-				{foreach from=$category->path item=cat}
-					{if !$cat@last || !empty($brand)}
+		{if $module != 'LoginView' && $module != 'RegisterView' && $module != 'WishlistView' && $module != 'CartView'}
+			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+				<div class="uk-container">
+					{if $module == 'ProductsView'}
+						{if !empty($category)}
+							{foreach from=$category->path item=cat}
+								{if !$cat@last || !empty($brand)}
+									<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+										<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
+											<span itemprop="name">{$cat->name|escape}</span>
+										</a>
+										<meta itemprop="position" content="{$bread_pos++}">
+									</span>
+									<span class="breadcrumb-separator">»</span>
+								{else}
+									<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+									<link itemprop="item" href="catalog/{$cat->url}"/>
+									<span itemprop="name">{$cat->name|escape}</span>
+									<meta itemprop="position" content="{$bread_pos++}">
+								</span>
+								{/if}
+							{/foreach}
+						{/if}
+					{elseif $module == 'ProductView'}
+						{if $category}
+							{foreach from=$category->path item=cat}
+								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+									<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
+										<span itemprop="name">{$cat->name|escape}</span>
+									</a>
+									<meta itemprop="position" content="{$bread_pos++}">
+								</span>
+								<span class="breadcrumb-separator">»</span>
+							{/foreach}
+						{/if}
 						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
-							<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
-								<span itemprop="name">{$cat->name|escape}</span>
-							</a>
+							<link itemprop="item" href="products/{$product->url}" />
+							<span itemprop="name">{$product->name|escape}</span>
 							<meta itemprop="position" content="{$bread_pos++}">
 						</span>
-						<span class="breadcrumb-separator">»</span>
 					{else}
 						<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
-						<link itemprop="item" href="catalog/{$cat->url}"/>
-						<span itemprop="name">{$cat->name|escape}</span>
-						<meta itemprop="position" content="{$bread_pos++}">
-					</span>
+							<link itemprop="item" href="{if !empty($page->url)}{$page->url}{/if}" />
+							<span itemprop="name">
+								{if !empty($h1_title)}
+									{$h1_title|escape}
+								{elseif !empty($page->name)}
+									{$page->name|escape}
+								{elseif !empty($page_name)}
+									{$page_name|escape}
+								{/if}
+							</span>
+							<meta itemprop="position" content="{$bread_pos++}">
+						</span>
 					{/if}
-				{/foreach}
-			{/if}
-		{elseif $module == 'ProductView'}
-			{if $category}
-				{foreach from=$category->path item=cat}
-					<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
-						<a itemprop="item" href="catalog/{$cat->url}" title="{$cat->name|escape}">
-							<span itemprop="name">{$cat->name|escape}</span>
-						</a>
-						<meta itemprop="position" content="{$bread_pos++}">
-					</span>
-					<span class="breadcrumb-separator">»</span>
-				{/foreach}
-			{/if}
-			<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
-				<link itemprop="item" href="products/{$product->url}" />
-				<span itemprop="name">{$product->name|escape}</span>
-				<meta itemprop="position" content="{$bread_pos++}">
-			</span>
+				</div>
+			</div>
 		{/if}
-	</div>
-</div>
-
 	{/if}
 
 		<div id="content" role="main" class="content_wrapper {if $module != 'MainView'} uk-container {/if}">
-
 				{$content}
-
 		</div>
 	</div>
 

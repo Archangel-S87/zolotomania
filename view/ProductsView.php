@@ -286,6 +286,8 @@ class ProductsView extends View
 							$ids[0][$v->name1][] = $v->id;
 							$ids[1][$v->name2][] = $v->id;
 						}
+                        // Привязка к магазину
+                        if ($v->shop_id) $v->shop = $this->variants->get_shop($v->shop_id);
 					}
 				}
 				$classes=array();
@@ -303,6 +305,7 @@ class ProductsView extends View
 				$products_all = array();
                 // Принудительно показываю все варианты товаров в фильтре
                 unset($filter['variants1']);
+                unset($filter['limit']);
 				foreach($this->products->get_products($filter) as $p)
 					$products_all[$p->id] = $p;
 				$products_all_ids = array_keys($products_all);

@@ -5,12 +5,12 @@ Authorization: Basic YWRtaW46djRpNmsxaWc5
 ###
 
 ### Загрузка файлоа
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_B41B_d3.zip
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_E46B_284.zip
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 
-< E:/OpenServer/domains/zolotomania.loc/_temp/v8_B41B_d3.zip
+< E:/OpenServer/domains/zolotomania.loc/_temp/v8_E46B_284.zip
 ###
 
 ### Импорт категорий
@@ -29,6 +29,14 @@ Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 
 ### Импорт вариантов
 POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=import_variants&filename=import_variants.json&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###
+
+
+### Импорт пользователей
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=users&mode=import&filename=import_users.json
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;

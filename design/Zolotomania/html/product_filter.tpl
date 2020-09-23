@@ -3,7 +3,7 @@
 <div class="product-filter">
    <div class="sort"><span>Сортировать по:</span>
 		<select onchange="direct_pagination(this.value);" class="selectPrductSort inputbox">
-			<option value="{url sort=position page=null}" {if $sort=='position'}selected{/if}>По умолчанию</optionx>
+			<option value="{url sort=position page=null}" {if $sort=='position'}selected{/if}>По умолчанию</option>
 			<option value="{url sort=priceup page=null}" {if $sort=='priceup'}selected{/if}>цене &#8593;</option>
 			<!--option value="{url sort=pricedown page=null}" {if $sort=='pricedown'}selected{/if}>цене &#8595;</option-->
 			<option value="{url sort=name page=null}" {if $sort=='name'}selected{/if}>названию</option>
