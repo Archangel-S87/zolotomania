@@ -167,7 +167,7 @@ class Variants extends Fivecms
 	}
 
 	public function get_shop($id) {
-        $query = $this->db->placehold("SELECT id, city, address FROM __shops WHERE id=? LIMIT 1", $id);
+        $query = $this->db->placehold("SELECT id, name, city, address FROM __shops WHERE id=? LIMIT 1", $id);
         $this->db->query($query);
         return $this->db->result();
     }

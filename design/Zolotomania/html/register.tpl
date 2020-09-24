@@ -17,7 +17,8 @@
 </div>
 {/if}
 
-<form class="form register_form" method="post">
+<form class="form register_form" method="post" style="margin-top: 70px; position:relative;">
+	<a href="/" class="form-back-page" onclick="window.history.back(); return false;"></a>
 	<h1>Регистрация</h1>
 	
 	<input type="text" name="name" id="name" data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" maxlength="255"   placeholder="ФИО" required/>
@@ -40,6 +41,16 @@
 	
 
 </form>
+
+<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+<script>
+	jQuery(function($){
+		const tel = $("#tel");
+		tel.focus(function() {
+			tel.mask('+7 (999) 999-99-99');
+		});
+	});
+</script>
 
 {if !empty($settings->ulogin)}
 	<div class="socialauth">Войти через соцсети:</div>

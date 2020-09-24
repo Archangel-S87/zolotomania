@@ -76,6 +76,97 @@ class LoginView extends View
 			}
 			return $this->design->fetch('password_remind.tpl');
 		}
+        // Активация аккаунта
+        elseif ($this->request->get('action') == 'activate') {
+
+            // Если запостили телефон
+            if($this->request->method('post') && $this->request->post('phone'))
+            {
+                $phone = $this->request->post('phone');
+                $this->design->assign('phone', $phone);
+
+                $phone = str_replace(['(', ')', ' ', '-'], '', $phone);
+
+                if (!preg_match('/^\+7[\d]{5,15}$/i', $phone)) {
+                    $this->design->assign('error', 'invalid_phone');
+                } else {
+
+                    $this->db->query("SELECT id FROM __users WHERE phone=? LIMIT 1", $phone);
+
+                    if ($user_id = $this->db->result('id')) {
+
+                        $user = $this->users->get_user(intval($user_id));
+
+                        if ($user->password) {
+                            $this->design->assign('error', 'has_password');
+                        } else {
+                            // Отправка смс на номер пользователя
+
+                            $this->design->assign('send_code', true);
+                            $this->design->assign('email', $user->email);
+
+                            $_SESSION['activate_id'] = $user_id;
+                            $_SESSION['phone'] = $phone;
+
+                            $code = $this->generate_sms_code();
+
+                            require_once 'sms/smsc.ru.php';
+
+                            $message = 'Код подтверждения активации ' . $code;
+
+                            $res = send_sms($phone, $message);
+
+                            if ($res[1] <= 0) {
+                                $this->design->assign('error', 'Ошибка sms №' . -$res[1]);
+                            }
+
+                        }
+
+                    } else {
+                        $this->design->assign('error', 'user_not_found');
+                    }
+                }
+
+            }
+            // Если пришол код
+            elseif ($this->request->method('post') && $this->request->post('sms_code'))
+            {
+                $code = $this->request->post('sms_code');
+                $email = $this->request->post('email');
+                $password = $this->request->post('password');
+
+                $this->design->assign('email', $email);
+                $this->design->assign('send_code', true);
+
+                $user = $this->users->get_user(intval($_SESSION['activate_id']));
+
+                $this->db->query('SELECT count(*) as count FROM __users WHERE email=? AND id!=?', $email, $user->id);
+                $user_exists = $this->db->result('count');
+
+                if($user_exists)
+                    $this->design->assign('error', 'user_exists');
+                elseif(empty($email))
+                    $this->design->assign('error', 'empty_email');
+                elseif(empty($password))
+                    $this->design->assign('error', 'empty_password');
+                elseif(empty($code) || $code != $this->generate_sms_code())
+                    $this->design->assign('error', 'Неверный код подтверждения');
+                else {
+                    $this->users->update_user($user->id, [
+                        'email' => $email,
+                        'password' => $password
+                    ]);
+
+                    unset($_SESSION['activate_id']);
+                    unset($_SESSION['phone']);
+
+                    header('Location: ' . $this->config->root_url . '/user/login');
+                }
+
+            }
+
+            return $this->design->fetch('user_activate.tpl');
+        }
 		// auth ULogin
 		elseif(isset($_POST['token'])) {
 			$s = file_get_contents('https://ulogin.ru/token.php?token='.$_POST['token'].'&host='.$_SERVER['HTTP_HOST']);
@@ -201,39 +292,39 @@ class LoginView extends View
 		// Вход
 		elseif($this->request->method('post') && $this->request->post('login'))
 		{
-			$email			= $this->request->post('email');
-			$password		= $this->request->post('password');
-			
-			$this->design->assign('email', $email);
-		
-			if($user_id = $this->users->check_password($email, $password))
-			{
-				$user = $this->users->get_user($email);
-				if($user->enabled)
-				{
-					$_SESSION['user_id'] = $user_id;
-					$this->users->update_user($user_id, array('last_ip'=>$ip));
-					
-					if($this->settings->cart_storage == 2) {
-						$this->cart->base_to_cart($user_id);
-						$this->cart->cart_to_base();
-					}
-					
-					// Перенаправляем пользователя на прошлую страницу, если она известна
-					/*if(!empty($_SESSION['current_for_login']))
-						header('Location: '.$_SESSION['current_for_login']);				
-					else*/
-						header('Location: '.$this->config->root_url.'/user');				
-				}
-				else
-				{
-					$this->design->assign('error', 'user_disabled');
-				}
-			}
-			else
-			{
-				$this->design->assign('error', 'login_incorrect');
-			}				
+            $login			= $this->request->post('user_login');
+            $password		= $this->request->post('password');
+
+            $this->design->assign('login', $login);
+
+            if($user_id = (int) $this->users->check_password($login, $password))
+            {
+                $user = $this->users->get_user($user_id);
+                if($user->enabled)
+                {
+                    $_SESSION['user_id'] = $user_id;
+                    $this->users->update_user($user_id, array('last_ip'=>$ip));
+
+                    if($this->settings->cart_storage == 2) {
+                        $this->cart->base_to_cart($user_id);
+                        $this->cart->cart_to_base();
+                    }
+
+                    // Перенаправляем пользователя на прошлую страницу, если она известна
+                    /*if(!empty($_SESSION['current_for_login']))
+                        header('Location: '.$_SESSION['current_for_login']);
+                    else*/
+                    header('Location: '.$this->config->root_url.'/user');
+                }
+                else
+                {
+                    $this->design->assign('error', 'user_disabled');
+                }
+            }
+            else
+            {
+                $this->design->assign('error', 'login_incorrect');
+            }
 		}	
 		return $this->design->fetch('login.tpl');
 	}	

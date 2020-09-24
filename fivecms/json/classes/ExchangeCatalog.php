@@ -375,6 +375,9 @@ class ExchangeCatalog extends Exchange
 
             if (!$image || !is_file($images_dir . $image)) {
                 $image = null;
+                if ($category_id = $this->find_category_id($category['external_id'])) {
+                    $this->categories->delete_image($category_id);
+                }
             }
         }
 
@@ -383,7 +386,10 @@ class ExchangeCatalog extends Exchange
             if ($is_update && $category_id = $this->find_category_id($category['external_id'])) {
                 // Обновление категории
                 if ($image) {
-                    $this->categories->delete_image($category_id);
+                    $old_category = $this->categories->get_category((int)$category_id);
+                    if ($image != $old_category->image) {
+                        $this->categories->delete_image($category_id);
+                    }
                     $new_category['image'] = $image;
                 }
                 $this->categories->update_category($category_id, $new_category);

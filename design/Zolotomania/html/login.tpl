@@ -17,9 +17,10 @@
 
 {* Если не отписка от рассылки*}
 {if !isset($hideform)}
-	<form class="form login_form" method="post">
+	<form class="form login_form" method="post" style="margin-top: 70px; position:relative;">
+		<a href="/" class="form-back-page" onclick="window.history.back(); return false;"></a>
 		<h1>Вход</h1>
-		<input type="text" name="email" data-format="email" data-notice="Введите email" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="Ваш e-mail"/>
+		<input id="login" type="text" name="user_login" data-format=".+" data-notice="Введите email или номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="Email или номер телефона"/>
 
 		
 		<input type="password" name="password" data-format=".+" data-notice="Введите пароль" value="" placeholder="Пароль" />
@@ -27,6 +28,27 @@
 		<input type="submit" class="button" name="login" value="Войти">
 		<div class="login_register">или <a class="bluelink" href="user/register">зарегистрироваться</a></div>
 	</form>
+
+	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+	<script>
+		$(function ($) {
+			let LoginMask;
+
+			$("#login").on('keyup', function () {
+				const input = $(this),
+						val = input.val();
+
+				if (val && /^[+]*$/.test(val) && !LoginMask) {
+					LoginMask = input.mask('+7 (999) 999-99-99');
+					input.val('+7 (');
+				} else if (LoginMask && /^[+]7 [(]___[)] ___-__-__$/.test(val)) {
+					LoginMask = null;
+					input.unmask();
+					input.val('');
+				}
+			});
+		});
+	</script>
 
 	{if !empty($settings->ulogin)}
 		<div class="socialauth">Войти через соцсети:</div>
