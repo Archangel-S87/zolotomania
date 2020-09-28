@@ -332,7 +332,18 @@ class CartView extends View
 	function fetch()
 	{  
 		// Способы доставки
-		$deliveries = $this->delivery->get_deliveries(array('enabled'=>1));
+		$deliveries = [];
+		$deliveries_temp = $this->delivery->get_deliveries(array('enabled'=>1));
+
+        // Способы доставки для магазинов и клиентов разные
+		$is_shop = $this->group && $this->group->name == 'Магазины';
+		foreach ($deliveries_temp as $delivery) {
+		    if ($is_shop && $delivery->name == 'На магазин') {
+                $deliveries[] = $delivery;
+            } elseif (!$is_shop && $delivery->name != 'На магазин') {
+                $deliveries[] = $delivery;
+            }
+        }
 
     	foreach($deliveries as $delivery)
             $delivery->payment_methods = $this->payment->get_payment_methods(array('delivery_id'=>$delivery->id, 'enabled'=>1));

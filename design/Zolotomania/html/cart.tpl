@@ -27,6 +27,9 @@
                 <td class="price">
                     Цена
                 </td>
+                <td class="amounts" style="display: none;">
+                    Количество
+                </td>
                 <td class="remove" style="border-radius: 0 5px 5px 0;">
                 </td>
             </tr>
@@ -56,6 +59,13 @@
                         {* Цена за единицу *}
                         <td class="price">
                             {($purchase->variant->price)|convert} {$currency->sign} <span class="purx">&nbsp;x</span>
+                        </td>
+
+                        {* Количество *}
+                        <td class="amount" style="display: none;">
+                            <input {if $purchase->variant->stock == 0}disabled{/if} type="text" name="amounts[{$purchase->variant->id}]" value="{if $purchase->variant->stock == 0}0{else}{$purchase->amount}{/if}" />
+
+                            <span> {if $purchase->variant->unit}{$purchase->variant->unit}{else}{$settings->units}{/if}</span>
                         </td>
 
                         {* Удалить из корзины *}
