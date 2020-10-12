@@ -150,6 +150,8 @@ RewriteRule ^user/register/?$	index.php?module=RegisterView  [L,QSA]
 RewriteRule ^user/logout/?$	index.php?module=LoginView&action=logout  [L,QSA]
 RewriteRule ^user/preminder/?$	index.php?module=LoginView&action=password_remind  [L,QSA]
 RewriteRule ^user/preminder/([0-9a-z]+)/?$	index.php?module=LoginView&action=password_remind&code=$1  [L,QSA]
+RewriteRule ^user/activate/?$	index.php?module=RegisterView&action=activate  [L,QSA]
+RewriteRule ^user/activate/([0-9a-z]+)/?$	index.php?module=RegisterView&action=activate&code=$1  [L,QSA]
 RewriteRule ^user/?$	index.php?module=UserView  [L,QSA]
 
 # Отзывы

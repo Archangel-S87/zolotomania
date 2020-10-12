@@ -1,0 +1,59 @@
+### Авторизация
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=check_auth
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+###
+
+### Загрузка файлоа
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_837_2df7b.zip
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+
+< E:/OpenServer/domains/zolotomania.loc/_temp/v8_837_2df7b.zip
+###
+
+### Распаковка архива из папки temp
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&unpacking=true&filename=v8_F3CF_5044.zip
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###ё
+
+### Импорт категорий
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_categories&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###ё
+
+### Импорт товаров
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_products&filename=import_products.json&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###
+
+### Импорт вариантов
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=import_variants&filename=import_variants.json&update=false
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###
+
+
+### Импорт пользователей
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=users&mode=import&filename=import_users.json
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###
+
+
+### Экспорт ордеров
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-01-01 00:00:00&date_end=2020-10-08 11:00:00
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###
+

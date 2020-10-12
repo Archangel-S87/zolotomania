@@ -320,17 +320,23 @@ class Exchange extends Fivecms
 
         $file = $this->temp_dir . $filename;
 
-        $input_stream = fopen('php://input', 'rb');
-        $output_stream = fopen($file, 'ab');
+        // Распакавать архив из папки temp_dir если он есть
+        $unpacking = $this->request->get('unpacking');
+        if (!$unpacking || !$is_archive || !file_exists($file)) {
 
-        if ($input_stream && $output_stream) {
-            if (!stream_copy_to_stream($input_stream, $output_stream)) {
-                self::error("Failed to write file {$filename}", 500);
+            $input_stream = fopen('php://input', 'rb');
+            $output_stream = fopen($file, 'ab');
+
+            if ($input_stream && $output_stream) {
+                if (!stream_copy_to_stream($input_stream, $output_stream)) {
+                    self::error("Failed to write file {$filename}", 500);
+                }
+                fclose($input_stream);
+                fclose($output_stream);
+            } else {
+                self::error("Unable to create file {$filename}", 500);
             }
-            fclose($input_stream);
-            fclose($output_stream);
-        } else {
-            self::error("Unable to create file {$filename}", 500);
+
         }
 
         // распаковка архива

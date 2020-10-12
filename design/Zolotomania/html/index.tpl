@@ -102,8 +102,8 @@
 			<meta name="twitter:image" property="og:image" content="{$post->images[1]->filename|resize:800:600:w}">
 			<link rel="image_src" href="{$post->images[1]->filename|resize:800:600:w}">
 		{else}
-			<meta name="twitter:image" property="og:image" content="{$config->root_url}/files/logo/logo.png">
-			<link rel="image_src" href="{$config->root_url}/files/logo/logo.png">
+			<meta name="twitter:image" property="og:image" content="{$config->root_url}/files/logo/logo.svg">
+			<link rel="image_src" href="{$config->root_url}/files/logo/logo.svg">
 		{/if}
 		<meta name="twitter:description" property="og:description" content="{if !empty($post->annotation)}{$post->annotation|strip_tags|escape}{elseif !empty($meta_description)}{$meta_description|escape}{/if}">
 	{else}
@@ -111,8 +111,8 @@
 		<meta property="og:type" content="website">
 		<meta name="twitter:card" content="summary">
 		<meta property="og:url" content="{$config->root_url}{$smarty.server.REQUEST_URI}">
-		<meta name="twitter:image" property="og:image" content="{$config->root_url}/files/logo/logo.png">
-		<link rel="image_src" href="{$config->root_url}/files/logo/logo.png">
+		<meta name="twitter:image" property="og:image" content="{$config->root_url}/files/logo/logo.svg">
+		<link rel="image_src" href="{$config->root_url}/files/logo/logo.svg">
 		<meta property="og:site_name" content="{$settings->site_name|escape}">
 		{if !empty($meta_description)}<meta name="twitter:description" property="og:description" content="{$meta_description|escape}">{/if}
 	{/if}
@@ -660,7 +660,7 @@
 		});
 		{/if}
 
-		$(function() {
+		$(document).ready(function() {
 			$(".zoom").fancybox({ 'hideOnContentClick' : true });
 			$(".zoom1").fancybox({ 'hideOnContentClick' : false, speedIn : 10, speedOut : 10, changeSpeed : 10});
 		});

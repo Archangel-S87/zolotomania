@@ -740,13 +740,6 @@ ul.tiny_products.parentscat li.product:hover{
         -ms-flex-pack: center;
             justify-content: center;
 }
-/*cats*/
-#container.catid15 .tiny_products:not(.parentscat),#container.catid28 .tiny_products:not(.parentscat){
-    display: none;
-}
-#container.catid15 .pagination, #container.catid28 .pagination{
-    display: none;
-}
 
 .form-back-page {
     position: absolute;
@@ -864,6 +857,79 @@ ul.tiny_products.parentscat li.product:hover{
     padding: 0px 35px;
     background: #bcd4e4;
 }
+
+/*activate*/
+.form.activate_form{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 25px;
+    background: #dbc0ce;
+    box-shadow: 0 0 15px #0000002e;
+    border-radius: 5px;
+}
+.form.activate_form input[type="text"], .form.activate_form input[type="password"], .form.activate_form input[type="email"],.form.activate_form input[type="tel"]{
+    padding: 10px;
+    border: 2px solid #bcd4e4;
+    width: 90%;
+    max-width: 300px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 1.15rem;
+}
+.form.activate_form input[type="password"]{
+    margin-bottom: 5px;
+}
+.form.activate_form input[type="submit"]{
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    padding: 0 35px;
+    background: #bcd4e4;
+}
+
+/*password_remind*/
+.form.password_remind {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 25px;
+    background: #dbc0ce;
+    box-shadow: 0 0 15px #0000002e;
+    border-radius: 5px;
+}
+.form.password_remind input[type="text"], .form.password_remind input[type="password"], .form.password_remind input[type="email"],.form.password_remind input[type="tel"]{
+    padding: 10px;
+    border: 2px solid #bcd4e4;
+    width: 90%;
+    max-width: 300px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 1.15rem;
+}
+.form.password_remind input[type="password"]{
+    margin-bottom: 5px;
+}
+.form.password_remind input[type="submit"]{
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    padding: 0 35px;
+    background: #bcd4e4;
+}
+
 /*product-filter*/
 .product-filter {
     display: -webkit-box;
@@ -1047,6 +1113,8 @@ background-color: transparent;
     padding-left: 16%;
 }
 .features-wrap {
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 0;
 }
 .feature_values ul{
@@ -1081,15 +1149,17 @@ background-color: transparent;
 }
 #content .feature_column {
     float: none;
-    padding-right: 0;
     display: flex;
     align-items: center;
+    padding: 0 10px;
 }
 #content .feature_name {
     padding: 0;
-    margin-right: 10px;
+    margin: 0 10px 0 0;
 }
 #content .feature_values {
+    display: flex;
+    align-items: center;
     padding-right: 0;
     margin: 10px 0 5px;
 }

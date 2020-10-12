@@ -7,6 +7,8 @@
 
 class ExchangeSales extends Exchange
 {
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
     protected $mods = [
         'import',
         'export'
@@ -125,7 +127,28 @@ class ExchangeSales extends Exchange
 
     protected function export()
     {
-        $filter = ['modified_since' => $this->settings->last_1c_orders_export_date];
+        $date_begin = $this->request->get('date_begin', 'string');
+        $date_end = $this->request->get('date_end', 'string');
+        $status = $this->request->get('status');
+
+        $filter = [];
+
+        if ($date_begin && ($date_time = strtotime($date_begin)) !== false) {
+            $filter['date_from'] = date(self::DATE_FORMAT, $date_time);
+        }
+        if ($date_end && ($date_time = strtotime($date_end)) !== false) {
+            $filter['date_to'] = date(self::DATE_FORMAT, $date_time);
+        }
+        if (!is_null($status)) {
+            // status = Новый / Принят / Доставлен / Отменен
+            $filter['status'] = (int)$status;
+        }
+
+        // По умолчанию только новые
+        if (!count($filter)) {
+            $filter['modified_since'] = $this->settings->last_1c_orders_export_date;
+        }
+
         $filter['limit'] = $this->orders->count_orders($filter);
 
         $orders = $this->orders->get_orders($filter);
@@ -134,8 +157,8 @@ class ExchangeSales extends Exchange
         foreach ($orders as $order) {
 
             if ($order->user_id) {
-                $this->db->query("SELECT id FROM __users WHERE id=? LIMIT 1", $order->user_id);
-                $user_id = $this->db->result('id');
+                $this->db->query("SELECT external_id FROM __users WHERE id=? LIMIT 1", $order->user_id);
+                $user_id = $this->db->result('external_id');
                 if (!$user_id) {
                     Exchange::add_warning("User with id {$order->user_id} not found");
                     continue;
@@ -237,7 +260,7 @@ class ExchangeSales extends Exchange
 
         }
 
-        //$this->settings->last_1c_orders_export_date = date("Y-m-d H:i:s");
+        $this->settings->last_1c_orders_export_date = date(self::DATE_FORMAT);
 
         Exchange::response(['orders' => $data]);
     }

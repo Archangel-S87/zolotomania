@@ -20,9 +20,8 @@
 	<form class="form login_form" method="post" style="margin-top: 70px; position:relative;">
 		<a href="/" class="form-back-page" onclick="window.history.back(); return false;"></a>
 		<h1>Вход</h1>
-		<input id="login" type="text" name="user_login" data-format=".+" data-notice="Введите email или номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="Email или номер телефона"/>
+		<input id="login" type="text" name="user_login" data-format=".+" data-notice="Введите номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="+7(___) ___-__-__"/>
 
-		
 		<input type="password" name="password" data-format=".+" data-notice="Введите пароль" value="" placeholder="Пароль" />
 		<a class="remember-password" href="user/preminder">Забыли пароль?</a>
 		<input type="submit" class="button" name="login" value="Войти">
@@ -31,22 +30,23 @@
 
 	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
 	<script>
+		$.fn.setCursorPosition = function(pos) {
+			if ($(this).get(0).setSelectionRange) {
+				$(this).get(0).setSelectionRange(pos, pos);
+			} else if ($(this).get(0).createTextRange) {
+				let range = $(this).get(0).createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', pos);
+				range.moveStart('character', pos);
+				range.select();
+			}
+		};
 		$(function ($) {
-			let LoginMask;
-
-			$("#login").on('keyup', function () {
-				const input = $(this),
-						val = input.val();
-
-				if (val && /^[+]*$/.test(val) && !LoginMask) {
-					LoginMask = input.mask('+7 (999) 999-99-99');
-					input.val('+7 (');
-				} else if (LoginMask && /^[+]7 [(]___[)] ___-__-__$/.test(val)) {
-					LoginMask = null;
-					input.unmask();
-					input.val('');
-				}
+			const login = $("#login");
+			login.click(function() {
+				$(this).setCursorPosition(3);
 			});
+			login.mask('+7(999) 999-99-99');
 		});
 	</script>
 

@@ -1,21 +1,60 @@
 Сайт лежит на пашкином хосте
 http://mmark.beget.tech/fivecms
 
-https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms
 http://xn--80anekfhdba3b2k.com/fivecms
 
 http://zolotomania.loc/fivecms/
 логин: admin
 пароль: v4i6k1ig9
 
-
 БД
 Имя базы glazatov_zolotom
 Пароль 19NZbN&c
 PhpMyAdmin https://octopus.beget.com/phpMyAdmin/index.php?db=glazatov_zolotom&token=c4024b1c17dfdf1ed97046187d748668
+
+
+Тестовый сервер
+https://dev.xn----8sbtgmhidba7b6k.xn--p1ai//fivecms
+
+БД
+Имя базы glazatov_dzm
+Пароль Iuji5*Mg
+PhpMyAdmin https://octopus.beget.com/phpMyAdmin/index.php?db=glazatov_dzm&lang=ru
+
 
 FTP
 Сервер glazatov.beget.tech
 Логин glazatov_admin
 Пароль ZM27071988
 
+Разместить в шапке на главной две ссылки https://zoloto-rezerv.ru/ https://скупка-золото.рф/
+
++Переделать маску входа и регистрации Сделать маску с подчёркиванием +7(___) ___-__-__ центрировать
+Активировать SMS оповещение.
+
+Артикул товара для магазинов должен быть в виде Льгов-060243, а для остальных 060243.
+
+Как магазин
+    Куда привести В магазин
+    Оплата Для магазина
+
+Как клиент
+    Куда привести
+        Домой
+            Поле адреса
+            Оплата
+                сбер
+                наличные
+                терминал
+                рассрочка
+                    Только для клиентов из Курска и курской облости
+                Обмен
+                    Только для клиентов из Курска и курской облости
+        Отделение почты
+            Разработка интерфейса
+            Оплата
+                сбер
+        В магазине
+            Всплывашка магазинов
+            Оплата
+                никакого выбора

@@ -1,6 +1,6 @@
 <!-- incl. cfeatures -->
 <form method="get" action="{url page=null}">
-    <div class="features-wrap">
+    <div class="features-wrap" style="flex:0 1 auto;">
         {if !empty($features_variants)}
             <div class="feature_column">
                 <div class="feature_values">
@@ -20,11 +20,11 @@
         {/if}
         {if !empty($features_variants1)}
             <div class="feature_column">
-                <div class="feature_values" style="display: flex; align-items: center">
-                    <div class="feature_name">Размер</div>
+                <div class="feature_name">Размер</div>
+                <div class="feature_values">
                     <ul>
                         {foreach $features_variants1 as $o  }
-                            <li style="margin-bottom: 0;">
+                            <li>
                                 <label{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} class="checked-active"{/if}>
                                     <input type="checkbox" name="v1[]"
                                            value="{$o}"{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} checked{/if} />{$o|escape}
@@ -61,16 +61,27 @@
                 const input = this,
                     filter_form = $('#cfeatures form');
 
-                filter_form.find('input[type="checkbox"]').each(function (index, item) {
-                    if (input !== item) {
-                        $(item).removeAttr('checked');
-                    }
-                });
+                if ($(input).hasClass('checked-active')) {
+                    $(input).removeAttr('checked');
+                }
+
+                // $('input[type="checkbox"]', filter_form).each(function (index, item) {
+                //     if (input !== item) {
+                //         $(item).removeAttr('checked');
+                //     }
+                // });
 
                 filter_form.submit();
             });
+
+            $(document).off("change", '#cfeatures input[type="text"]');
+            $(document).on("change", '#cfeatures input[type="text"]', function () {
+                $('#cfeatures form').submit();
+            });
         });
 
+        {*
+        // Пока не использую
         function mod_ajax_filter(current_input) {
             if (ajax_process) return false;
 
@@ -136,6 +147,7 @@
                 }
             });
         }
+        *}
     </script>
 
     {* Features *}
@@ -143,11 +155,6 @@
         {foreach $features as $f}
             <div class="feature_column">
                 <div class="feature_name" data-feature="{$f->id}">{$f->name}</div>
-                <div class="hide_feat">
-                    <svg x="0px" y="0px">
-                        <use xlink:href='#b_plus'/>
-                    </svg>
-                </div>
                 <div class="feature_values">
                     {if $f->in_filter==2}
                         {$f_min="min[`$f->id`]"}
@@ -180,11 +187,10 @@
                         <ul>
                             {foreach $f->options as $k=>$o}
                                 <li>
-                                    <label>
-                                        <span class="chbox">
-											<input type="checkbox" name="{$f->id}[]"
-                                                   {if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}checked="checked"{/if} value="{$o->value|escape}"/></span>
-                                        <span>{$o->value|escape}</span>
+                                    <label{if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})} class="checked-active"{/if}>
+                                        <input type="checkbox" name="{$f->id}[]"
+                                               {if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}checked="checked"{/if} value="{$o->value|escape}"/>
+                                        {$o->value|escape}
                                     </label>
                                 </li>
                             {/foreach}
@@ -225,88 +231,18 @@
         {/if}
 
         {*  price slider  *}
-        {if true}
-            <script>
-                minCost ={$minCost};
-                maxCost ={$maxCost};
-                minCurr = {if isset($minCurr)}{$minCurr}{else}0{/if};
-                maxCurr ={$maxCurr};
-                // priceslider
-                {literal}
-                $(document).ready(function () {
-                    if (minCurr >= 0 && maxCurr > 0) {
-                        $("#cslider").slider({
-                            min: minCost,
-                            max: maxCost,
-                            values: [minCurr, maxCurr],
-                            range: true,
-                            stop: function (event, ui) {
-                                var mncurr = $("#cslider").slider("values", 0);
-                                var mxcurr = $("#cslider").slider("values", 1);
-                                $("input#minCurr").val(mncurr);
-                                $("input#maxCurr").val(mxcurr);
-                                ajax_filter();
-                            },
-                            slide: function (event, ui) {
-                                $("input#minCurr").val(ui.values[0]);
-                                $("input#maxCurr").val(ui.values[1]);
-                            }
-                        });
-                        $("input#minCurr").change(function () {
-                            var value1 = $("input#minCurr").val();
-                            var value2 = $("input#maxCurr").val();
-                            if (parseInt(value1) > parseInt(value2)) {
-                                value1 = value2;
-                                $("input#minCurr").val(value1);
-                            }
-                            $("#cslider").slider("values", 0, value1);
-                        });
-                        $("input#maxCurr").change(function () {
-                            var value1 = $("input#minCurr").val();
-                            var value2 = $("input#maxCurr").val();
-                            if (value2 > maxCost) {
-                                value2 = maxCost;
-                                $("input#maxCurr").val(maxCost)
-                            }
-                            if (parseInt(value1) > parseInt(value2)) {
-                                value2 = value1;
-                                $("input#maxCurr").val(value2);
-                            }
-                            $("#cslider").slider("values", 1, value2);
-                        });
-                        $('input.curr').keypress(function (event) {
-                            var key, keyChar;
-                            if (!event) var event = window.event;
-                            if (event.keyCode) key = event.keyCode; else if (event.which) key = event.which;
-                            if (key == null || key == 0 || key == 8 || key == 13 || key == 9 || key == 46 || key == 37 || key == 39) return true;
-                            keyChar = String.fromCharCode(key);
-                            if (!/\d/.test(keyChar)) return false;
-                        });
-                    }
-                });
-                {/literal}
-                // priceslider end
-            </script>
-            <div class="mpriceslider">
-                <div class="formCost">
-                    <span class="pr-cost">Цена:</span><input type="text" name="minCurr" id="minCurr"
-                                                             onchange="ajax_filter();" value="{$minCurr}"/>
-                    <label for="maxCurr">-</label> <input type="text" name="maxCurr" id="maxCurr"
-                                                          onchange="ajax_filter();" value="{$maxCurr}"/>
-                </div>
-                <div class="sliderCont">
-                    <div id="cslider"></div>
-                </div>
-                <a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="clear_filter">Сбросить фильтр</a>
+        <div class="mpriceslider">
+            <div class="formCost">
+                <span class="pr-cost">Цена:</span><input type="text" name="minCurr" id="minCurr"
+                                                         onchange="ajax_filter();" value="{$minCurr}"/>
+                <label for="maxCurr">-</label> <input type="text" name="maxCurr" id="maxCurr"
+                                                      onchange="ajax_filter();" value="{$maxCurr}"/>
             </div>
-        {else}
-            <div class="mpriceslider">
-                <div class="sliderButton">
-                    <input type="submit" value="Показать{if $total_products_num > 0} ({$total_products_num}){/if}"
-                           class="buttonblue">
-                </div>
+            <div class="sliderCont">
+                <div id="cslider"></div>
             </div>
-        {/if}
+            <a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="clear_filter">Сбросить фильтр</a>
+        </div>
 
         {if !empty($keyword)}
             <div style="display:none;">

@@ -172,7 +172,7 @@
 				{elseif !empty($brand->image)}
 					{$img_url=$config->root_url|cat:'/'|cat:$config->brands_images_dir|cat:$brand->image}
 				{else}
-					{$img_url=$config->root_url|cat:'/files/logo/logo.png'}
+					{$img_url=$config->root_url|cat:'/files/logo/logo.svg'}
 				{/if}
 					<img itemprop="url contentUrl" src="{$img_url}" alt="{$meta_title|escape}" title="{$meta_title|escape}"/>
 					<meta itemprop="image" content="{$img_url}" />
@@ -183,8 +183,8 @@
 
 			<div style="display:none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
 			    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-			        <img itemprop="url" src="{$config->root_url}/files/logo/logo.png" alt="{$settings->company_name|escape}" title="{$settings->company_name|escape}"/>
-					<meta itemprop="image" content="{$config->root_url}/files/logo/logo.png" />
+			        <img itemprop="url" src="{$config->root_url}/files/logo/logo.svg" alt="{$settings->company_name|escape}" title="{$settings->company_name|escape}"/>
+					<meta itemprop="image" content="{$config->root_url}/files/logo/logo.svg" />
 			    </div>
 				<meta itemprop="name" content="{$settings->company_name|escape}" />
 				<meta itemprop="address" content="{$config->root_url}" />

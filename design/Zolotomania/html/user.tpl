@@ -1,14 +1,22 @@
 {* Шаблон страницы зарегистрированного пользователя *}
 {$meta_title = "Личный кабинет" scope=root}
 {$page_name = "Личный кабинет" scope=root}
-<h1>Личный кабинет</h1>
 
 {if isset($error)}
 	<div class="message_error">
 		{if $error == 'empty_name'}Введите имя
-		{elseif $error == 'empty_email'}Введите email
 		{elseif $error == 'empty_phone'}Введите Телефон
+		{elseif $error == 'invalid_tel'}Не корректный номер телефона
+		{elseif $error == 'empty_email'}Введите email
 		{elseif $error == 'empty_password'}Введите пароль
+		{elseif $error == 'user_exists'}
+			{if $user_exists_message == 'email'}
+				Пользователь с таким email уже зарегистрирован
+			{elseif $user_exists_message == 'phone'}
+				Пользователь с таким телефоном уже зарегистрирован
+			{else}
+				Пользователь с таким email и телефоном уже зарегистрирован
+			{/if}
 		{elseif $error == 'empty_adress'}Укажите адрес
 		{elseif $error == 'user_exists'}Пользователь с таким email уже зарегистрирован
 		{else}{$error}{/if}
@@ -18,12 +26,12 @@
 	<form style="display:table;" class="form" method="post">
 		<label>ФИО</label>
 		<input data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" name="name" maxlength="255" type="text" required/>
-	 
-		<label>Email</label>
-		<input data-format="email" data-notice="Введите email" value="{if isset($email)}{$email|escape}{/if}" name="email" maxlength="255" type="email" required/>
 	
-		<label>Телефон</label>
-		<input placeholder="Напр: +7 (981) 123-4567" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="phone" maxlength="255" type="tel" required/>
+		<label for="tel">Телефон</label>
+		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text"/>
+
+		<label>Email</label>
+		<input value="{if isset($email)}{$email|escape}{/if}" name="email" maxlength="255" type="email"/>
 
 		<label>Куда привезти</label>
 		<textarea name="adress" type="text" value="">{if isset($adress)}{$adress|escape}{/if}</textarea>
@@ -32,6 +40,28 @@
 		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px;"/>
 		<input id="logininput" type="submit" class="button" value="Сохранить">
 	</form>
+
+	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+	<script>
+		$.fn.setCursorPosition = function(pos) {
+			if ($(this).get(0).setSelectionRange) {
+				$(this).get(0).setSelectionRange(pos, pos);
+			} else if ($(this).get(0).createTextRange) {
+				let range = $(this).get(0).createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', pos);
+				range.moveStart('character', pos);
+				range.select();
+			}
+		};
+		$(function ($) {
+			const tel = $("#tel");
+			tel.click(function() {
+				$(this).setCursorPosition(3);
+			});
+			tel.mask('+7(999) 999-99-99');
+		});
+	</script>
 	
 	{if $cart->total_products>0}
 	<div class="balance_block">

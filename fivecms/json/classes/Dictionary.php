@@ -55,32 +55,42 @@ class Dictionary
         $reader->close();
     }
 
-    public function read_dictionary_shops()
+    private function add_section($name, $value)
     {
-        $reader = new JsonReader();
+        if (!property_exists($this, $name)) $this->$name = null;
 
-        try {
-            $reader->open($this->file);
+        if (is_array($this->$name) && !empty($this->$name['not_property'])) return;
 
-            if ($reader->read('shops')) {
-                $depth = $reader->depth();
-                $reader->read();
-                do {
-                    $shop = $reader->value();
-                    if (!$id = $shop['id'] ?? '') continue;
-                    unset($shop['id']);
-                    $this->shops['shops'][$id] = $shop;
-                } while ($reader->next() && $reader->depth() > $depth);
-            } else return;
-        } catch (Exception $exception) {
-            Exchange::error_read_file($this->file, $exception);
+        $values = [];
+        foreach ($value['Значения'] ?? [] as $val) {
+            $values[(string)$val['id']] = (string)$val['name'];
         }
 
-        $reader->close();
+        // Привязка свойств к категориям
+        $binding_categories = [
+            'add' => [],
+            'exclude' => [],
+            'is_binding' => false // привязка характеристики приходит с 1с
+        ];
+        if (isset($value['categories'])) {
+            $binding_categories = array_merge($binding_categories, $value['categories']);
+            if (!empty($value['categories']['add'])) $binding_categories['is_binding'] = true;
+        }
+
+        $property = [
+            'external_id' => (string)($value['id'] ?? ''),
+            'name' => (string)($value['name'] ?? ''),
+            'values' => $values,
+        ];
+
+        $this->$name = is_array($this->$name) ? array_merge($this->$name, $property) : $property;
+
+        $this->all_sections[(string)$value['id']] = (string)$name;
     }
 
-    public function get_shops() {
-        return $this->shops['shops'];
+    private function add_category($name, $value)
+    {
+        $this->categories[$value['external_id']] = $value;
     }
 
     /**
@@ -132,30 +142,31 @@ class Dictionary
         return $this->$section['values'][$value_id] ?? '';
     }
 
-    private function add_section($name, $value)
+    public function read_dictionary_shops()
     {
-        if (!property_exists($this, $name)) $this->$name = null;
+        $reader = new JsonReader();
 
-        if (is_array($this->$name) && !empty($this->$name['not_property'])) return;
+        try {
+            $reader->open($this->file);
 
-        $values = [];
-        foreach ($value['Значения'] ?? [] as $val) {
-            $values[(string)$val['id']] = (string)$val['name'];
+            if ($reader->read('shops')) {
+                $depth = $reader->depth();
+                $reader->read();
+                do {
+                    $shop = $reader->value();
+                    if (!$id = $shop['id'] ?? '') continue;
+                    unset($shop['id']);
+                    $this->shops['shops'][$id] = $shop;
+                } while ($reader->next() && $reader->depth() > $depth);
+            } else return;
+        } catch (Exception $exception) {
+            Exchange::error_read_file($this->file, $exception);
         }
 
-        $property = [
-            'external_id' => (string)($value['id'] ?? ''),
-            'name' => (string)($value['name'] ?? ''),
-            'values' => $values,
-        ];
-
-        $this->$name = is_array($this->$name) ? array_merge($this->$name, $property) : $property;
-
-        $this->all_sections[(string)$value['id']] = (string)$name;
+        $reader->close();
     }
 
-    private function add_category($name, $value)
-    {
-        $this->categories[$value['external_id']] = $value;
+    public function get_shops() {
+        return $this->shops['shops'];
     }
 }

@@ -27,12 +27,22 @@ class UpdateDB extends Fivecms
         // Модификацмя таблицы заказы
         $this->update_table_variants();
 
+        // Создание таблицы запросов CMS
+        $this->create_table_users_confirm_sms();
+
         // Обновление таблицы групп пользователей
         //$this->update_table_groups();
 
         // Обновление таблицы __users
         //$this->update_table_users();
         echo 0;
+    }
+
+    private function create_table_users_confirm_sms()
+    {
+        if ($this->check_table('users_confirm_sms')) return;
+        $table_name = $this->config->db_prefix . 'users_confirm_sms';
+        $this->db->query("CREATE TABLE {$table_name} ( `id` INT(11) NOT NULL AUTO_INCREMENT, `user_id` INT(11) NOT NULL, `phone` VARCHAR(45) NOT NULL, `code` INT(5) NOT NULL, `is_send` TINYINT(1) NOT NULL DEFAULT '1', `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`)) ENGINE = MyISAM;");
     }
 
     private function create_table_shops()

@@ -23,28 +23,38 @@ class UserView extends View
 		{
 			$name			= $this->request->post('name');
 			$email			= $this->request->post('email');
-			$phone			= $this->request->post('phone');
+            $tel			= $this->request->post('tel');
 			$password		= $this->request->post('password');
 			$adress			= $this->request->post('adress');
 			
 			$this->design->assign('name', $name);
 			$this->design->assign('email', $email);
-			$this->design->assign('phone', $phone);
 			$this->design->assign('adress', $adress);
-			
-			$this->db->query('SELECT count(*) as count FROM __users WHERE email=? AND id!=?', $email, $this->user->id);
+
+            $phone = str_replace(['(', ')', ' ', '-'], '', $tel);
+            $this->design->assign('phone', $tel);
+
+            if ($email) {
+                $this->db->query('SELECT count(*) as count FROM __users WHERE email=? AND id!=?', $email, $this->user->id);
+                $this->design->assign('user_exists_message', 'email');
+            } elseif ($email && $phone) {
+                $this->db->query('SELECT count(*) as count FROM __users WHERE email=? AND phone!=? AND id=?', $email, $phone, $this->user->id);
+                $this->design->assign('user_exists_message', '');
+            } else {
+                $this->db->query('SELECT count(*) as count FROM __users WHERE phone=? AND id!=?', $phone, $this->user->id);
+                $this->design->assign('user_exists_message', 'phone');
+            }
+
 			$user_exists = $this->db->result('count');
 
 			if($user_exists)
 				$this->design->assign('error', 'user_exists');
 			elseif(empty($name))
 				$this->design->assign('error', 'empty_name');
-			elseif(empty($email))
-				$this->design->assign('error', 'empty_email');
-			elseif(empty($phone))
-				$this->design->assign('error', 'empty_phone');
-			elseif(empty($adress))
-				$this->design->assign('error', 'empty_adress');
+            elseif(empty($tel))
+                $this->design->assign('error', 'empty_tel');
+            elseif(!preg_match('/^\+7[\d]{5,15}$/i', $phone))
+                $this->design->assign('error', 'invalid_tel');
 			elseif($user_id = $this->users->update_user($this->user->id, array('name'=>$name, 'email'=>$email, 'phone'=>$phone, 'adress'=>$adress)))
 			{
 				$this->user = $this->users->get_user(intval($user_id));
@@ -79,9 +89,7 @@ class UserView extends View
 		$this->design->assign('referrals', $referrals);
 		
 		$this->design->assign('meta_title', $this->user->name);
-
-		$body = $this->design->fetch('user.tpl');
 		
-		return $body;
+		return $this->design->fetch('user.tpl');
 	}
 }

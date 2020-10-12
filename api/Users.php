@@ -121,7 +121,7 @@ class Users extends Fivecms
         if(isset($user['password']))
             $user['password'] = md5($this->salt.$user['password'].md5($user['password']));
 
-        $query = $this->db->placehold("SELECT count(*) as count FROM __users WHERE email=?", $user['email']);
+        $query = $this->db->placehold("SELECT count(*) as count FROM __users WHERE phone=?", $user['phone']);
         $this->db->query($query);
 
         if($this->db->result('count') > 0)

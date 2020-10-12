@@ -7,9 +7,17 @@
 {if isset($error)}
 <div class="message_error">
 	{if $error == 'empty_name'}Введите имя
-	{elseif $error == 'empty_email'}Введите email
+	{elseif $error == 'empty_tel'}Введите телефон
+	{elseif $error == 'invalid_tel'}Не корректный номер телефона
 	{elseif $error == 'empty_password'}Введите пароль
-	{elseif $error == 'user_exists'}Пользователь с таким email уже зарегистрирован
+	{elseif $error == 'user_exists'}
+		{if $user_exists_message == 'email'}
+			Пользователь с таким email уже зарегистрирован
+		{elseif $user_exists_message == 'phone'}
+			Пользователь с таким телефоном уже зарегистрирован
+		{else}
+			Пользователь с таким email и телефоном уже зарегистрирован
+		{/if}
 	{elseif $error == 'captcha'}Не пройдена проверка на бота
 	{elseif $error == 'ip'}Вы уже регистрировались. Если забыли пароль - воспользуйтесь его востановлением.
 	{elseif $error == 'wrong_name'}В поле ФИО может использоваться только кириллица
@@ -22,13 +30,10 @@
 	<h1>Регистрация</h1>
 	
 	<input type="text" name="name" id="name" data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" maxlength="255"   placeholder="ФИО" required/>
-	
-	
-	<input type="email" name="email" id="email" data-format="email" data-notice="Введите email" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="Email" />
 
-	
-	<input type="tel" name="tel" id="tel" data-format=".+" data-notice="Введите телефон" value="{if isset($tel)}{$tel|escape}{/if}" maxlength="20"  placeholder="Телефон" required/>
+	<input type="tel" name="tel" id="tel" data-format=".+" data-notice="Введите телефон" value="{if isset($tel)}{$tel|escape}{/if}" maxlength="20"  placeholder="+7(___) ___-__-__" >
 
+	<input type="email" name="email" id="email"  data-notice="Введите email" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="Email" />
    
     <input type="password" name="password" id="password" data-format=".+" data-notice="Введите пароль" value="" placeholder="Пароль" />
 
@@ -37,18 +42,28 @@
     <input style="margin-top:15px;" id="logininput" type="submit" class="button hideablebutton" name="register" value="Зарегистрироваться">
 
 	{include file='conf.tpl'}
-	
-	
 
 </form>
 
 <script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
 <script>
+	$.fn.setCursorPosition = function(pos) {
+		if ($(this).get(0).setSelectionRange) {
+			$(this).get(0).setSelectionRange(pos, pos);
+		} else if ($(this).get(0).createTextRange) {
+			let range = $(this).get(0).createTextRange();
+			range.collapse(true);
+			range.moveEnd('character', pos);
+			range.moveStart('character', pos);
+			range.select();
+		}
+	};
 	jQuery(function($){
 		const tel = $("#tel");
-		tel.focus(function() {
-			tel.mask('+7 (999) 999-99-99');
+		tel.click(function() {
+			$(this).setCursorPosition(3);
 		});
+		tel.mask('+7(999) 999-99-99');
 	});
 </script>
 

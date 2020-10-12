@@ -5,12 +5,19 @@ Authorization: Basic YWRtaW46djRpNmsxaWc5
 ###
 
 ### Загрузка файлоа
-POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_B933_661.zip
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&filename=v8_837_2df7b.zip
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 
-< E:/OpenServer/domains/zolotoy-telets.loc/_temp/v8_B933_661.zip
+< E:/OpenServer/domains/zolotoy-telets.loc/_temp/v8_837_2df7b.zip
+###
+
+### Распаковка архива из папки temp
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=catalog&mode=file&unpacking=true&filename=v8_837_2df7b.zip
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 ###
 
 ### Импорт категорий
