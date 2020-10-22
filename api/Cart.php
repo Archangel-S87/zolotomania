@@ -243,8 +243,8 @@ class Cart extends Fivecms
 		// Выберем товар из базы, заодно убедившись в его существовании
 		$variant = $this->variants->get_variant($variant_id);
 
-		// Если товар существует, добавим его в корзину
-		if(!empty($variant) && ($variant->stock>0) )
+		// Если товар существует и не в резерве, добавим его в корзину
+		if(!empty($variant) && ($variant->stock>0) && (!$variant->reservation))
 		{
 			// Не дадим больше чем на складе
 			$amount = min($amount, $variant->stock);
@@ -273,8 +273,8 @@ class Cart extends Fivecms
 		// Выберем товар из базы, заодно убедившись в его существовании
 		$variant = $this->variants->get_variant($variant_id);
 
-		// Если товар существует, добавим его в корзину
-		if(!empty($variant) && $variant->stock>0)
+        // Если товар существует и не в резерве, добавим его в корзину
+		if(!empty($variant) && $variant->stock>0 && !$variant->reservation)
 		{
 			// Не дадим больше чем на складе
 			$amount = min($amount, $variant->stock);

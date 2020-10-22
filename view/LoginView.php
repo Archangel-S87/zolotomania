@@ -98,9 +98,10 @@ class LoginView extends View
                 $this->design->assign('send_code', true);
 
                 if (!$sms->check_sms_send($phone, $user->id)) {
-                    $this->design->assign('error', 'sms_send');
+                    $res = $sms->send_sms_code($user);
+                    if (!is_numeric($res)) $this->design->assign('error', $res);
                 } else {
-                    $sms->send_sms_code($user);
+                    $this->design->assign('error', 'sms_send');
                 }
             }
         }
@@ -131,6 +132,9 @@ class LoginView extends View
 
             // Отправляем письмо пользователю для восстановления пароля
             $this->notify->email_password_remind($user->id, $password);
+
+            // Отправляем смс с новым паролем
+            $sms->send_sms_message($user->phone, "Ваш новый пароль $password");
 
             // Залогиниваемся под пользователем и переходим в кабинет для изменения пароля
             $_SESSION['user_id'] = $user->id;

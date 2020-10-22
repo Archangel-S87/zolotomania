@@ -143,31 +143,30 @@ class RegisterView extends View
             $phone = str_replace(['(', ')', ' ', '-'], '', $phone);
             if (!preg_match('/^\+7[\d]{5,15}$/i', $phone)) {
                 $this->design->assign('error', 'invalid_phone');
-            } else {
-
-                // Проверка на дубль телефонов
-                $this->db->query("SELECT * FROM __users WHERE phone=? AND enabled=0 LIMIT 1", $phone);
-                $save_user = $this->db->result();
-                if ($save_user->id != $_SESSION['user_id']) {
-                    $this->design->assign('error', 'user_exists');
-                    return;
-                }
-                if ($save_user->phone != $phone) {
-                    $this->users->update_user($_SESSION['user_id'], ['phone' => $phone]);
-                    $save_user = $this->users->get_user((int)$_SESSION['user_id']);
-                }
-
-                // Отправка смс на номер пользователя
-                $this->design->assign('send_code', true);
-                $this->design->assign('phone', $phone);
-
-                if (!$sms->check_sms_send($phone, $save_user->id)) {
-                    $this->design->assign('error', 'sms_send');
-                } else {
-                    $sms->send_sms_code($save_user);
-                }
+                return;
+            }
+            // Проверка на дубль телефонов
+            $this->db->query("SELECT * FROM __users WHERE phone=? AND enabled=0 LIMIT 1", $phone);
+            $save_user = $this->db->result();
+            if ($save_user->id != $_SESSION['user_id']) {
+                $this->design->assign('error', 'user_exists');
+                return;
+            }
+            if ($save_user->phone != $phone) {
+                $this->users->update_user($_SESSION['user_id'], ['phone' => $phone]);
+                $save_user = $this->users->get_user((int)$_SESSION['user_id']);
             }
 
+            // Отправка смс на номер пользователя
+            $this->design->assign('send_code', true);
+            $this->design->assign('phone', $phone);
+
+            if (!$sms->check_sms_send($phone, $save_user->id)) {
+                $res = $sms->send_sms_code($save_user);
+                if (!is_numeric($res)) $this->design->assign('error', $res);
+            } else {
+                $this->design->assign('error', 'sms_send');
+            }
         } // Если пришол код
         elseif ($this->request->method('post') && $this->request->post('sms_code')) {
 

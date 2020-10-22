@@ -29,7 +29,8 @@
 	<div class="message message_error">
 		<span class="text">{if $message_error=='login_exists'}{$tr->login_exists}
 		{elseif $message_error=='empty_name'}{$tr->empty_name}
-		{elseif $message_error=='empty_email'}{$tr->empty_email}
+		{elseif $message_error=='empty_phone'}Телефон должен быть указан
+		{elseif $message_error=='login_existed'}Телефон закреплён за другим пользователем
 		{elseif $message_error=='wrong_change_balance'}{$tr->wrong_withdrawal_amount}
 		{else}{$message_error|escape}{/if}</span>
 		{if isset($smarty.get.return)}
@@ -53,49 +54,57 @@
 		<div id=column_left>
 			<!-- Левая колонка -->
 	
-				<!-- Параметры страницы -->
-				<div class="block">
-					<ul>
-						{if $groups}
-						<li>
-							<label style="width: 57px;" class=property>{$tr->group}</label>
-							<select name="group_id">
-								<option value='0'>{$tr->no|capitalize}</option>
-								{foreach from=$groups item=g}
-									<option value='{$g->id}' {if $user->group_id == $g->id}selected{/if}>{$g->name|escape} ({$g->discount|escape}%)</option>
-								{/foreach}
-							</select>
-						</li>
-						{/if}
-						<li style="overflow:visible;">
-							<label style="width: 57px;" class=property>Email</label>
-							<input style="width: 290px;" name="email" class="fivecms_inp" type="text" value="{$user->email|escape}" />
-							{include file='send_user_message.tpl'}
-							<input style="margin-left: 10px;" id="backform" type="button" class="button_green" value="{$tr->send_message}" />
-						</li>
-						{if $user->balance != 0}
-						<li style="height:28px;">
-							<label style="width: 170px;" class="property">{$tr->accrued_points} {$tr->on} </label>
-							{*<input style="width:80px;" name="balance" class="fivecms_inp" type="number" value="{$user->balance|convert|replace:' ':''}" />*}
-							<div style="margin-top:2px;">{$user->balance|convert} {$currency->sign}</div>
-						</li>
-						<li style="height:28px;">
-							<label style="width: 175px;" class="property">{$tr->withdrawal_amount} </label>
-							- <input style="width:70px;" name="change_balance" class="fivecms_inp" type="number" min="0" max="{$user->balance|round}" />
-						</li>
-						{/if}
-						<li><label style="width: 140px;" class=property>{$tr->phone} </label><input style="width:290px;" name="phone" class="fivecms_inp" type="text" value="{$user->phone|escape}" /></li>
-						<li><label style="width: 140px;" class=property>{$tr->register_date}</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->created|date}" /></li>
-						<li><label style="width: 140px;" class=property>IP</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->last_ip|escape}" /></li>
-						<li><label style="width: 140px;" class=property>{if !empty($user->partner_id)}<a class="bluelink" href="index.php?module=UserAdmin&id={$user->partner_id}" target="_blank">{$tr->referer}</a>{else}{$tr->referer}{/if}</label><input style="width: 100px;" disabled name="partner_id" class="fivecms_inp" type="text" value="{$user->partner_id}" /></li>
-						<li style="overflow:visible;width:610px;">
-							<p style="font-weight:700;margin:15px 0;">{$tr->user_info}:</p>
-							<textarea name="comment" class="editor_small">{$user->comment|escape}</textarea>
-						</li>
-					</ul>
-				</div>
-	
-				<!-- Параметры страницы (The End)-->			
+			<!-- Параметры страницы -->
+			<div class="block">
+				<ul>
+					{if $groups}
+					<li>
+						<label style="width: 70px;" class=property>{$tr->group}</label>
+						<select name="group_id">
+							<option value='0'>{$tr->no|capitalize}</option>
+							{foreach from=$groups item=g}
+								<option value='{$g->id}' {if $user->group_id == $g->id}selected{/if}>{$g->name|escape} ({$g->discount|escape}%)</option>
+							{/foreach}
+						</select>
+					</li>
+					{/if}
+					<li style="overflow:visible;">
+						<label style="width: 70px;" class=property>{$tr->phone} </label>
+						<input id="phone" style="width:290px;" name="phone" class="fivecms_inp" type="text" value="{$user->phone|escape}" />
+					</li>
+					{if $user->balance != 0}
+					<li style="height:28px;">
+						<label style="width: 170px;" class="property">{$tr->accrued_points} {$tr->on} </label>
+						{*<input style="width:80px;" name="balance" class="fivecms_inp" type="number" value="{$user->balance|convert|replace:' ':''}" />*}
+						<div style="margin-top:2px;">{$user->balance|convert} {$currency->sign}</div>
+					</li>
+					<li style="height:28px;">
+						<label style="width: 175px;" class="property">{$tr->withdrawal_amount} </label>
+						- <input style="width:70px;" name="change_balance" class="fivecms_inp" type="number" min="0" max="{$user->balance|round}" />
+					</li>
+					{/if}
+					<li>
+						<label style="width: 70px;" class=property>Email</label>
+						<input style="width: 290px;" name="email" class="fivecms_inp" type="text" value="{$user->email|escape}" />
+						{include file='send_user_message.tpl'}
+						<input style="margin-left: 10px;" id="backform" type="button" class="button_green" value="{$tr->send_message}" />
+					</li>
+					<li><label style="width: 140px;" class=property>{$tr->register_date}</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->created|date}" /></li>
+					<li><label style="width: 140px;" class=property>IP</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->last_ip|escape}" /></li>
+					<li><label style="width: 140px;" class=property>{if !empty($user->partner_id)}<a class="bluelink" href="index.php?module=UserAdmin&id={$user->partner_id}" target="_blank">{$tr->referer}</a>{else}{$tr->referer}{/if}</label><input style="width: 100px;" disabled name="partner_id" class="fivecms_inp" type="text" value="{$user->partner_id}" /></li>
+					<li style="overflow:visible;width:610px;">
+						<p style="font-weight:700;margin:15px 0;">{$tr->user_info}:</p>
+						<textarea name="comment" class="editor_small">{$user->comment|escape}</textarea>
+					</li>
+				</ul>
+			</div>
+			<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+			<script>
+				$(function ($) {
+					$("#phone").mask('+7(999) 999-99-99');
+				});
+			</script>
+			<!-- Параметры страницы (The End)-->
 			
 			<input style="float: left; margin-bottom: 20px;" class="button_green button_save" type="submit" name="user_info" value="{$tr->save|escape}" />
 		</div>

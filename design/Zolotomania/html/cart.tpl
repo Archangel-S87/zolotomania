@@ -167,8 +167,7 @@
             </div>
         </div>
         <span style="{if $cart->total_price >= $settings->minorder}display:none;{/if}" class="minorder">Минимальная сумма заказа <strong
-                    style="white-space: nowrap;">{$settings->minorder|convert} {$currency->sign}</strong><br/> Чтобы оформить заказ Вам нужно <a
-                    href="/">добавить в корзину еще товаров!</a></span>
+                    style="white-space: nowrap;">{$settings->minorder|convert} {$currency->sign}</strong><br/> Чтобы оформить заказ Вам нужно <a href="/">добавить в корзину еще товаров!</a></span>
 
         <div class="del_pay_info" style="{if $cart->total_price < $settings->minorder}display:none;{/if}">
 
@@ -383,7 +382,8 @@
                 {if isset($error)}
                     <div class="message_error">
                         {if $error == 'empty_name'}Введите имя{/if}
-                        {if $error == 'empty_email'}Введите email{/if}
+                        {if $error == 'empty_phone'}Введите телефон{/if}
+                        {elseif $error == 'invalid_phone'}Не корректный номер телефона
                         {if $error == 'captcha'}Не пройдена проверка на бота{/if}
                         {if $error == 'min_order'}Сумма товаров в заказе меньше минимума{/if}
                     </div>
@@ -396,15 +396,9 @@
                                data-notice="Введите ФИО"/>
                     </div>
 
-                    <div class="del_right">
-                        <label>Email *</label>
-                        <input name="email" type="email" value="{if !empty($email)}{$email|escape}{/if}"
-                               data-format="email" data-notice="Введите email"/>
-                    </div>
-
                     <div class="del_left">
                         <label>Телефон *</label>
-                        <input id="phone" name="phone" type="text" data-format=".+"
+                        <input id="user_phone" name="phone" type="text" data-format=".+"
                                value="{if !empty($phone)}{$phone|escape}{/if}" data-notice="Укажите телефон"/>
                     </div>
 
@@ -413,6 +407,17 @@
                         <input name="address" type="text"
                                value="{if !empty($address)}{$address|escape}{/if}{if !empty($adress)}{$adress|escape}{/if}"/>
                     </div>
+
+                    <script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+                    <script>
+                        jQuery(function($){
+                            const tel = $("#user_phone");
+                            tel.click(function() {
+                                $(this).setCursorPosition(3);
+                            });
+                            tel.mask('+7(999) 999-99-99');
+                        });
+                    </script>
                 </div>
 
                 {* загрузка файлов *}
@@ -456,7 +461,7 @@
                 {* загрузка файлов @ *}
 
                 <label>Комментарий к заказу</label>
-                <textarea name="comment" id="order_comment">{if !empty($comment)}{$comment|escape}{/if}</textarea>
+                <textarea name="comment" id="order_comment" rows="1">{if !empty($comment)}{$comment|escape}{/if}</textarea>
                 {include file='conf.tpl'}
                 {include file='antibot.tpl'}
                 <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}

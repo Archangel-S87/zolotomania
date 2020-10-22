@@ -252,3 +252,31 @@ $('.url').click(function(){
 	var url = $(this).attr('data-url');
 	window.open(url,'_blank');
 });
+// Выставление курсора вполе на позицию pos
+$.fn.setCursorPosition = function(pos) {
+	if ($(this).get(0).setSelectionRange) {
+		$(this).get(0).setSelectionRange(pos, pos);
+	} else if ($(this).get(0).createTextRange) {
+		let range = $(this).get(0).createTextRange();
+		range.collapse(true);
+		range.moveEnd('character', pos);
+		range.moveStart('character', pos);
+		range.select();
+	}
+};
+// Автоматическая высота textarea
+jQuery.fn.extend({
+	autoHeightTextarea: function () {
+		function autoHeight_(element) {
+			return jQuery(element)
+				.css({ 'height': 'auto', 'overflow-y': 'hidden' })
+				.height(element.scrollHeight);
+		}
+		return this.each(function() {
+			autoHeight_(this).on('input', function() {
+				autoHeight_(this);
+			});
+		});
+	}
+});
+$('textarea').autoHeightTextarea();

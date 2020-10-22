@@ -99,7 +99,7 @@ class Users extends Fivecms
     function get_user($id)
     {
         if(gettype($id) == 'string')
-            $where = $this->db->placehold(' WHERE u.email=? ', $id);
+            $where = $this->db->placehold(' WHERE u.phone=? ', $id);
         else
             $where = $this->db->placehold(' WHERE u.id=? ', intval($id));
 

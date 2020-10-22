@@ -26,15 +26,15 @@ class StreamTelecom extends Fivecms
         $this->db->query("INSERT INTO __users_confirm_sms SET ?%", $confirm);
         $_SESSION['confirm_id'] = $this->db->insert_id();
 
-        $text = 'Ваш код ' . $code;
-
-        //$this->send_sms_message($user->phone, $text);
+        return $this->send_sms_message($user->phone, "Ваш код $code");
     }
 
     public function check_sms_send($phone, $user_id)
     {
         $this->db->query("SELECT is_activate FROM __users_confirm_sms WHERE phone=? AND user_id=?", $phone, (int)$user_id);
-        return $this->db->result('is_activate');
+        $res = $this->db->result();
+        if (!$res) return false;
+        return !$res->is_activate;
     }
 
     public function check_sms_code($code)
@@ -57,6 +57,6 @@ class StreamTelecom extends Fivecms
     public function send_sms_message($phone, $message)
     {
         $url = self::API . '?user=' . self::LOGIN . '&pwd=' . self::PASS . '&sadr=' . self::SOURCE_ADDRESS . '&dadr=' . $phone . '&text=' . $message;
-        file_get_contents($url);
+        return file_get_contents($url);
     }
 }

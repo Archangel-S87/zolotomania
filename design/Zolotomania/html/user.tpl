@@ -30,11 +30,8 @@
 		<label for="tel">Телефон</label>
 		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text"/>
 
-		<label>Email</label>
-		<input value="{if isset($email)}{$email|escape}{/if}" name="email" maxlength="255" type="email"/>
-
-		<label>Куда привезти</label>
-		<textarea name="adress" type="text" value="">{if isset($adress)}{$adress|escape}{/if}</textarea>
+		<label>Адресс</label>
+		<textarea name="adress" type="text" rows="1" value="">{if isset($adress)}{$adress|escape}{/if}</textarea>
 		
 		<label class="ch_passw"><a href='#' onclick="$('#password').show();return false;">Изменить пароль</a></label>
 		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px;"/>
@@ -43,17 +40,6 @@
 
 	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
 	<script>
-		$.fn.setCursorPosition = function(pos) {
-			if ($(this).get(0).setSelectionRange) {
-				$(this).get(0).setSelectionRange(pos, pos);
-			} else if ($(this).get(0).createTextRange) {
-				let range = $(this).get(0).createTextRange();
-				range.collapse(true);
-				range.moveEnd('character', pos);
-				range.moveStart('character', pos);
-				range.select();
-			}
-		};
 		$(function ($) {
 			const tel = $("#tel");
 			tel.click(function() {

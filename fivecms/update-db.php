@@ -54,14 +54,23 @@ class UpdateDB extends Fivecms
 
     private function update_table_orders()
     {
-        if ($this->check_column('shop_id', 'orders')) return;
-        $this->db->query("ALTER TABLE __orders ADD shop_id INT(4) NOT NULL");
+        if (!$this->check_column('shop_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders ADD shop_id INT(4) NOT NULL");
+        }
+
+        // Возможен пустой email
+        $this->db->query("ALTER TABLE __orders CHANGE email email VARCHAR(255) NULL");
     }
 
     private function update_table_variants()
     {
-        if ($this->check_column('shop_id', 'variants')) return;
-        $this->db->query("ALTER TABLE __variants ADD shop_id INT(4) NOT NULL");
+        if (!$this->check_column('shop_id', 'variants')) {
+            $this->db->query("ALTER TABLE __variants ADD shop_id INT(4) NOT NULL");
+        }
+
+        if (!$this->check_column('reservation', 'variants')) {
+            $this->db->query("ALTER TABLE __variants ADD reservation TINYINT(1) DEFAULT 0 NOT NULL");
+        }
     }
 
     private function update_table_groups()

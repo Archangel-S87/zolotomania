@@ -34,7 +34,8 @@ class CartView extends View
 		$bonus              = $this->request->post('bonus','integer');
     	$order->email       = $this->request->post('email');
     	$order->address     = $this->request->post('address');
-    	$order->phone       = $this->request->post('phone');
+        $phone              = $this->request->post('phone');
+        $order->phone       = str_replace(['(', ')', ' ', '-'], '', $phone);
     	$order->comment     = $this->request->post('comment');
     	if($this->request->post('calc')) $order->calc = $this->request->post('calc');
 		$order->ip      	= $_SERVER['REMOTE_ADDR'];
@@ -153,10 +154,27 @@ class CartView extends View
 	    		$this->coupons->update_coupon($cart->coupon->id, array('usages'=>$cart->coupon->usages+1));
 	    	
 	    	// Добавляем товары к заказу
+            $purchase_count = 0;
 	    	foreach($this->request->post('amounts') as $variant_id=>$amount)
 	    	{
+	    	    // Проверяю не находится ли вариант в резерве
+                $variant = $this->variants->get_variant($variant_id);
+                if (!$variant || $variant->reservation) continue;
+                // Помечаю вариант как в резерве
+                $this->variants->update_variant($variant_id, ['reservation' => 1]);
+
 	    		$this->orders->add_purchase(array('order_id'=>$order_id, 'variant_id'=>intval($variant_id), 'amount'=>intval($amount)));
+
+                $purchase_count++;
 	    	}
+
+	    	// В заказе нет товаров очищаю корзину
+            if (!$purchase_count) {
+                $this->orders->delete_order($order_id);
+                $this->cart->empty_cart();
+                header('Location: /');
+            }
+
 	    	$order = $this->orders->get_order($order_id);
 	    	
 	    	// Стоимость доставки
@@ -190,29 +208,34 @@ class CartView extends View
 			
 			// for mobile app don`t delete or change!!!
 			// Автоматически регистрируем нового пользователя если не залогинен
-		 		if(!empty($_SERVER['HTTP_CLIENT_IP'])) { $ip=$_SERVER['HTTP_CLIENT_IP']; }
-				elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip=$_SERVER['HTTP_X_FORWARDED_FOR']; }
-				else { $ip=$_SERVER['REMOTE_ADDR']; }
-		 		
-		 		if(!$this->user && !empty($order->email)) {
-		    		$this->db->query('SELECT count(*) as count FROM __users WHERE email=?', $order->email);
-		  			$user_exists = $this->db->result('count');
-		  			if($user_exists) { 
-		    			$this->db->query('SELECT * FROM __users WHERE email=?', $order->email);
-		    			$user_exists_id = $this->db->result('id');
-		  			  $this->orders->update_order($order->id, array('user_id'=>$user_exists_id));
-					} else { 
-		    		$chars="qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP"; 
-		    		$max=10; 
-		    		$size=StrLen($chars)-1; 
-		    		$password=null; 
-		    		while($max--) $password.=$chars[rand(0,$size)]; 
-		    		$user_id = $this->users->add_user(array('email'=>$order->email, 'password'=>$password, 'name'=>$order->name, 'phone'=>$order->phone, 'enabled'=>'1', 'last_ip'=>$ip));
-		    		$this->orders->update_order($order->id, array('user_id'=>$user_id));
-		    		$this->notify->email_user_registration($user_id, $password);
-					$_SESSION['user_id'] = $user_id;
-					}
-		  		}
+            if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+
+            if (!$this->user && !empty($order->phone)) {
+                $this->db->query('SELECT count(*) as count FROM __users WHERE phone=?', $order->phone);
+                $user_exists = $this->db->result('count');
+                if ($user_exists) {
+                    $this->db->query('SELECT * FROM __users WHERE phone=?', $order->phone);
+                    $user_exists_id = $this->db->result('id');
+                    $this->orders->update_order($order->id, ['user_id' => $user_exists_id]);
+                } else {
+                    $chars = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
+                    $max = 10;
+                    $size = StrLen($chars) - 1;
+                    $password = null;
+                    while ($max--) $password .= $chars[rand(0, $size)];
+                    $user_id = $this->users->add_user(['password' => $password, 'name' => $order->name, 'phone' => $order->phone, 'enabled' => '1', 'last_ip' => $ip, 'external_id' => $order->phone]);
+                    $this->orders->update_order($order->id, ['user_id' => $user_id]);
+                    // TODO Отправка СМС на номер телефона
+                    //$this->notify->email_user_registration($user_id, $password);
+                    $_SESSION['user_id'] = $user_id;
+                }
+            }
 			// for mobile app end don`t delete or change!!!
 			
 			// add partner_id to user

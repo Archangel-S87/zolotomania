@@ -72,7 +72,7 @@
 					<a href="index.php?module=UserAdmin&id={$user->id}">{$user->name|escape}</a>{if $user->ref_views} <span class="cursor_help" title="{$tr->ref_visits}">[{$user->ref_views}]</span>{/if}{if !empty($user->balance) && $user->balance != 0} <span class="cursor_help" title="{$tr->points}">({$user->balance|round} {$currency->sign})</span>{/if}	
 				</div>
 				<div class="user_email cell">
-					<a href="mailto:{$user->name|escape}<{$user->email|escape}>">{$user->email|escape}</a>	
+					<a href="tel:{$user->phone|escape}<{$user->phone|escape}>">{$user->phone|escape}</a>
 				</div>
 				<div class="user_group cell">
 					{if !empty($user->tdiscount)}{$tr->enablediscounts5} ({$user->tdiscount}%){/if} {if !empty($groups[$user->group_id]->name)}{$groups[$user->group_id]->name}{/if}{if !empty($user->discount)} ({$user->discount}%){/if}

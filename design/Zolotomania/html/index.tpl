@@ -137,7 +137,15 @@
 
 		{if $module == 'MainView'}
 
-		<div class="container">
+		<div class="container flex">
+			<div class="header__left">
+				<a href="//zoloto-rezerv.ru" target="_blank">
+					<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
+				</a>
+				<a href="//скупка-золото.рф" target="_blank">
+					<span>Скупка золота</span>
+				</a>
+			</div>
 			<div class="header__right">
 				<div id="top_phone">
 						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
@@ -209,14 +217,10 @@
 						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
 					{/if}
 				</div>
-
-
-
-
 			</div>
 		</div>
 
-		<div class="MainView__header" style="background: url(files/tiffany-two-models-1.jpg);">
+		<div class="MainView__header" style="background: url('/design/Zolotomania/images/tiffany-two-models-1.jpg');">
 			<div class="MainView__header-content">
 				<div class="header__logo" onclick="window.location='{$config->root_url}/'">
 					<span class="header__logo--big">З</span>олото<span class="header__logo--big">М</span>ания<sup>®</sup>
@@ -323,7 +327,7 @@
 		<div class="side-shade2"></div>
 		{$bread_pos = 1}
 
-		{if $module != 'LoginView' && $module != 'RegisterView' && $module != 'WishlistView' && $module != 'CartView'}
+		{if !in_array($module, ['LoginView', 'RegisterView', 'WishlistView', 'CartView', 'OrderView'])}
 			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
 				<div class="uk-container">
 					{if $module == 'ProductsView'}

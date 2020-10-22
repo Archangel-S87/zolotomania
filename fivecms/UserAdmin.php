@@ -17,19 +17,19 @@ class UserAdmin extends Fivecms
 			if($this->request->post('change_balance'))
 				$change_balance = $this->request->post('change_balance', 'float');
 			$user->group_id = $this->request->post('group_id');
-			$user->phone = $this->request->post('phone');
+            $user->phone = str_replace(['(', ')', ' ', '-'], '', $this->request->post('phone'));
 			$user->comment = $this->request->post('comment');
 	
-			## Не допустить одинаковые email пользователей.
+			## Не допустить одинаковые телефоны пользователей.
 			if(empty($user->name))
 			{			
 				$this->design->assign('message_error', 'empty_name');
 			}
-			elseif(empty($user->email))
+			elseif(empty($user->phone))
 			{			
-				$this->design->assign('message_error', 'empty_email');
+				$this->design->assign('message_error', 'empty_phone');
 			}
-			elseif(($u = $this->users->get_user($user->email)) && $u->id!=$user->id)
+			elseif(($u = $this->users->get_user($user->phone)) && $u->id != $user->id)
 			{			
 				$this->design->assign('message_error', 'login_existed');
 			}
