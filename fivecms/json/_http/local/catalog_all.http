@@ -18,7 +18,7 @@ POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
-###ё
+###
 
 ### Импорт категорий
 POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=import_categories&update=false
@@ -51,9 +51,15 @@ Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 
 
 ### Экспорт ордеров
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-01-01&date_end=2020-10-09&status=1
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-01-01&date_end=2020-10-09&status=0
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 ###
 
+### Импорт ордеров
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=import&filename=import_orders.json
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###

@@ -489,7 +489,8 @@ class ExchangeCatalog extends Exchange
             'external_id' => $json_variant['variant_id'],
             'name1' => $name1,
             'unit' => 'шт',
-            'shop_id' => $this->find_shop_id($json_variant['shop'] ?? '')
+            'shop_id' => $this->find_shop_id($json_variant['shop'] ?? ''),
+            'reservation' => $json_variant['reservation'] ?? 0
         ];
 
         $variant_id = $this->variants->add_variant($variant);

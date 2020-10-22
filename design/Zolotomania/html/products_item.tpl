@@ -31,8 +31,14 @@
         {if $settings->showsku == 1}
             {* Расположение товара - склад *}
             <p class="sku">
-                {if $product->variant->sku && !empty($product->variant->shop->name)}
-                    <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                {if $group && $group->name == 'Магазины'}
+                    {if $product->variant->sku && !empty($product->variant->shop->name)}
+                        <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                    {/if}
+                {else}
+                    {if $product->variant->sku}
+                        <span>Артикул: {$product->variant->sku}</span>
+                    {/if}
                 {/if}
             </p>
         {/if}
@@ -133,26 +139,30 @@
                         </div>
                     {/if}
                     <div class="buy uk-flex">
-                        <div class="wishprod">
-                            <div class="wishlist towish" title="Избранное">
-                                {if !empty($wished_products) && $product->id|in_array:$wished_products}
-                                    <span onclick="window.location='/wishlist'" class="inwish activewc">
+                        {if !$product->variant->reservation}
+                            <div class="wishprod">
+                                <div class="wishlist towish" title="Избранное">
+                                    {if !empty($wished_products) && $product->id|in_array:$wished_products}
+                                        <span onclick="window.location='/wishlist'" class="inwish activewc">
 										<span xlink:href='#activew'
                                               class="button button-default button-blue">В желаниях</span>
 									</span>
-                                {else}
-                                    <span onclick="window.location='/wishlist'"
-                                          class="inwish activewc">
+                                    {else}
+                                        <span onclick="window.location='/wishlist'"
+                                              class="inwish activewc">
 										<span xlink:href='#activew'
                                               class="button button-default button-blue">В желаниях</span>
 									</span>
-                                    <span class="basewc button button-default button-blue" data-wish="{$product->id}" xlink:href='#basew'>Подумаю</span>
-                                {/if}
+                                        <span class="basewc button button-default button-blue" data-wish="{$product->id}" xlink:href='#basew'>Подумаю</span>
+                                    {/if}
+                                </div>
                             </div>
-                        </div>
-                        <input {if $settings->trigger_id}onmousedown="try { rrApi.addToBasket({$product->variant->id}) } catch(e) {}"{/if}
-                               type="submit" class="button buttonred add-to-cart" value="Беру!"
-                               data-result-text="В корзине"/>
+                            <input {if $settings->trigger_id}onmousedown="try { rrApi.addToBasket({$product->variant->id}) } catch(e) {}"{/if}
+                                   type="submit" class="button buttonred add-to-cart" value="Беру!"
+                                   data-result-text="В корзине"/>
+                        {else}
+                            <div class="reservation">В резерве</div>
+                        {/if}
                     </div>
 
                 </form>

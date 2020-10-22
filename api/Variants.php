@@ -51,7 +51,7 @@ class Variants extends Fivecms
 		if(!$product_id_filter && !$variant_id_filter)
 			return array();
 		
-		$query = $this->db->placehold("SELECT v.id, v.product_id , v.price, NULLIF(v.compare_price, 0) as compare_price, v.sku, IFNULL(v.stock, ?) as stock, (v.stock IS NULL) as infinity, v.name, v.name1, v.name2, v.unit, v.currency_id, v.attachment, v.position, v.discount, v.discount_date, v.shop_id
+		$query = $this->db->placehold("SELECT v.id, v.product_id , v.price, NULLIF(v.compare_price, 0) as compare_price, v.sku, IFNULL(v.stock, ?) as stock, (v.stock IS NULL) as infinity, v.name, v.name1, v.name2, v.unit, v.currency_id, v.attachment, v.position, v.discount, v.discount_date, v.shop_id, v.reservation 
 					FROM __variants AS v
 					WHERE 
 					1
@@ -99,7 +99,7 @@ class Variants extends Fivecms
 			
 		$currencies = $this->money->get_currencies();
 			
-		$query = $this->db->placehold("SELECT v.id, v.product_id , v.price, NULLIF(v.compare_price, 0) as compare_price, v.sku, IFNULL(v.stock, ?) as stock, (v.stock IS NULL) as infinity, v.name, v.name1, v.name2, v.unit, v.currency_id, v.attachment, v.discount, v.discount_date
+		$query = $this->db->placehold("SELECT v.id, v.product_id , v.price, NULLIF(v.compare_price, 0) as compare_price, v.sku, IFNULL(v.stock, ?) as stock, (v.stock IS NULL) as infinity, v.name, v.name1, v.name2, v.unit, v.currency_id, v.attachment, v.discount, v.discount_date, v.reservation 
 					FROM __variants v WHERE id=?
 					LIMIT 1", $this->settings->max_order_amount, $id);
 		
