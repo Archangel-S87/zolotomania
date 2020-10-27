@@ -25,11 +25,11 @@ class UserView extends View
 			$email			= $this->request->post('email');
             $tel			= $this->request->post('tel');
 			$password		= $this->request->post('password');
-			$adress			= $this->request->post('adress');
+			$address			= $this->request->post('address');
 			
 			$this->design->assign('name', $name);
 			$this->design->assign('email', $email);
-			$this->design->assign('adress', $adress);
+			$this->design->assign('address', $address);
 
             $phone = str_replace(['(', ')', ' ', '-'], '', $tel);
             $this->design->assign('phone', $tel);
@@ -55,14 +55,14 @@ class UserView extends View
                 $this->design->assign('error', 'empty_tel');
             elseif(!preg_match('/^\+7[\d]{5,15}$/i', $phone))
                 $this->design->assign('error', 'invalid_tel');
-			elseif($user_id = $this->users->update_user($this->user->id, array('name'=>$name, 'email'=>$email, 'phone'=>$phone, 'adress'=>$adress)))
+			elseif($user_id = $this->users->update_user($this->user->id, array('name'=>$name, 'email'=>$email, 'phone'=>$phone, 'address'=>$address)))
 			{
 				$this->user = $this->users->get_user(intval($user_id));
 				$this->design->assign('name', $this->user->name);
 				$this->design->assign('user', $this->user);
 				$this->design->assign('email', $this->user->email);			
 				$this->design->assign('phone', $this->user->phone);
-				$this->design->assign('adress', $this->user->adress);		
+				$this->design->assign('address', $this->user->address);
 			}
 			else
 				$this->design->assign('error', 'unknown error');
@@ -79,7 +79,7 @@ class UserView extends View
 			$this->design->assign('name', $this->user->name);
 			$this->design->assign('email', $this->user->email);	
 			$this->design->assign('phone', $this->user->phone);	
-			$this->design->assign('adress', $this->user->adress);		
+			$this->design->assign('address', $this->user->address);
 		}
 	
 		$orders = $this->orders->get_orders(array('user_id'=>$this->user->id));

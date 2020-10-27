@@ -17,7 +17,7 @@
 			{else}
 				Пользователь с таким email и телефоном уже зарегистрирован
 			{/if}
-		{elseif $error == 'empty_adress'}Укажите адрес
+		{elseif $error == 'empty_address'}Укажите адрес
 		{elseif $error == 'user_exists'}Пользователь с таким email уже зарегистрирован
 		{else}{$error}{/if}
 	</div>
@@ -31,7 +31,7 @@
 		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text"/>
 
 		<label>Адресс</label>
-		<textarea name="adress" type="text" rows="1" value="">{if isset($adress)}{$adress|escape}{/if}</textarea>
+		<textarea name="address" type="text" rows="1" value="">{if isset($address)}{$address|escape}{/if}</textarea>
 		
 		<label class="ch_passw"><a href='#' onclick="$('#password').show();return false;">Изменить пароль</a></label>
 		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px;"/>

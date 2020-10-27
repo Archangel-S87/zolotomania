@@ -3,8 +3,8 @@ ErrorDocument 404 /404
 ErrorDocument 401 /password.php
 RewriteEngine on
 
-php_value error_reporting 0
-php_flag display_errors off
+php_value error_reporting 1
+php_flag display_errors on
 php_value max_input_vars 30000
 php_value max_input_time 1200
 php_value max_execution_time 1200

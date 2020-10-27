@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<name>
+		СберБанк
+	</name>
+
+	<settings>
+		<variable>token_sber</variable>
+		<name>Токен</name>
+	</settings>
+
+	<settings>
+		<variable>test_server</variable>
+		<name>Тестовый</name>
+		<options>
+			<name>Нет</name>
+			<value>0</value>
+		</options>
+		<options>
+			<name>Да</name>
+			<value>1</value>
+		</options>
+	</settings>
+
+	<settings>
+		<variable>payment_method</variable>
+		<name>Метов оплаты</name>
+		<options>
+			<name>Регистрация заказа</name>
+			<value>register</value>
+		</options>
+	</settings>
+</module>

@@ -166,6 +166,11 @@ class Variants extends Fivecms
 		$this->update_variant($id, array('attachment'=>null));
 	}
 
+    public function get_shops() {
+        $this->db->query('SELECT * FROM __shops');
+        return $this->db->results() ?: [];
+    }
+
 	public function get_shop($id) {
         $query = $this->db->placehold("SELECT id, name, city, address FROM __shops WHERE id=? LIMIT 1", $id);
         $this->db->query($query);

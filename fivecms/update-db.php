@@ -58,6 +58,10 @@ class UpdateDB extends Fivecms
             $this->db->query("ALTER TABLE __orders ADD shop_id INT(4) NOT NULL");
         }
 
+        if (!$this->check_column('order_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders ADD order_id VARCHAR(64) NULL DEFAULT NULL AFTER payment_method_id");
+        }
+
         // Возможен пустой email
         $this->db->query("ALTER TABLE __orders CHANGE email email VARCHAR(255) NULL");
     }
@@ -86,10 +90,6 @@ class UpdateDB extends Fivecms
         // добавление колонок
         if (!$this->check_column('external_id', $table_mame)) {
             $this->db->query("ALTER TABLE __{$table_mame} ADD external_id varchar(74) NOT NULL COMMENT 'ИД 1С'");
-        }
-
-        if (!$this->check_column('site_id', $table_mame)) {
-            $this->db->query("ALTER TABLE __{$table_mame} ADD site_id varchar(64) NOT NULL DEFAULT '{$this->site_id}' COMMENT 'ИдСайта'");
         }
 
         if (!$this->check_column('bonus_type', $table_mame)) {

@@ -134,7 +134,7 @@ class ExchangeUsers extends Exchange
 
         // Временный пользователь для сравнения
         $user = [
-            'email' => $json_user['Email'],
+            'email' => $json_user['Email'] ?? '',
             'password' => $json_user['password'],
             'name' => $json_user['ФИО'],
             'balance' => (float)$json_user['КоличествоБонусов'],
