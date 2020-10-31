@@ -2,6 +2,11 @@
 
 class Notify extends Fivecms
 {
+    /**
+     * @deprecated
+     * @param $phone string
+     * @param $smstext string
+     */
 	public function sms($phone, $smstext){
 		require_once('sms/sms.ru.php');
 		$smsru = new SMSRU($this->settings->apiid);
@@ -12,6 +17,81 @@ class Notify extends Fivecms
 		$data->partner_id = '15587'; 
 		$sms = $smsru->send_one($data); 
 	}
+
+    /**
+     * Отправляет смс код активашии юзеру
+     * @param $user
+     * @return false|string
+     */
+    public function send_sms_code($user)
+    {
+        $code = rand(10000, 99999);
+
+        $confirm = [
+            'user_id' => $user->id,
+            'phone' => $user->phone,
+            'code' => $code
+        ];
+
+        $this->db->query("INSERT INTO __users_confirm_sms SET ?%", $confirm);
+        $_SESSION['confirm_id'] = $this->db->insert_id();
+
+        return $this->send_sms_message($user->phone, "Ваш код $code");
+    }
+
+    /**
+     * Проверяет отправлен ли юзеру смс код
+     * @param $phone string
+     * @param $user_id int
+     * @return bool
+     */
+    public function check_sms_send($phone, $user_id)
+    {
+        $this->db->query("SELECT is_activate FROM __users_confirm_sms WHERE phone=? AND user_id=?", $phone, (int)$user_id);
+        $res = $this->db->result();
+        if (!$res) return false;
+        return !$res->is_activate;
+    }
+
+    /**
+     * Проверяет смс код
+     * @param $code string
+     * @return false|stdClass
+     */
+    public function check_sms_code($code)
+    {
+        $this->db->query("SELECT * FROM __users_confirm_sms WHERE id=?", (int)$_SESSION['confirm_id']);
+        $confirm = $this->db->result();
+        if ($confirm && $confirm->code == $code) {
+            return $confirm;
+        }
+        $this->db->query("SELECT * FROM __users_confirm_sms WHERE user_id=? AND code=?", (int)$_SESSION['user_id'], $code);
+        return $this->db->result();
+    }
+
+    public function activate_confirm()
+    {
+        $this->db->query("UPDATE __users_confirm_sms SET is_activate=1 WHERE id=?", (int)$_SESSION['confirm_id']);
+        unset($_SESSION['confirm_id']);
+    }
+
+    /**
+     * Отправляет смс на номер телефона сервис StreamTelecom
+     * @param $phone string
+     * @param $message string
+     * @return false|string
+     */
+    public function send_sms_message($phone, $message)
+    {
+        $data = [
+            'user' => $this->settings->apiid,
+            'pwd' => $this->settings->apipass,
+            'sadr' => $this->settings->apifrom,
+            'dadr' => $phone,
+            'text' => $message
+        ];
+        return file_get_contents('http://gateway.api.sc/get?' . http_build_query($data));
+    }
 
     function email($to, $subject, $message, $from = '', $reply_to = '')
     {

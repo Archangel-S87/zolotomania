@@ -9,7 +9,7 @@ class SettingsAdmin extends Fivecms
 	{	
 		$this->passwd_file = $this->config->root_dir.'/fivecms/.passwd';
 		$this->htaccess_file = $this->config->root_dir.'/fivecms/.htaccess';
-		
+
 		$managers = $this->managers->get_managers();
 		$this->design->assign('managers', $managers);
 
@@ -44,6 +44,7 @@ class SettingsAdmin extends Fivecms
 
 				$this->settings->disclaimer = $this->request->post('disclaimer');
 				$this->settings->apiid = $this->request->post('apiid');
+				$this->settings->apipass = $this->request->post('apipass');
 				$this->settings->apifrom = $this->request->post('apifrom');
 				$this->settings->allowsms = $this->request->post('allowsms');
 				$this->settings->statussms = $this->request->post('statussms');

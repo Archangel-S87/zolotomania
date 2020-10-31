@@ -75,9 +75,6 @@ class LoginView extends View
 
     private function password_remind()
     {
-        require_once 'sms/stream_telecom.php';
-        $sms = new StreamTelecom();
-
         $this->template = 'password_remind.tpl';
 
         // Если запостили phone
@@ -97,8 +94,8 @@ class LoginView extends View
                 // Отправка смс на номер пользователя
                 $this->design->assign('send_code', true);
 
-                if (!$sms->check_sms_send($phone, $user->id)) {
-                    $res = $sms->send_sms_code($user);
+                if (!$this->notify->check_sms_send($phone, $user->id)) {
+                    $res = $this->notify->send_sms_code($user);
                     if (!is_numeric($res)) $this->design->assign('error', $res);
                 } else {
                     $this->design->assign('error', 'sms_send');
@@ -111,7 +108,7 @@ class LoginView extends View
             $code = $this->request->post('sms_code');
             $this->design->assign('send_code', true);
 
-            if (!$confirm = $sms->check_sms_code($code)) {
+            if (!$confirm = $this->notify->check_sms_code($code)) {
                 $this->design->assign('error', 'error_code');
                 return;
             }
@@ -134,12 +131,12 @@ class LoginView extends View
             $this->notify->email_password_remind($user->id, $password);
 
             // Отправляем смс с новым паролем
-            $sms->send_sms_message($user->phone, "Ваш новый пароль $password");
+            $this->notify->send_sms_message($user->phone, "Ваш новый пароль $password");
 
             // Залогиниваемся под пользователем и переходим в кабинет для изменения пароля
             $_SESSION['user_id'] = $user->id;
 
-            $sms->activate_confirm();
+            $this->notify->activate_confirm();
 
             if ($this->settings->cart_storage == 2) {
                 $this->cart->base_to_cart($user->id);
