@@ -591,6 +591,16 @@ tr#carttitles{height:35px !important;}
 #purchases1 [type="button"].button{float:none;cursor:pointer;font-size:14px !important;margin-left:10px;}
 #purchases td.lastpur{padding-bottom:20px;}
 .buttonblue{padding:6px 10px;font-size:14px;background: #bcd4e4;color:#ffffff;text-decoration:none;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;border:0;cursor:pointer;font-weight:700;text-transform:uppercase;}
+.cartview .buttonblue {
+    border: 2px solid #d24a46;
+    line-height: 26px;
+    font-size: 13px;
+    background-color: #fff;
+    color: #26244c;
+}
+.cartview .buttonblue:hover {
+    background-color: #d24a46;
+}
 .buttonblue:hover{color:#ffffff;    background: #bcd4e4;}
 #purchases1 td{padding-bottom:2px;}
 
@@ -939,10 +949,36 @@ span input[name="amount"]{margin-top:0px;}
     margin-top: 15px;
 }
 .button.blue:hover, .comment_form .button:hover, #logininput:hover, .regsubmit a.button:hover, .login_form .button:hover, .feedback_form .button:hover, .cart_form .button:hover, #orderform .button:hover {background:#4e6f9b;border:0px solid #4e6f9b;}
-.checkout_button:hover{background:#4e6f9b !important;color:#ffffff;border:0px solid #4e6f9b;}
-.checkout_button{cursor:pointer;font-weight:700;outline:none;padding: 15px 80px;text-transform:uppercase;font-size:20px;border-radius:20px;margin: 12px auto 0 auto;display:table;text-decoration:none;}
-.checkout_button{animation-name:blink;animation-timing-function:linear;animation-duration:3s;animation-iteration-count:infinite;}
-@keyframes blink {50% {opacity:0.7;}}
+.checkout_button:hover {
+    background: #d24a46;
+    color: #ffffff;
+}
+.checkout_button {
+    display: table;
+    cursor: pointer;
+    border: 2px solid #d24a46;
+    line-height: 26px;
+    padding: 15px 80px;
+    outline: none;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 12px auto 20px auto;
+    text-decoration: none;
+    color: #26244c;
+    background-color: #fff;
+}
+.checkout_button {
+    animation-name: blink;
+    animation-timing-function: linear;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+@keyframes blink {
+    50% {
+        opacity: 0.7;
+    }
+}
 .feedback_form input, .feedback_form textarea, .comment_textarea, .comment_form input[type="text"]{background:#f7f7f7;}
 .yashare-auto-init{background:#f6f6f6;clear:both;display:inline-block;margin-top:15px;width:180px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;}
 span.b-share{margin-left:2px;}
@@ -985,8 +1021,12 @@ input#viewform{padding:5px 5px 6px;font-size:11px;float:none;margin:12px 0 0 0px
 #curr_plate{margin:10px 10px 10px 5px;padding:5px;float:right;background-color:#FFFFFF;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;max-width:115px;font-size:12px;}
 #tarif-list td{padding-bottom:2px;padding-top:3px;}
 #content table{margin:15px 0;}
-#content table td, #content table th{border: 1px solid #e8e2e2;padding:5px;margin:0;}
-#content .description td, #content #purchases1 td{border:0px solid #dadada !important;    padding: 5px 10px 5px 10px !important;   border-bottom: 1px solid #fff!important;}
+#content table td, #content table th{border: 1px solid #fff;padding:5px;margin:0;}
+#content .description td, #content #purchases1 td {
+    border: 0 solid #fff !important;
+    padding: 5px 10px 5px 10px !important;
+    border-bottom: 3px solid #d24a46 !important;
+}
 #content #purchases1 th{border:0px solid #dadada !important;padding:0 10px 2px 10px;}
 #content #purchases1 #discount th{padding:10px 10px 10px 10px;}
 .comment_list li ul li{border-bottom:0px dotted #CFCFCF;font-size:13px;padding:3px 10px 0px 20px;overflow:hidden;}
@@ -1140,12 +1180,10 @@ input#viewform{padding:5px 5px 6px;font-size:11px;float:none;margin:12px 0 0 0px
     margin: 15px 0;
     padding: 9px 11px 12px 11px;
     text-align: justify;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dbc0ce;
     color: #ffffff;
-    width: 100%!important;
+    width: 100%;
 }
 .attention > div{
     margin: 0 auto;

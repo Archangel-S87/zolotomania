@@ -267,7 +267,7 @@ class ProductsView extends View
 				$images = $this->products->get_images(array('product_id'=>$products_ids));
 				foreach($images as $image)
 					$products[$image->product_id]->images[] = $image;
-			}		
+			}
 			//	Проверка загрузки всех изображений из интернета @	
 
 			foreach($products as &$product)

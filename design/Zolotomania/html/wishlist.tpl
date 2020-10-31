@@ -4,7 +4,7 @@
 
 {if $wished_products|count}
     <div class="tiny_products relcontent">
-        {foreach $wished_products as $product}
+        {foreach from=$wished_products item=product name=product}
             <div class="product flex">
 
                 {* Product images | Фото товара *}
@@ -18,20 +18,27 @@
                         {/if}
                         {if !empty($product->variant->compare_price)}
                             <div class="lowprice">
-                            - {100-($product->variant->price*100/$product->variant->compare_price)|round}%</div>{/if}
+                            - {100-($product->variant->price*100/$product->variant->compare_price)|round}%
+                            </div>
+                        {/if}
                     </div>
                     {* Большое фото *}
                     <div class="imagebig" id="lenss">
                         <div class="big_middle">
-                            {if $product->image}
+                            {if !empty($product->image)}
                                 {if $product->images|count==1}
-                                    <a href="{$product->image->filename|resize:800:600:w}" class="zoom cloud-zoom" id="zoom1" title="{$product->name|escape}" data-rel="{if !empty($product->image->color)}{$product->image->color}{else}gallery{/if}">
+                                    <a href="{$product->image->filename|resize:800:600:w}"
+                                    class="zoom cloud-zoom"
+                                    id="zoom1"
+                                    title="{$product->name|escape}"
+                                    data-rel="{if !empty($product->image->color)}{$product->image->color}{else}gallery{/if}">
                                 {/if}
-                                <div onClick="$('.imagesmall a:visible:first').click();" class="image"><img
-                                            src="{$product->image->filename|resize:800:600:w}"
-                                            alt="{$product->name|escape}" title="{$product->name|escape}"
-                                            class="imglenss"/></div>
-                                {if $product->images|count==1}</a>{/if}
+                                <div onClick="$('.imagesmall a:visible:first').click();" class="image">
+                                    <img src="{$product->image->filename|resize:800:600:w}" alt="{$product->name|escape}" title="{$product->name|escape}" class="imglenss"/>
+                                </div>
+                                {if $product->images|count==1}
+                                    </a>
+                                {/if}
                             {else}
                                 <div class="image">
                                     <svg fill="#dadada" style="width:50%;height:50%;" viewBox="0 0 24 24">
@@ -43,15 +50,17 @@
                     </div>
                     {* Большое фото @ *}
                     {* Миниатюры *}
-                    {if $product->images|count>1}
+                    {if !empty($product->image) && $product->images|count>1}
                         <div class="images">
                             {foreach $product->images as $i=>$image}
                                 <div class="{if !$image->color}imgvisible{/if} cloud-zoom-gallery imagesmall"
                                      data-imcolor="{$image->color}" data-sm="{$image->filename|resize:800:600:w}">
-                                    <a class="zoom" href="{$image->filename|resize:800:600:w}"
+                                    <a class="zoom"
+                                       href="{$image->filename|resize:800:600:w}"
                                        title="{$product->name|escape}"
                                        data-rel="{if !empty($image->color)}{$image->color}{else}gallery{/if}">
-                                        <img src="{$image->filename|resize:100:100}" alt="{$product->name|escape}"
+                                        <img src="{$image->filename|resize:100:100}"
+                                             alt="{$product->name|escape}"
                                              title="{$product->name|escape}"/>
                                     </a>
                                 </div>
@@ -88,8 +97,14 @@
                         {if $settings->showsku == 1}
                             {* Расположение товара - склад *}
                             <p class="sku">
-                                {if $product->variant->sku && !empty($product->variant->shop->name)}
-                                    <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                                {if $group && $group->name == 'Магазины'}
+                                    {if $product->variant->sku && !empty($product->variant->shop->name)}
+                                        <span>{$product->variant->shop->name}-{$product->variant->sku}</span>
+                                    {/if}
+                                {else}
+                                    {if $product->variant->sku}
+                                        <span>Артикул: {$product->variant->sku}</span>
+                                    {/if}
                                 {/if}
                             </p>
                         {/if}
@@ -97,11 +112,21 @@
 
                     <h1 class="product__title" data-product="{$product->id}">{$product->name|escape}</h1>
                     {* schema *}
-                    {if $product->annotation}{$descr = $product->annotation|strip_tags:true}{elseif $product->body}{$descr = $product->body|strip_tags:true}{elseif !empty($seo_description)}{$descr = $seo_description}{elseif $meta_description}{$descr = $meta_description|escape}{else}{$descr = $product->name|escape}{/if}
+                    {if !empty($product->annotation)}
+                        {$descr = $product->annotation|strip_tags:true}
+                    {elseif $product->body}
+                        {$descr = $product->body|strip_tags:true}
+                    {elseif !empty($seo_description)}
+                        {$descr = $seo_description}
+                    {elseif !empty($meta_description)}
+                        {$descr = $meta_description|escape}
+                    {else}
+                        {$descr = $product->name|escape}
+                    {/if}
                     <div itemscope itemtype="http://schema.org/Product">
                         <meta content="{$product->name|escape}" itemprop="name">
                         <meta content="{$descr|replace:'"':''}" itemprop="description">
-                        <meta content="{if $product->image}{$product->image->filename|resize:800:600:w}{else}{$config->root_url}/js/nophoto.png{/if}"
+                        <meta content="{if !empty($product->image)}{$product->image->filename|resize:800:600:w}{else}{$config->root_url}/js/nophoto.png{/if}"
                               itemprop="image">
                         {if !empty($product->variant->price)}
                             <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -140,30 +165,32 @@
                                 {if $product->vproperties}
                                     {$cntname1 = 0}
                                     <span class="pricelist" style="display:none;">
-							{foreach $product->variants as $v}
-                                {$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-                                <span class="c{$v->id}"
-                                      data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
-                                      data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
-                                      data-sku="{if $v->sku}Артикул: {$v->sku}{/if}"
-                                      data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
-                                {if $v->name1}{$cntname1 = 1}{/if}
-                            {/foreach}
-						</span>
+                                        {foreach $product->variants as $v}
+                                            {$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
+                                            <span class="c{$v->id}"
+                                                  data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
+                                                  data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
+                                                  data-sku="{if $v->sku}Артикул: {$v->sku}{/if}"
+                                                  data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
+                                            {if $v->name1}{$cntname1 = 1}{/if}
+                                        {/foreach}
+						            </span>
                                     {$cntname2 = 0}
                                     <span class="pricelist2" style="display:none;">
-                                    {foreach $product->variants as $v}
-                                        {if $v->compare_price > 0}
-                                            <spanclass
-                                            ="c{$v->id}">{$v->compare_price|convert}</span>{/if}
-                                        {if $v->name2}{$cntname2 = $cntname2 + 1}{/if}
-                                    {/foreach}
+                                        {foreach $product->variants as $v}
+                                            {if $v->compare_price > 0}
+                                                <span class="c{$v->id}">{$v->compare_price|convert}</span>
+                                            {/if}
+                                            {if $v->name2}{$cntname2 = $cntname2 + 1}{/if}
+                                        {/foreach}
                                     </span>
                                     <input class="vhidden 1clk" name="variant" value="" type="hidden"/>
                                     {if $settings->showsku == 1}<!--p class="sku">{if $product->variant->sku}Артикул: {$product->variant->sku}{/if}</p-->{/if}
-                                    {if $settings->showstock == 1}<span class="stockblock">На складе: <span
+                                    {if $settings->showstock == 1}
+                                        <span class="stockblock">На складе: <span
                                                 class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span>
-                                        </span>{/if}
+                                        </span>
+                                    {/if}
                                     <div class="variants-wrap flex" style="display: none; margin-bottom: 15px;">
                                         <select name="variant1"
                                                 class="p0"{if $cntname1 == 0} style="display:none;"{/if}>
@@ -195,24 +222,24 @@
                                         <span class="compare_price"></span>
                                         <span class="price"></span>
                                         <span class="currency">
-								{$currency->sign|escape}
-                                            {if $settings->b9manage}/<span
-                                                    class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}
-							</span>
+                                        {$currency->sign|escape}{if $settings->b9manage}/<span class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}
+							            </span>
                                         {if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
                                             <span class="bonus">+ <span
                                                     class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span>
-                                            </span>{/if}
+                                            </span>
+                                        {/if}
                                     </div>
                                 {else}
                                     {if $product->variants|count==1  && !$product->variant->name}{else}
                                         <span class="b1c_caption" style="display: none;"> </span>
                                     {/if}
 
-
-                                    {if $settings->showstock == 1}<span class="stockblock">На складе: <span
+                                    {if $settings->showstock == 1}
+                                        <span class="stockblock">На складе: <span
                                                 class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span>
-                                        </span>{/if}
+                                        </span>
+                                    {/if}
                                     <select class="b1c_option" name="variant"
                                             {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}>
                                         {foreach $product->variants as $v}
@@ -258,13 +285,13 @@
                                         <span class="compare_price">{if $product->variant->compare_price}{$product->variant->compare_price|convert}{/if}</span>
                                         <span class="price">{$product->variant->price|convert}</span>
                                         <span class="currency">
-								{$currency->sign|escape}{if $settings->b9manage}/<span
-                                                    class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}
-							</span>
+                                            {$currency->sign|escape}{if $settings->b9manage}/<span class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}
+                                        </span>
                                         {if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
                                             <span class="bonus">+ <span
                                                     class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span>
-                                            </span>{/if}
+                                            </span>
+                                        {/if}
                                     </div>
                                 {/if}
                                 <div class="buy uk-flex">
@@ -281,16 +308,14 @@
                                 </div>
                                 {include file='1click.tpl'}
 
-
                             </div>
                         </form>
                         {* Выбор варианта товара (The End) *}
                         {if !empty($brand->name)}
-                            <div class="annot-brand"><span>Производитель:</span> <a class="bluelink"
-                                                                                    style="font-weight:700;"
-                                                                                    href="brands/{$brand->url}">{$brand->name|escape}</a>
-                            </div>{/if}
-
+                            <div class="annot-brand">
+                                <span>Производитель:</span> <a class="bluelink" style="font-weight:700;" href="brands/{$brand->url}">{$brand->name|escape}</a>
+                            </div>
+                        {/if}
                     {else}
                         {if $settings->showsku == 1 && !empty($product->variant->sku)}
                             <!--p class="sku">Артикул: {$product->variant->sku}</p-->
@@ -325,9 +350,8 @@
                                                 {/if}
                                             </div>
                                             <div class="product_info">
-                                                <h3 class="product_title"><a data-product="{$same_product->id}"
-                                                                             href="products/{$same_product->url}"
-                                                                             title="{$same_product->name|escape}">{$same_product->name|escape}</a>
+                                                <h3 class="product_title">
+                                                    <a data-product="{$same_product->id}" href="products/{$same_product->url}" title="{$same_product->name|escape}">{$same_product->name|escape}</a>
                                                 </h3>
                                                 {if isset($same_product->rating) && $same_product->rating > 0}
                                                     {$same_rating = $same_product->rating}
@@ -337,19 +361,18 @@
                                                 <div class="ratecomp">
                                                     <div class="catrater">
                                                         <div class="statVal">
-										<span class="rater_sm">
-											<span class="rater-starsOff_sm" style="width:60px;">
-												<span class="rater-starsOn_sm"
-                                                      style="width:{$same_rating*60/5|string_format:"%.0f"}px"></span>
-											</span>
-										</span>
+                                                            <span class="rater_sm">
+                                                                <span class="rater-starsOff_sm" style="width:60px;">
+                                                                    <span class="rater-starsOn_sm"
+                                                                          style="width:{$same_rating*60/5|string_format:"%.0f"}px"></span>
+                                                                </span>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <div style="float: right">
                                                         {foreach $same_product->variants as $v}
                                                             {if $v@first}
-                                                                <span class="price">{$v->price|convert} <span
-                                                                            class="currency">{$currency->sign|escape}</span></span>
+                                                                <span class="price">{$v->price|convert} <span class="currency">{$currency->sign|escape}</span></span>
                                                             {/if}
                                                         {/foreach}
                                                     </div>
@@ -368,7 +391,7 @@
                             {$product->annotation}
                         </div>
                     {/if}
-                    {if $product->features}
+                    {if !empty($product->features)}
                         <div id="tab2" class="tab_content">
                             <ul class="features">
                                 {foreach $product->features as $f}
@@ -414,6 +437,9 @@
                 </div>
 
             </div>
+            {if !$smarty.foreach.product.last}
+                <hr>
+            {/if}
         {/foreach}
     </div>
     <script>

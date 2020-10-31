@@ -16,3 +16,4 @@ files/**/*.png
 !files/silver.jpg
 fivecms/cml/temp/
 fivecms/json/temp/*
+payment/Sberbank/log

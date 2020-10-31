@@ -4,13 +4,13 @@
 
 <div class="user-name" style="color: #d24a46; font-size: 24px; padding: 30px 0 20px;">{$order->name|escape}</div>
 <h1 style="border: none; text-transform: none">Ваш заказ №{$order->id}
-{if $order->status == 0}ждет обработки
-{elseif $order->status == 4}в обработке
-{elseif $order->status == 1}выполняется
-{elseif $order->status == 2}выполнен
-{elseif $order->status == 3}отменен
-{/if}
-{if $order->paid == 1}, оплата поступила{/if}
+{*{if $order->status == 0}ждет обработки*}
+{*{elseif $order->status == 4}в обработке*}
+{*{elseif $order->status == 1}выполняется*}
+{*{elseif $order->status == 2}выполнен*}
+{*{elseif $order->status == 3}отменен*}
+{*{/if}*}
+{*{if $order->paid == 1}, оплата поступила{/if}*}
 </h1>
 
 <h2 style="text-transform:uppercase;">Детали заказа:</h2>
@@ -206,7 +206,7 @@
 	{/if}
 
 	<div class="page-pg">
-		<div class="attention" style="display:table;clear:both;width:300px;text-align:center;padding:15px 15px 8px 15px;margin: 20px auto 20px auto">
+		<div class="attention" style="display:table;clear:both;width:300px;text-align:center;padding:15px 15px 8px 15px;margin: 20px auto 20px auto;background-color:#bcd4e4;color:#000;">
 			<p style="font-size:16px;text-transform:uppercase;">Спасибо за заказ!</p>
 			{if empty($order->paid) && $order->status != 3}
 				<div style="width:600px;padding-top:5px;">

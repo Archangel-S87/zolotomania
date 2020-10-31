@@ -3,7 +3,12 @@
 {$meta_title = "Корзина" scope=root}
 {$page_name = "Корзина" scope=root}
 
-<h1 style="margin-top: 20px;">Корзина</h1>
+<h1 class="flex" style="margin-top: 20px; flex-wrap: nowrap; justify-content: space-between;">
+    Корзина
+    <span class="cart-back" style="margin-bottom: -10px; line-height: 1;">
+        <a href="javascript:history.go(-1)" class="buttonblue">Вернутся к покупкам</a>
+    </span>
+</h1>
 
 {if $cart->purchases}
     <form class="main_cart_form" method="post" name="cart"
@@ -86,9 +91,7 @@
 
         </table>
         <div class="cart__after uk-flex">
-            <div class="cart-back">
-                <a href="javascript:history.go(-1)" class="buttonblue">Вернутся к покупкам</a>
-            </div>
+            <div class="cart-back"></div>
 
             <div class="purchases_middle">
                 {* Discount *}
@@ -359,7 +362,8 @@
                             $(document).ready(function () {
                                 $('#deliveries input').change(function () {
                                     if ($(this).attr('id') === 'user_address') return false;
-                                    if (+$(this).val() === 100) {
+                                    const val = +$(this).val();
+                                    if (val === 100) {
                                         $.fancybox({
                                             href: '#shops-content',
                                             hideOnContentClick: false,
@@ -370,14 +374,16 @@
                                             scrolling: 'no'
                                         });
                                     }
-                                    if (+$(this).val() === 123) {
+                                    if (val === 123) {
                                         $('#li_delivery_123').find('.description').addClass('show').slideDown('normal');
-                                        $(this).attr('data-format', '.+');
-                                        $(this).attr('data-notice', 'Укажите адрес');
+                                        const user_address = $('#user_address');
+                                        user_address.attr('data-format', '.+');
+                                        user_address.attr('data-notice', 'Укажите адрес');
                                     } else {
                                         $('#li_delivery_123').find('.description').removeClass('show').slideUp('normal');
-                                        $(this).removeAttr('data-format');
-                                        $(this).removeAttr('data-notice');
+                                        const user_address = $('#user_address');
+                                        user_address.removeAttr('data-format');
+                                        user_address.removeAttr('data-notice');
                                     }
                                 });
                                 $('#shop-list input').change(function () {

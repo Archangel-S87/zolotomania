@@ -296,6 +296,21 @@ class CartView extends View
                 }
                 // функция прикрепления файлов end
 
+                // Очищаю избранное от заказаных товаров
+                if (!empty($_COOKIE['wished_products'])) {
+                    $products_ids = explode(',', $_COOKIE['wished_products']);
+                    foreach ($cart->purchases as $purchase) {
+                        $key = array_search($purchase->product->id, $products_ids);
+                        if ($key !== false) unset($products_ids[$key]);
+                    }
+                    if (!count($products_ids)) {
+                        unset($_COOKIE['wished_products']);
+                        setcookie('wished_products', '', time() - 365 * 24 * 3600, '/');
+                    } else {
+                        setcookie('wished_products', implode(',', $products_ids), time() + 365 * 24 * 3600, '/');
+                    }
+                }
+
                 // Очищаем корзину (сессию)
                 $this->cart->empty_cart();
 

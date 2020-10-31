@@ -138,14 +138,7 @@
 		{if $module == 'MainView'}
 
 		<div class="container flex">
-			<div class="header__left">
-				<a href="//zoloto-rezerv.ru" target="_blank">
-					<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
-				</a>
-				<a href="//скупка-золото.рф" target="_blank">
-					<span>Скупка золота</span>
-				</a>
-			</div>
+			<div class="header__left"></div>
 			<div class="header__right">
 				<div id="top_phone">
 						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
@@ -241,19 +234,19 @@
 			</div>
 			<div class="header__right">
 				<div id="top_phone">
-						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
-							<span uk-icon="icon: receiver; ratio: 1.25"></span>
-							{if $settings->phone && $settings->tel}
-								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{elseif $settings->phone}
+					<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
+						<span uk-icon="icon: receiver; ratio: 1.25"></span>
+						{if $settings->phone && $settings->tel}
+							<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
+							<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
+						{elseif $settings->phone}
 
-								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							{elseif $settings->tel}
+							<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
+						{elseif $settings->tel}
 
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{/if}
-						</div>
+							<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
+						{/if}
+					</div>
 				</div>
 				<nav class="menu">
 					<div class="inner">
@@ -310,9 +303,6 @@
 						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
 					{/if}
 				</div>
-
-
-
 
 			</div>
 		</div>
@@ -395,21 +385,15 @@
 	<footer class="footer">
 		<div class="container flex">
 
-
-					<div class="footer__column">
-    					<div class="uk-panel uk-margin-remove-first-child  uk-margin-remove-top">
-    					    <div class="uk-child-width-expand uk-grid-column-small uk-flex-middle uk-grid" uk-grid="">
-    					    	<div class="uk-width-auto@m uk-first-column">
-    					    		<img class="footer__logo logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
-    					    	</div>
-
-                			</div>
-						</div>
-
-
+					<div class="footer__column friendly-resources">
+						<a class="npk" href="//zoloto-rezerv.ru" target="_blank">
+							<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
+							<span>НПК "Ваш Золотой РезервЪ"</span>
+						</a>
+						<a class="au-ag" href="//скупка-золото.рф" target="_blank">
+							<span>Скупка Au/Ag</span>
+						</a>
             		</div>
-
-
 
 					<div class="footer__column">
 						<div class="uk-h4" id="footer#5">
@@ -443,29 +427,25 @@
 						</div>
 					</div>
 					<div class="footer__column">
-
 						<ul class="footer__list footer__adress">
 							<li class="footer__adress--item">Курск, Красная площадь, 2\4</li>
-
 						</ul>
 						<a class="footer__adress--all button" href="/adresa-magazinov">Все магазины</a>
 					</div>
 
-
-
 		<div class="footer__bottom">
   			{if $menus[17]->enabled}
-							{get_pages var="menu_1" menu_id=17}
-							{if $menu_1}
-							<ul class="footer__list footer__menu flex">
-								{foreach $menu_1 as $p}
-								<li {if $page && $page->id == $p->id}class="selected"{/if} class="footer__menu">
-									<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
-								</li>
-								{/foreach}
-							</ul>
-							{/if}
-						{/if}
+				{get_pages var="menu_1" menu_id=17}
+				{if $menu_1}
+				<ul class="footer__list footer__menu flex">
+					{foreach $menu_1 as $p}
+					<li {if $page && $page->id == $p->id}class="selected"{/if} class="footer__menu">
+						<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
+					</li>
+					{/foreach}
+				</ul>
+				{/if}
+			{/if}
   		</div>
 		</div>
 
@@ -800,10 +780,6 @@
 		</script>
 	{/if}
 	{* OnlineChat end *}
-
-
-
-
 
 	{if !empty($settings->script_footer)}{$settings->script_footer}{/if}
 

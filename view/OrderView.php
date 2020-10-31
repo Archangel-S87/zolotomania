@@ -37,7 +37,8 @@ class OrderView extends View
         $purchases = $this->orders->get_purchases(['order_id' => intval($order->id)]);
         if (!$purchases) return false;
 
-        if (!$this->user || $this->user->id != $order->user_id) return false;
+        // TODO Включить на prod
+        //if (!$this->user || $this->user->id != $order->user_id) return false;
 
         if ($this->request->method('post')) {
             if ($payment_method_id = $this->request->post('payment_method_id', 'integer')) {
