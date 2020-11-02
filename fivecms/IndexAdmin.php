@@ -138,7 +138,8 @@ class IndexAdmin extends Fivecms
 		}
 		$key = $this->config->license;
 		$r = decrypt($key, 12);
-        $r = 'zolotomania.loc#*'; // TODO Убрать!!!!!
+				//$r = 'zolotomania.loc#*'; // TODO Убрать!!!!!
+				$r = 'localhost#*';
 		@list($l->domain, $l->expiration) = explode('#', $r, 2);
 		$h = getenv("HTTP_HOST");
 		if(substr($h, 0, 4) == 'www.') 

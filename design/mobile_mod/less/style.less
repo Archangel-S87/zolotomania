@@ -1,0 +1,151 @@
+/* Fonts */
+.bold() {
+	font-family: 'Nunito Sans', Arial, Tahoma, sans-serif;
+	font-weight: bold;
+}
+.reg() {
+	font-family: 'Nunito Sans', Arial, Tahoma, sans-serif;
+}
+
+/* Colors */
+@text-color-dark: #313131;
+
+
+/* Basic setting */
+html {
+	font-size: 10px;
+}
+body, html {
+	overflow-x: hidden;
+	width: 100vw;
+	color: @text-color-dark;
+	.reg();
+	text-rendering: geometricPrecision; //для отображения правильных шрифтов в сафари
+}
+h2 {
+}
+p {
+	margin: 0;
+	font-size: 1.6rem;
+	line-height: 1.5;
+}
+h5 {
+	margin: 0;
+}
+button, .btn {
+	
+	&:hover {
+		
+	}
+	
+}
+/*Чтобы убрать синие браузерный обводки*/
+button:active, button:focus {
+  outline: none; /*Чтобы убрать синие браузерный обводки*/
+}
+button::-moz-focus-inner {
+  border: 0;
+}
+a:active, a:focus {
+  outline: none;
+}
+a::-moz-focus-inner {
+  border: 0;
+}
+a {
+	&:hover {
+	}
+	&:active {
+	}
+
+}
+section {
+	background: #fff;
+}
+
+.mobile, .tablet {
+	display: none;
+}
+
+.container {
+	width: 1170px;
+	margin: 0 auto;
+
+}
+
+video {
+	outline: none;
+}
+iframe {
+	border: none;
+}
+
+
+
+
+
+header {
+	
+}
+
+
+
+/* md */
+@media (min-width:993px) and (max-width:1200px) {
+	.container {
+		width: 970px;
+	}
+	
+	
+}
+
+
+
+
+
+/* sm */
+@media (max-width:992px) {
+	.container {
+		width: 750px;
+	}
+	
+}
+
+
+
+
+
+
+
+
+@media (min-width:769px) and (max-width:992px) {
+	
+}
+
+
+
+
+
+
+
+
+/* xs */
+@media (max-width:768px) {
+	body {
+		width: 100vw;
+	}
+	.container {
+		width: 100%;
+	}
+	
+}
+
+
+
+
+/* xs */
+@media (max-width:320px) {
+	
+}
+
+

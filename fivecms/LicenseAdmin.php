@@ -28,7 +28,8 @@ class LicenseAdmin extends Fivecms
 				$res .= $char;
 		}
 		$r = $res;
-        $r = 'zolotomania.loc#*'; // TODO Убрать!!!!!
+				//$r = 'zolotomania.loc#*'; // TODO Убрать!!!!!
+				$r = 'localhost#*';
 		
 		@list($l->domain, $l->expiration) = explode('#', $r, 2);
 		
