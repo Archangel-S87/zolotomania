@@ -10,6 +10,11 @@
 	</settings>
 
 	<settings>
+		<variable>key_sber</variable>
+		<name>Сикретный ключ</name>
+	</settings>
+
+	<settings>
 		<variable>test_server</variable>
 		<name>Тестовый</name>
 		<options>
@@ -24,7 +29,7 @@
 
 	<settings>
 		<variable>payment_method</variable>
-		<name>Метов оплаты</name>
+		<name>Метод оплаты</name>
 		<options>
 			<name>Регистрация заказа</name>
 			<value>register</value>

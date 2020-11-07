@@ -525,11 +525,13 @@ class Orders extends Fivecms
 			foreach($purchases as $purchase)
 			{	
 				$variant = $this->variants->get_variant($purchase->variant_id);
-				if(!$variant->infinity)
-				{
+				// Снимаю с резерва
+				$variant_data = ['reservation' => 0];
+				if(!$variant->infinity) {
 					$new_stock = $variant->stock-$purchase->amount;
-					$this->variants->update_variant($variant->id, array('stock'=>$new_stock));
+                    $variant_data['stock'] = $new_stock;
 				}
+                $this->variants->update_variant($variant->id, $variant_data);
 			}				
 			$query = $this->db->placehold("UPDATE __orders SET closed=1, modified=NOW() WHERE id=? LIMIT 1", $order->id);
 			$this->db->query($query);

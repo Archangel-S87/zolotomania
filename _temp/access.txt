@@ -28,7 +28,8 @@ FTP
 Пароль ZM27071988
 
 СБЕР
-token: atmiumq7192mp5bob3p8u0189o
+Тестовые карты
+https://securepayments.sberbank.ru/wiki/doku.php/test_cards
 
 Как магазин
     Куда привести В магазин

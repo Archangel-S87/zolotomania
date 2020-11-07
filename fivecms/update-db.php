@@ -30,12 +30,23 @@ class UpdateDB extends Fivecms
         // Создание таблицы запросов CMS
         $this->create_table_users_confirm_sms();
 
+        // Создание таблицы оплаты в сбере
+        $this->create_table_payments_sber();
+
         // Обновление таблицы групп пользователей
         //$this->update_table_groups();
 
         // Обновление таблицы __users
         //$this->update_table_users();
         echo 0;
+    }
+
+    private function create_table_payments_sber()
+    {
+        $table_name = 'payments_sber';
+        if ($this->check_table($table_name)) return;
+        $table_name = $this->config->db_prefix . $table_name;
+        $this->db->query("CREATE TABLE {$table_name} (`id` INT(11) NOT NULL AUTO_INCREMENT, `order_id` INT(11) NOT NULL, `trial` TINYINT(2) NOT NULL COMMENT 'orderId магазина в системе банка', `order_sber` VARCHAR(64) NOT NULL, `date_create` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`), UNIQUE (`order_sber`)) ENGINE = MyISAM COMMENT = 'Оплата в сбере';");
     }
 
     private function create_table_users_confirm_sms()
@@ -56,10 +67,6 @@ class UpdateDB extends Fivecms
     {
         if (!$this->check_column('shop_id', 'orders')) {
             $this->db->query("ALTER TABLE __orders ADD shop_id INT(4) NOT NULL");
-        }
-
-        if (!$this->check_column('order_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders ADD order_id VARCHAR(64) NULL DEFAULT NULL AFTER payment_method_id");
         }
 
         // Возможен пустой email
