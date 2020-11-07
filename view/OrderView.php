@@ -18,6 +18,10 @@ class OrderView extends View
         // Скачивание файла
         if ($this->request->get('file')) {
             return $this->download();
+        } elseif ($this->request->get('after_payment') && $this->request->get('orderId')) {
+            return $this->after_payment();
+        } elseif ($this->request->get('bad_payment') && $this->request->get('orderId')) {
+            return $this->bad_payment();
         } else {
             return $this->fetch_order();
         }
@@ -181,12 +185,37 @@ class OrderView extends View
             include_once("payment/$module_name/$module_name.php");
             $module = new $module_name();
             //$form = $module->checkout_form($params['order_id'], $params['button_text']);
-            if (isset($params['button_text']))
-                $form = $module->checkout_form($params['order_id'], $params['button_text']);
-            else
-                $form = $module->checkout_form($params['order_id'], null);
+            $form = $module->checkout_form($params['order_id'], $params['button_text'] ?? null);
         }
         return $form;
     }
 
+    private function bad_payment()
+    {
+        if ($url = $this->request->get('url', 'string'))
+            $order = $this->orders->get_order((string)$url);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return false;
+
+        if (!$order) return false;
+
+        $this->design->assign('order', $order);
+
+        // Способ оплаты
+        if ($order->payment_method_id) {
+            $payment_method = $this->payment->get_payment_method($order->payment_method_id);
+        }
+        // TODO детальная расшифровка ошибок требует подключение модуля и получение статуса
+
+        $this->design->assign('meta_title', 'Ошибка при оплате');
+        return $this->design->fetch('bad_payment.tpl');
+    }
+
+    private function after_payment()
+    {
+        $this->design->assign('meta_title', 'Спасибо за оплату!');
+        return $this->design->fetch('after_payment.tpl');
+    }
 }

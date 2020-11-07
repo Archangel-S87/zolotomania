@@ -317,7 +317,7 @@ class ExchangeCatalog extends Exchange
         if (!$feature_id = $this->db->result('id')) {
             $new_feature = [
                 'name' => (string)$section['name'],
-                'in_filter' => $section['in_filter'] ?? 0
+                'in_filter' => (int)$section['in_filter']
             ];
             $feature_id = $this->features->add_feature($new_feature);
             if (!empty($section['position'])) {

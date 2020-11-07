@@ -3,6 +3,35 @@
 class Notify extends Fivecms
 {
     /**
+     * @param $dir string
+     * @param $file_name string
+     * @param $data array | string
+     * @return false|int
+     */
+    public function print_log($dir, $file_name, $data)
+    {
+        $data = (array)$data;
+        $file_data = '';
+
+        for ($i = 0; $i < 40; $i++) {
+            if ($i == 21) $file_data .= date('d-m-Y H:i:s');
+            $file_data .= '-';
+        }
+        $file_data .= PHP_EOL;
+
+        foreach ($data as $key => $value) {
+            $file_data .= $key . '=' . $value . PHP_EOL;
+        }
+
+        $dir .= '/log';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        return file_put_contents("$dir/$file_name", $file_data, FILE_APPEND);
+    }
+
+    /**
      * @deprecated
      * @param $phone string
      * @param $smstext string
@@ -398,5 +427,4 @@ class Notify extends Fivecms
 			$subject = 'Подтверждение подписки на рассылку';
 			$this->email($email, $subject, $email_template, $this->settings->notify_from_email);
 	}
-
 }

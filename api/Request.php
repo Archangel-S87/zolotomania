@@ -3,8 +3,8 @@
 /**
  * Класс-обертка для обращения к переменным _GET, _POST, _FILES
  *
- * @copyright 	5CMS
- * @link 		http://5cms.ru
+ * @copyright    5CMS
+ * @link        http://5cms.ru
  *
  *
  */
@@ -14,116 +14,116 @@ require_once('Fivecms.php');
 class Request extends Fivecms
 {
 
-	/**
-	 * Конструктор, чистка слешей
-	 */
-	public function __construct()
-	{		
-		parent::__construct();
-		//if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-		if(phpversion() < '7.4' && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+    /**
+     * Конструктор, чистка слешей
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        //if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if (phpversion() < '7.4' && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             $_POST = $this->stripslashes_recursive($_POST);
             $_GET = $this->stripslashes_recursive($_GET);
             $_COOKIE = $this->stripslashes_recursive($_COOKIE);
             $_REQUEST = $this->stripslashes_recursive($_REQUEST);
-        }	
-	}
+        }
+    }
 
-	/**
-	* Определение request-метода обращения к странице (GET, POST)
-	* Если задан аргумент функции (название метода, в любом регистре), возвращает true или false
-	* Если аргумент не задан, возвращает имя метода
-	* Пример:
-	* 
-	*	if($fivecms->request->method('post'))
-	*		print 'Request method is POST';
-	* 
-	*/
+    /**
+     * Определение request-метода обращения к странице (GET, POST)
+     * Если задан аргумент функции (название метода, в любом регистре), возвращает true или false
+     * Если аргумент не задан, возвращает имя метода
+     * Пример:
+     *
+     *    if($fivecms->request->method('post'))
+     *        print 'Request method is POST';
+     *
+     */
     public function method($method = null)
     {
-    	if(!empty($method))
-    		return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
-	    return $_SERVER['REQUEST_METHOD'];
+        if (!empty($method))
+            return strtolower($_SERVER['REQUEST_METHOD']) == strtolower($method);
+        return $_SERVER['REQUEST_METHOD'];
     }
 
-	/**
-	* Возвращает переменную _GET, отфильтрованную по заданному типу, если во втором параметре указан тип фильтра
-	* Второй параметр $type может иметь такие значения: integer, string, boolean
-	* Если $type не задан, возвращает переменную в чистом виде
-	*/
+    /**
+     * Возвращает переменную _GET, отфильтрованную по заданному типу, если во втором параметре указан тип фильтра
+     * Второй параметр $type может иметь такие значения: integer, string, boolean
+     * Если $type не задан, возвращает переменную в чистом виде
+     */
     public function get($name, $type = null)
     {
-    	$val = null;
-    	if(isset($_GET[$name]))
-    		$val = $_GET[$name];
-    		
-    	if(!empty($type) && is_array($val))
-    		$val = reset($val);
-    	
-    	if($type == 'string')
-    		return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
-    		
-    	if($type == 'integer' || $type == 'int')
-    		return intval($val);
+        $val = null;
+        if (isset($_GET[$name]))
+            $val = $_GET[$name];
 
-		if($type == 'float' || $type == 'floatval')
-			return floatval($val);	
+        if (!empty($type) && is_array($val))
+            $val = reset($val);
 
-    	if($type == 'boolean' || $type == 'bool')
-    		return !empty($val);
-    		
-    	return $val;
+        if ($type == 'string')
+            return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
+
+        if ($type == 'integer' || $type == 'int')
+            return intval($val);
+
+        if ($type == 'float' || $type == 'floatval')
+            return floatval($val);
+
+        if ($type == 'boolean' || $type == 'bool')
+            return !empty($val);
+
+        return $val;
     }
 
-	/**
-	* Возвращает переменную _POST, отфильтрованную по заданному типу, если во втором параметре указан тип фильтра
-	* Второй параметр $type может иметь такие значения: integer, string, boolean
-	* Если $type не задан, возвращает переменную в чистом виде
-	*/
+    /**
+     * Возвращает переменную _POST, отфильтрованную по заданному типу, если во втором параметре указан тип фильтра
+     * Второй параметр $type может иметь такие значения: integer, string, boolean
+     * Если $type не задан, возвращает переменную в чистом виде
+     */
     public function post($name = null, $type = null)
     {
-    	$val = null;
-    	if(!empty($name) && isset($_POST[$name]))
-    		$val = $_POST[$name];
-    	elseif(empty($name))
-    		$val = file_get_contents('php://input');
-    		
-    	if($type == 'string')
-    		return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
-    		
-    	if($type == 'integer')
-    		return intval($val);
+        $val = null;
+        if (!empty($name) && isset($_POST[$name]))
+            $val = $_POST[$name];
+        elseif (empty($name))
+            $val = file_get_contents('php://input');
 
-    	if($type == 'boolean')
-    		return !empty($val);
+        if ($type == 'string')
+            return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
 
-    	return $val;
+        if ($type == 'integer')
+            return intval($val);
+
+        if ($type == 'boolean')
+            return !empty($val);
+
+        return $val;
     }
 
-	/**
-	* Возвращает переменную _FILES
-	* Обычно переменные _FILES являются двухмерными массивами, поэтому можно указать второй параметр,
-	* например, чтобы получить имя загруженного файла: $filename = $fivecms->request->files('myfile', 'name');
-	*/
+    /**
+     * Возвращает переменную _FILES
+     * Обычно переменные _FILES являются двухмерными массивами, поэтому можно указать второй параметр,
+     * например, чтобы получить имя загруженного файла: $filename = $fivecms->request->files('myfile', 'name');
+     */
     public function files($name, $name2 = null)
     {
-    	if(!empty($name2) && !empty($_FILES[$name][$name2]))
-    		return $_FILES[$name][$name2];
-    	elseif(empty($name2) && !empty($_FILES[$name]))
-    		return $_FILES[$name];
-    	else
-    		return null;
+        if (!empty($name2) && !empty($_FILES[$name][$name2]))
+            return $_FILES[$name][$name2];
+        elseif (empty($name2) && !empty($_FILES[$name]))
+            return $_FILES[$name];
+        else
+            return null;
     }
 
-	/**
-	 * Рекурсивная чистка магических слешей
-	 */
-	private function stripslashes_recursive($var)
-	{
-        if(get_magic_quotes_gpc()) {
+    /**
+     * Рекурсивная чистка магических слешей
+     */
+    private function stripslashes_recursive($var)
+    {
+        if (get_magic_quotes_gpc()) {
             $res = null;
-            if(is_array($var)) {
-                foreach($var as $k=>$v) {
+            if (is_array($var)) {
+                foreach ($var as $k => $v) {
                     $res[stripcslashes($k)] = $this->stripslashes_recursive($v);
                 }
             } else {
@@ -134,28 +134,26 @@ class Request extends Fivecms
         }
         return $res;
     }
-    
-    	
-	/**
-	* Проверка сессии
-	*/
+
+
+    /**
+     * Проверка сессии
+     */
     public function check_session()
     {
-		if(!empty($_POST))
-		{
-			if(empty($_POST['session_id']) || $_POST['session_id'] != session_id())
-			{
-				unset($_POST);
-				return false;
-			}
-		}
-		return true;
+        if (!empty($_POST)) {
+            if (empty($_POST['session_id']) || $_POST['session_id'] != session_id()) {
+                unset($_POST);
+                return false;
+            }
+        }
+        return true;
     }
 
-	
-	/**
-	* URL
-	*/
+
+    /**
+     * URL
+     */
     public function url($params = array())
     {
         $query = array();
@@ -163,19 +161,19 @@ class Request extends Fivecms
         if (isset($url['query'])) {
             parse_str($url['query'], $query);
         }
-        if(phpversion() < '7.4' && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if (phpversion() < '7.4' && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
             foreach ($query as &$v) {
                 if (!is_array($v)) {
                     $v = stripslashes(urldecode($v));
                 }
             }
         }
-        foreach ($params as $name=>$value) {
+        foreach ($params as $name => $value) {
             $query[$name] = $value;
         }
         $query_is_empty = true;
-        foreach ($query as $name=>$value) {
-            if ($value!=='' && $value!==null) {
+        foreach ($query as $name => $value) {
+            if ($value !== '' && $value !== null) {
                 $query_is_empty = false;
             }
         }
@@ -186,16 +184,53 @@ class Request extends Fivecms
         }
         return http_build_url(null, $url);
     }
-    
-	/**
-    * Determine if the request is the result of an AJAX call.
-    *
-    * @return bool
-    */
+
+    /**
+     * Determine if the request is the result of an AJAX call.
+     *
+     * @return bool
+     */
     public function ajax()
     {
-        return isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) &&
-            ( strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' );
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+    }
+
+    /**
+     * Отправляет запрос на удалённый сервер
+     * @param string $url
+     * @param array $data
+     * @param bool $is_post
+     * @param array $headers
+     * @return array('body'=>string, 'error'=>string)
+     */
+    public function curl_request($url, $data = [], $is_post = true, $headers = [])
+    {
+        $ch = curl_init();
+
+        if ($is_post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        } else {
+            $url = str_replace('?', '', $url);
+            $url .= '?' . http_build_query($data);
+        }
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+        if ($headers) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
+        $body = curl_exec($ch);
+        curl_close($ch);
+
+        return [
+            'body' => $body,
+            'error' => $body === false ? curl_error($ch) : false
+        ];
     }
 }
 
@@ -218,9 +253,9 @@ if (!function_exists('http_build_url')) {
     // @param	mixed			Same as the first argument
     // @param	int				A bitmask of binary or'ed HTTP_URL constants (Optional)HTTP_URL_REPLACE is the default
     // @param	array			If set, it will be filled with the parts of the composed url like parse_url() would return
-    function http_build_url($url, $parts=array(), $flags=HTTP_URL_REPLACE, &$new_url=false)
+    function http_build_url($url, $parts = array(), $flags = HTTP_URL_REPLACE, &$new_url = false)
     {
-        $keys = array('user','pass','port','path','query','fragment');
+        $keys = array('user', 'pass', 'port', 'path', 'query', 'fragment');
         // HTTP_URL_STRIP_ALL becomes all the HTTP_URL_STRIP_Xs
         if ($flags & HTTP_URL_STRIP_ALL) {
             $flags |= HTTP_URL_STRIP_USER;
@@ -229,8 +264,7 @@ if (!function_exists('http_build_url')) {
             $flags |= HTTP_URL_STRIP_PATH;
             $flags |= HTTP_URL_STRIP_QUERY;
             $flags |= HTTP_URL_STRIP_FRAGMENT;
-        }
-        // HTTP_URL_STRIP_AUTH becomes HTTP_URL_STRIP_USER and HTTP_URL_STRIP_PASS
+        } // HTTP_URL_STRIP_AUTH becomes HTTP_URL_STRIP_USER and HTTP_URL_STRIP_PASS
         elseif ($flags & HTTP_URL_STRIP_AUTH) {
             $flags |= HTTP_URL_STRIP_USER;
             $flags |= HTTP_URL_STRIP_PASS;
@@ -278,38 +312,39 @@ if (!function_exists('http_build_url')) {
         }
         $new_url = $parse_url;
         return
-             ((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
-            .((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') .'@' : '')
-            .((isset($parse_url['host'])) ? $parse_url['host'] : '')
-            .((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
-            .((isset($parse_url['path'])) ? $parse_url['path'] : '')
-            .((isset($parse_url['query'])) ? '?' . $parse_url['query'] : '')
-            .((isset($parse_url['fragment'])) ? '#' . $parse_url['fragment'] : '')
-        ;
+            ((isset($parse_url['scheme'])) ? $parse_url['scheme'] . '://' : '')
+            . ((isset($parse_url['user'])) ? $parse_url['user'] . ((isset($parse_url['pass'])) ? ':' . $parse_url['pass'] : '') . '@' : '')
+            . ((isset($parse_url['host'])) ? $parse_url['host'] : '')
+            . ((isset($parse_url['port'])) ? ':' . $parse_url['port'] : '')
+            . ((isset($parse_url['path'])) ? $parse_url['path'] : '')
+            . ((isset($parse_url['query'])) ? '?' . $parse_url['query'] : '')
+            . ((isset($parse_url['fragment'])) ? '#' . $parse_url['fragment'] : '');
     }
 }
 if (!function_exists('http_build_query')) {
-    function http_build_query($data, $prefix=null, $sep='', $key='')
+    function http_build_query($data, $prefix = null, $sep = '', $key = '')
     {
-        $ret    = array();
+        $ret = array();
         foreach ((array)$data as $k => $v) {
-            $k    = urlencode($k);
+            $k = urlencode($k);
             if (is_int($k) && $prefix != null) {
-                $k    = $prefix.$k;
+                $k = $prefix . $k;
             };
             if (!empty($key)) {
-                $k    = $key."[".$k."]";
+                $k = $key . "[" . $k . "]";
             };
             if (is_array($v) || is_object($v)) {
                 array_push($ret, http_build_query($v, "", $sep, $k));
             } else {
-                array_push($ret, $k."=".urlencode($v));
+                array_push($ret, $k . "=" . urlencode($v));
             };
         };
         if (empty($sep)) {
             $sep = ini_get("arg_separator.output");
         };
-        return    implode($sep, $ret);
-    };
+        return implode($sep, $ret);
+    }
+
+    ;
 };
 
