@@ -11,14 +11,25 @@ class Sberbank extends Fivecms
     // Суффикс для подстановки в системе банка ордера
     const SUFFIX_ORDER = '_ref_';
 
+    private $order;
     private $payment_method;
     private $payment_settings;
 
+    /**
+     * @param $order_id
+     * @return false|stdClass
+     */
+    public function set_order($order_id)
+    {
+        $this->order = $this->orders->get_order((int)$order_id);
+        $this->payment_method = $this->payment->get_payment_method($this->order->payment_method_id);
+        $this->payment_settings = $this->payment->get_payment_settings($this->payment_method->id);
+        return $this->order;
+    }
+
     public function checkout_form($order_id)
     {
-        $order = $this->orders->get_order((int)$order_id);
-        $this->payment_method = $this->payment->get_payment_method($order->payment_method_id);
-        $this->payment_settings = $this->payment->get_payment_settings($this->payment_method->id);
+        $this->set_order($order_id);
 
         $last_order = $this->get_last_order($order_id);
 
@@ -27,19 +38,20 @@ class Sberbank extends Fivecms
             $status = $this->get_order_status_extended($last_order->order_sber);
 
             if (!$status) {
-                $form_url = $this->register_order($order);
+                $form_url = $this->register_order();
             } elseif (isset($status->orderStatus) && $status->orderStatus == 0) {
+                // Ордер ожидает оплаты
                 $form_url['url'] = self::TEST_FORM . '?mdOrder=' . htmlentities($last_order->order_sber);
             } elseif (isset($status->orderStatus) && $status->orderStatus == 6) {
                 // Если просрочен регистрирую новый ордер
-                $form_url = $this->register_order($order, ++$last_order->trial);
+                $form_url = $this->register_order(++$last_order->trial);
             } else {
                 // Вывести ошибку
-                return "<p class='checkout_button'>Статус заказа {$status->orderStatus}</p>";
+                return "<p class='checkout_button'>{$status->actionCodeDescription}</p>";
             }
         } else {
             // Регистрирую ордер в сиситеме банка
-            $form_url = $this->register_order($order);
+            $form_url = $this->register_order();
             // Сохраняю даныые у себя
         }
 
@@ -56,7 +68,7 @@ class Sberbank extends Fivecms
      * @param $order_sber
      * @return false|stdClass
      */
-    private function get_order_status_extended($order_sber)
+    public function get_order_status_extended($order_sber)
     {
         $data = [
             'token' => $this->payment_settings['token_sber'],
@@ -74,31 +86,30 @@ class Sberbank extends Fivecms
 
         if ($response['error']) return false;
 
-        $er = json_decode($response['body']);
         return json_decode($response['body']);
     }
 
-    private function register_order($order, $index = 0)
+    private function register_order($index = 0)
     {
-        $price = $this->money->convert($order->total_price, $this->payment_method->currency_id, false);
-        $delivery = $this->delivery->get_delivery($order->delivery_id);
+        $price = $this->money->convert($this->order->total_price, $this->payment_method->currency_id, false);
+        $delivery = $this->delivery->get_delivery($this->order->delivery_id);
 
         $user_data = [
-            'Заказ' => $order->id,
-            'Заказчик' => $order->name,
-            'Телефон' => $order->phone,
+            'Заказ' => $this->order->id,
+            'Заказчик' => $this->order->name,
+            'Телефон' => $this->order->phone,
             'Доставка' => $delivery->name,
         ];
 
         $data = [
             'token' => $this->payment_settings['token_sber'],
-            'orderNumber' => $order->id . self::SUFFIX_ORDER . $index,
-            'amount' => $price * 100,
-            'returnUrl' => "{$this->config->root_url}/order/{$order->url}?after_payment=1",
-            'failUrl' => "{$this->config->root_url}/order/{$order->url}?bad_payment=1",
-            'description' => "Оплата заказа №{$order->id}",
+            'orderNumber' => $this->order->id . self::SUFFIX_ORDER . $index,
+            'amount' => (int)($price * 100),
+            'returnUrl' => "{$this->config->root_url}/order/{$this->order->url}?after_payment=1",
+            'failUrl' => "{$this->config->root_url}/order/{$this->order->url}?bad_payment=1",
+            'description' => "Оплата заказа №{$this->order->id}",
             'jsonParams' => json_encode($user_data),
-            'phone' => $order->phone
+            'phone' => $this->order->phone
         ];
 
         $url = $this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER;
@@ -116,13 +127,17 @@ class Sberbank extends Fivecms
         }
 
         $j_body = json_decode($response['body']);
-        if (!$j_body || !$j_body->orderId || !$j_body->formUrl) {
+        if (!$j_body) {
             $this->notify->print_log(__DIR__, 'get_form.log', $response['body']);
-            return ['error' => 'Ошибка'];
+            $html = base64_encode($response['body']);
+            return '<iframe src="data:text/html;base64,' . $html . '" width="100%"></iframe>';
+        } elseif ($j_body && (!$j_body->orderId || !$j_body->formUrl)) {
+            $this->notify->print_log(__DIR__, 'get_form.log', $response['body']);
+            return 'Ошибка';
         }
 
         $this->save_register_order([
-            'order_id' => (int)$order->id,
+            'order_id' => (int)$this->order->id,
             'trial' => (int)$index,
             'order_sber' => $j_body->orderId
         ]);
