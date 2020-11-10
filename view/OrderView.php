@@ -215,7 +215,7 @@ class OrderView extends View
 
     private function after_payment()
     {
-        $this->design->assign('meta_title', 'Спасибо за оплату!');
+        $this->design->assign('meta_title', 'Спасибо за покупку!');
         return $this->design->fetch('after_payment.tpl');
     }
 }

@@ -330,7 +330,7 @@
                                                    type="text"
                                                    data-format=".+"
                                                    data-notice="Укажите адрес"
-                                                   value="{if !empty($address)}{$address|escape}{/if}{if !empty($adress)}{$adress|escape}{/if}"
+                                                   value="{if !empty($address)}{$address|escape}{/if}"
                                                    style="width: 400px;"/>
                                         {/if}
                                     </div>

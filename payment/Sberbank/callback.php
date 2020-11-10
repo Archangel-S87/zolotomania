@@ -9,7 +9,9 @@
 // Работаем в корневой директории
 chdir ('../../');
 require_once('api/Fivecms.php');
+require_once('payment/Sberbank/Sberbank.php');
 $fivecms = new Fivecms();
+$sberbank = new Sberbank();
 
 function c_log($message) {
     global $fivecms;
@@ -40,6 +42,16 @@ $data = "mdOrder;{$mdOrder};operation;{$operation};orderNumber;{$orderNumber};st
 $hmac = hash_hmac('sha256', $data, $payment_settings['key_sber']);
 
 if ($checksum != strtoupper($hmac)) c_log('bad sign');
+
+// Проверка на удачную оплату
+if ($operation != 'deposited') c_log('Оплата не удалась');
+// Проверка на завершение оплаты
+$sberbank->set_order($order_id);
+$order_status = $sberbank->get_order_status_extended($mdOrder);
+if (!$order_status) c_log('Банк не отдал статус заказа');
+if ($order_status->actionCode != 0) c_log("{$order_status->actionCode} {$order_status->actionCodeDescription}");
+
+// Оплата прошла - закрываем ордер
 
 // Проверка наличия товара
 $purchases = $fivecms->orders->get_purchases(['order_id' => (int)$order->id]);

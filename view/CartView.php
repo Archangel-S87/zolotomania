@@ -225,7 +225,7 @@ class CartView extends View
                         while ($max--) $password .= $chars[rand(0, $size)];
                         $user_id = $this->users->add_user(['password' => $password, 'name' => $order->name, 'phone' => $order->phone, 'enabled' => '1', 'last_ip' => $ip, 'external_id' => $order->phone]);
                         $this->orders->update_order($order->id, ['user_id' => $user_id]);
-                        // TODO Отправка СМС на номер телефона
+                        $this->notify->send_sms_message($order->phone, "Ваш пароль $password");
                         //$this->notify->email_user_registration($user_id, $password);
                         $_SESSION['user_id'] = $user_id;
                     }
@@ -388,9 +388,15 @@ class CartView extends View
                 $last_order = $this->orders->get_orders(['user_id' => $this->user->id, 'limit' => 1]);
                 $last_order = reset($last_order);
 
-                $this->design->assign('name', $last_order->name ?? $this->user->name);
-                $this->design->assign('phone', $last_order->phone ?? $this->user->phone);
-                $this->design->assign('address', $last_order->address ?? $this->user->address);
+                if ($last_order) {
+                    $this->design->assign('name', $last_order->name ?: $this->user->name);
+                    $this->design->assign('phone', $last_order->phone ?: $this->user->phone);
+                    $this->design->assign('address', $last_order->address ?: $this->user->address);
+                } else {
+                    $this->design->assign('name', $this->user->name);
+                    $this->design->assign('phone', $this->user->phone);
+                    $this->design->assign('address', $this->user->address);
+                }
             }
 
         }
