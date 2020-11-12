@@ -11,9 +11,6 @@
 	{* Комментарии *}
 	<div id="comments">
 		{if $comments}
-			<div class="post-pg">
-				<h2 class="comments_title">Отзывы</h2>
-			</div>
 			{* Список с комментариями *}
 			<ul class="comment_list">
 				{foreach $comments as $comment}
@@ -64,9 +61,9 @@
 			<textarea class="comment_textarea" id="comment_text" name="text" data-format=".+" data-notice="Введите комментарий" required>{if !empty($comment_text)}{$comment_text}{/if}</textarea>
 			<div>
 
-			<input style="margin-top:7px;" placeholder="* Имя" class="input_name" type="text" id="comment_name" name="name" value="{if !empty($comment_name)}{$comment_name|escape}{/if}" data-format=".+" data-notice="Введите имя" required/>
+			<input style="margin-top:7px;" placeholder="Имя" class="input_name" type="text" id="comment_name" name="name" value="{if !empty($comment_name)}{$comment_name|escape}{/if}" data-format=".+" data-notice="Введите имя" required/>
 
-			<input style="margin-top:10px;" placeholder="* E-mail" class="input_name" type="email" id="comment_email" name="email" value="{if !empty($comment_email)}{$comment_email}{/if}" data-format=".+" data-notice="Введите E-Mail" required/>
+			<input style="margin-top:10px;" placeholder="E-mail" class="input_name" type="email" id="comment_email" name="email" value="{if !empty($comment_email)}{$comment_email}{/if}" data-format=".+" data-notice="Введите E-Mail" required/>
 
 			<div class="captcha-block">
 				{include file='antibot.tpl'}

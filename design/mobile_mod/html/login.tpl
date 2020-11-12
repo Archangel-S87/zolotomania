@@ -16,16 +16,24 @@
 	{* Если не отписка от рассылки*}
 	{if !isset($hideform)}	
 		<form class="form login_form separator" method="post">
-			<label>Email</label>
-			<input type="email" name="email" data-format="email" data-notice="Введите email" value="{if !empty($email)}{$email|escape}{/if}" maxlength="255" />
-	
+			<label>Телефон</label>
+			<input id="login" type="text" name="user_login" data-format=".+" data-notice="Введите номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="+7(___) ___-__-__"/>
 			<label>Пароль (<a href="user/preminder">напомнить</a>)</label>
 			<input type="password" name="password" data-format=".+" data-notice="Введите пароль" value="" />
 	
 			<input type="submit" class="button" name="login" value="Войти">
-			<a class="button logreg" href="/user/register">Зарегистрироваться</a>
+			<a class="logreg" href="/user/register">Зарегистрироваться</a>
 		</form>
-	
+		<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+		<script>
+			$(function ($) {
+				const login = $("#login");
+				login.click(function() {
+					$(this).setCursorPosition(3);
+				});
+				login.mask('+7(999) 999-99-99');
+			});
+		</script>
 		{if !empty($settings->ulogin)}
 			<div class="socialauth">Войти через соцсети:</div>
 			{* Ulogin *}

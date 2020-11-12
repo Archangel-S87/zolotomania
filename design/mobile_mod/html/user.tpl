@@ -1,7 +1,7 @@
 {* Шаблон страницы зарегистрированного пользователя *}
 {$meta_title = "Личный кабинет" scope=root}
 {$page_name = "Личный кабинет" scope=root}
-<div class="page-pg userview">
+<div class="page-pg">
 	{if isset($error)}
 	<div class="message_error">
 		{if $error == 'empty_name'}Введите имя
@@ -13,24 +13,25 @@
 	</div>
 	{/if}
 	
+
 	<form class="form separator" method="post">
 		<label>ФИО</label>
 		<input data-format=".+" data-notice="Введите имя" value="{$name|escape}" name="name" maxlength="255" type="text" required/>
-	 
-		<label>Email</label>
-		<input data-format="email" data-notice="Введите email" value="{$email|escape}" name="email" maxlength="255" type="email" required/>
 		
 		<label>Телефон</label>
 		<input data-format=".+" data-notice="Введите Телефон" value="{if !empty($phone)}{$phone|escape}{/if}" name="phone" maxlength="255" type="tel" required/>
 
+		<label>Адресс</label>
+		<textarea name="address" type="text" rows="1" value="">{if isset($address)}{$address|escape}{/if}</textarea>
+
 		<label class="ch_passw"><a href='#' onclick="$('#password').show();return false;">Изменить пароль</a></label>
 		<input id="password" value="" name="password" type="password" style="display:none; margin-bottom: 20px;"/>
-		<input id="logininput" type="submit" class="button" value="Сохранить">
+		<input id="logininput" type="submit" class="button buttonblue" value="Сохранить">
 	</form>
 	
 	{if !empty($user->comment)}
 		<div class="mainproduct blue">Информация для пользователя:</div>
-		<div class="user_comment">{$user->comment}</user>
+		<div class="user_comment">{$user->comment}</div>
 	{/if}
 	
 	{if !empty($orders)}
@@ -105,7 +106,7 @@
 	{/if}
 
 	<div class="separator">
-		<a href="user/logout" class="button" style="border: 1px solid #cec9c9; margin-top:30px; background-color: #eaeaea;">Разлогиниться</a>
+		<a href="user/logout" class="button buttonblue">Разлогиниться</a>
 	</div>
 
 </div>

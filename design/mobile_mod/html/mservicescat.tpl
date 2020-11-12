@@ -1,6 +1,5 @@
 <!-- incl. mservicescat -->
 <div class="box">
-	<div class="box-heading">Каталог услуг</div>
 	<div class="box-content">
 		<div class="box-category">
 			{function name=services_categories_tree level=1}

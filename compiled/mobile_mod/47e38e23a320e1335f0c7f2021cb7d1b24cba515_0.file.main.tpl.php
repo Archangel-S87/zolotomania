@@ -1,43 +1,43 @@
 <?php
-/* Smarty version 3.1.33, created on 2020-11-02 12:14:11
+/* Smarty version 3.1.33, created on 2020-11-12 16:14:54
   from '/Applications/MAMP/htdocs/zolotomania/design/mobile_mod/html/main.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5f9ff813ebc994_49624377',
+  'unifunc' => 'content_5fad5f7e093233_22428099',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '47e38e23a320e1335f0c7f2021cb7d1b24cba515' => 
     array (
       0 => '/Applications/MAMP/htdocs/zolotomania/design/mobile_mod/html/main.tpl',
-      1 => 1604315638,
+      1 => 1605195496,
       2 => 'file',
     ),
   ),
   'includes' => 
   array (
     'file:slides_mob.tpl' => 1,
-    'file:mblog.tpl' => 1,
   ),
 ),false)) {
-function content_5f9ff813ebc994_49624377 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5fad5f7e093233_22428099 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->smarty->ext->_tplFunction->registerTplFunctions($_smarty_tpl, array (
   'categories_treemain' => 
   array (
     'compiled_filepath' => '/Applications/MAMP/htdocs/zolotomania/compiled/mobile_mod/47e38e23a320e1335f0c7f2021cb7d1b24cba515_0.file.main.tpl.php',
     'uid' => '47e38e23a320e1335f0c7f2021cb7d1b24cba515',
-    'call_name' => 'smarty_template_function_categories_treemain_15156828015f9ff813dde551_17932883',
+    'call_name' => 'smarty_template_function_categories_treemain_2973273925fad5f7df002a8_15712705',
   ),
   'services_categories_treemain' => 
   array (
     'compiled_filepath' => '/Applications/MAMP/htdocs/zolotomania/compiled/mobile_mod/47e38e23a320e1335f0c7f2021cb7d1b24cba515_0.file.main.tpl.php',
     'uid' => '47e38e23a320e1335f0c7f2021cb7d1b24cba515',
-    'call_name' => 'smarty_template_function_services_categories_treemain_15156828015f9ff813dde551_17932883',
+    'call_name' => 'smarty_template_function_services_categories_treemain_2973273925fad5f7df002a8_15712705',
   ),
 ));
-$_smarty_tpl->_assignInScope('wrapper', 'index.tpl' ,false ,8);?>
+?><!-- main.tpl -->
+<?php $_smarty_tpl->_assignInScope('wrapper', 'index.tpl' ,false ,8);?>
 
 <?php $_smarty_tpl->_assignInScope('canonical', '' ,false ,8);?>
 
@@ -53,31 +53,17 @@ $_smarty_tpl->_assignInScope('wrapper', 'index.tpl' ,false ,8);?>
 		<?php $_smarty_tpl->smarty->ext->_tplFunction->callTemplateFunction($_smarty_tpl, 'services_categories_treemain', array('services_categories'=>$_smarty_tpl->tpl_vars['services_categories']->value), true);?>
 	
 	<?php }?>
-
-<?php if ($_smarty_tpl->tpl_vars['page']->value->body) {?>
-	<div class="main-text"> <div class="top cutouter" style="max-height:<?php echo htmlspecialchars($_smarty_tpl->tpl_vars['settings']->value->cutmob, ENT_QUOTES, 'UTF-8', true);?>
-px;"> <div class="disappear"></div> <div class="cutinner"> <h1><?php echo htmlspecialchars($_smarty_tpl->tpl_vars['page']->value->header, ENT_QUOTES, 'UTF-8', true);?>
-</h1>
-			  	<?php echo $_smarty_tpl->tpl_vars['page']->value->body;?>
-
-			</div> </div> <div class="top cutmore" style="display:none;">Развернуть...</div> </div>
-<?php }?>
-
-<?php if ($_smarty_tpl->tpl_vars['settings']->value->hideblog == 1) {?>
-	<?php $_smarty_tpl->_assignInScope('news', 3);?>
-	<?php $_smarty_tpl->_subTemplateRender('file:mblog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, false);
-}
-}
-/* smarty_template_function_categories_treemain_15156828015f9ff813dde551_17932883 */
-if (!function_exists('smarty_template_function_categories_treemain_15156828015f9ff813dde551_17932883')) {
-function smarty_template_function_categories_treemain_15156828015f9ff813dde551_17932883(Smarty_Internal_Template $_smarty_tpl,$params) {
+<!-- main.tpl @ --><?php }
+/* smarty_template_function_categories_treemain_2973273925fad5f7df002a8_15712705 */
+if (!function_exists('smarty_template_function_categories_treemain_2973273925fad5f7df002a8_15712705')) {
+function smarty_template_function_categories_treemain_2973273925fad5f7df002a8_15712705(Smarty_Internal_Template $_smarty_tpl,$params) {
 foreach ($params as $key => $value) {
 $_smarty_tpl->tpl_vars[$key] = new Smarty_Variable($value, $_smarty_tpl->isRenderingCache);
 }
 ?>
 
 			<?php if ($_smarty_tpl->tpl_vars['categories']->value) {?>
-				<div class="maincatalog">Каталог</div> <ul class="category_products separator" style="margin-bottom:10px;margin-top:0;">
+				<ul class="category_products separator">
 					<?php
 $_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['categories']->value, 'c');
 if ($_from !== null) {
@@ -85,7 +71,8 @@ foreach ($_from as $_smarty_tpl->tpl_vars['c']->value) {
 ?>
 						<?php if ($_smarty_tpl->tpl_vars['c']->value->visible) {?>
 							<li class="product" onClick="window.location='/catalog/<?php echo $_smarty_tpl->tpl_vars['c']->value->url;?>
-'"> <div class="image">
+'"> <div class="product_info"> <h3><?php echo htmlspecialchars($_smarty_tpl->tpl_vars['c']->value->name, ENT_QUOTES, 'UTF-8', true);?>
+</h3> </div> <div class="image">
 									<?php if ($_smarty_tpl->tpl_vars['c']->value->image) {?>
 										<img alt="<?php echo htmlspecialchars($_smarty_tpl->tpl_vars['c']->value->name, ENT_QUOTES, 'UTF-8', true);?>
 " title="<?php echo htmlspecialchars($_smarty_tpl->tpl_vars['c']->value->name, ENT_QUOTES, 'UTF-8', true);?>
@@ -95,8 +82,7 @@ echo $_smarty_tpl->tpl_vars['c']->value->image;?>
 									<?php } else { ?>
 										<svg class="nophoto"><use xlink:href='#folder' /></svg>
 									<?php }?>
-								</div> <div class="product_info"> <h3><?php echo htmlspecialchars($_smarty_tpl->tpl_vars['c']->value->name, ENT_QUOTES, 'UTF-8', true);?>
-</h3> </div> </li>
+								</div> </li>
 						<?php }?>
 					<?php
 }
@@ -124,10 +110,10 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
 			<?php }?>
 		<?php
 }}
-/*/ smarty_template_function_categories_treemain_15156828015f9ff813dde551_17932883 */
-/* smarty_template_function_services_categories_treemain_15156828015f9ff813dde551_17932883 */
-if (!function_exists('smarty_template_function_services_categories_treemain_15156828015f9ff813dde551_17932883')) {
-function smarty_template_function_services_categories_treemain_15156828015f9ff813dde551_17932883(Smarty_Internal_Template $_smarty_tpl,$params) {
+/*/ smarty_template_function_categories_treemain_2973273925fad5f7df002a8_15712705 */
+/* smarty_template_function_services_categories_treemain_2973273925fad5f7df002a8_15712705 */
+if (!function_exists('smarty_template_function_services_categories_treemain_2973273925fad5f7df002a8_15712705')) {
+function smarty_template_function_services_categories_treemain_2973273925fad5f7df002a8_15712705(Smarty_Internal_Template $_smarty_tpl,$params) {
 $params = array_merge(array('level'=>1), $params);
 foreach ($params as $key => $value) {
 $_smarty_tpl->tpl_vars[$key] = new Smarty_Variable($value, $_smarty_tpl->isRenderingCache);
@@ -164,5 +150,5 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
 				<?php }?>
 		<?php
 }}
-/*/ smarty_template_function_services_categories_treemain_15156828015f9ff813dde551_17932883 */
+/*/ smarty_template_function_services_categories_treemain_2973273925fad5f7df002a8_15712705 */
 }

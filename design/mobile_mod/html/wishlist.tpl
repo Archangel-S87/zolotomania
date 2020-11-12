@@ -1,6 +1,6 @@
 {$meta_title = "Избранное" scope=root}
 {$page_name = "Избранное" scope=root}
-
+{* TODO меняется текст в адресной строке при переходе на сраницу избраного *}
 {if $wished_products|count}
 	<ul id="wished" class="tiny_products">
 		{foreach $wished_products as $product}
@@ -14,20 +14,15 @@
 			</div>
 		
 			<div class="product_info separator">
-				<a class="wish-remove" href="wishlist/remove/{$product->id}">
-					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path d="M0 0h24v24H0z" fill="none"/>
-						<path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-					</svg>
-				</a>
+				<a class="wish-remove" href="wishlist/remove/{$product->id}"></a>
 				<h3><a href="products/{$product->url}">{$product->name|escape}</a></h3>
 			</div>
 		</li>
 		{/foreach}
 	</ul>
-	<div class="separator" style="height:60px; padding:15px;">
+	<div class="separator">
 		{literal}
-			<a name="#" onclick="if (document.referrer) {location.href=document.referrer} else {history.go(-1)}" class="buttonblue">Вернуться</a>
+			<a name="#" onclick="if (document.referrer) {location.href=document.referrer} else {history.go(-1)}" class="button buttonblue">Вернуться</a>
 		{/literal}
 	</div>
 {else}

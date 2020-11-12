@@ -1,3 +1,4 @@
+<!-- main.tpl -->
 {$wrapper = 'index.tpl' scope=root}
 
 {* Канонический адрес страницы *}
@@ -9,20 +10,19 @@
 	{if $settings->purpose == 0}
 		{function name=categories_treemain}
 			{if $categories}
-				<div class="maincatalog">Каталог</div>
-				<ul class="category_products separator" style="margin-bottom:10px;margin-top:0;">
+				<ul class="category_products separator">
 					{foreach $categories as $c}
 						{if $c->visible}
 							<li class="product" onClick="window.location='/catalog/{$c->url}'">
+								<div class="product_info">
+									<h3>{$c->name|escape}</h3>
+								</div>
 								<div class="image">
 									{if $c->image}
 										<img alt="{$c->name|escape}" title="{$c->name|escape}" src="{$config->categories_images_dir}{$c->image}" />
 									{else}
 										<svg class="nophoto"><use xlink:href='#folder' /></svg>
 									{/if}
-								</div>
-								<div class="product_info">
-									<h3>{$c->name|escape}</h3>
 								</div>
 							</li>
 						{/if}
@@ -100,24 +100,4 @@
 		{/function}
 		{services_categories_treemain services_categories=$services_categories}	
 	{/if}
-{* categories end *}
-
-{* main text *}
-{if $page->body}
-	<div class="main-text">
-		<div class="top cutouter" style="max-height:{$settings->cutmob|escape}px;">
-			<div class="disappear"></div>
-			<div class="cutinner">
-			  	<h1>{$page->header|escape}</h1>
-			  	{$page->body}
-			</div>
-		</div>
-		<div class="top cutmore" style="display:none;">Развернуть...</div>
-	</div>
-{/if}
-{* main text end *}
-
-{if $settings->hideblog == 1}
-	{$news=3}
-	{include file='mblog.tpl'}
-{/if}
+<!-- main.tpl @ -->

@@ -34,14 +34,14 @@
 						</li>
 					{/foreach}
 				</ul>
-				<div class="page-pg"><input type='submit' class="button" value='Сохранить вариант оплаты'></div>
+				<div class="page-pg"><input type='submit' class="button buttonblue" value='Сохранить вариант оплаты'></div>
 			</form>
 		{elseif !empty($payment_method)}
 			<div class="page-pg">
 				<p class="orderstatus">Способ оплаты - {$payment_method->name}</p>
 		
 				<form id="paymentform" method=post>
-					<input type=submit id="reset_payment" class="button" name='reset_payment_method' value='Выбрать другой способ оплаты'>
+					<input type=submit id="reset_payment" class="button buttonblue" name='reset_payment_method' value='Выбрать другой способ оплаты'>
 				</form>
 		
 				{if empty($settings->payment_control) || 
@@ -60,8 +60,8 @@
 
 	{if !empty($show_greetings)}
 	<div class="page-pg">
-		<div class="attention" style="display:table;width:100%;text-align:center;padding:10px 10px 0px 10px;margin:20px 0;">
-			<p style="font-size:16px;text-transform:uppercase;">Спасибо за заказ!</p>
+		<div class="attention">
+			<p>Спасибо за заказ!</p>
 			{if empty($order->paid) && $order->status != 3}
 				{if !empty($payment_control)}
 					<p>Если вы выбрали вариант онлайн-оплаты, то произведите ее на этой странице.</p>
