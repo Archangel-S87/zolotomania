@@ -111,7 +111,7 @@ class Design extends Fivecms
 	public function is_mobile_browser()
 	{
 	    //if (true) return true; // TODO убрать перед выгрузкой
-		$user_agent = $_SERVER['HTTP_USER_AGENT']; 
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		$http_accept = isset($_SERVER['HTTP_ACCEPT'])?$_SERVER['HTTP_ACCEPT']:'';
 		
 		if(preg_match('#5cms#', $user_agent))
