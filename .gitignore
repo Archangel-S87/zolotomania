@@ -4,6 +4,7 @@ compiled/adaptive_wide/*
 compiled/mobile/*
 compiled/mail/*
 compiled/Zolotomania/*
+compiled/mobile_mod/*
 cache/**/*.*
 fivecms/design/compiled*
 !files/originals/*

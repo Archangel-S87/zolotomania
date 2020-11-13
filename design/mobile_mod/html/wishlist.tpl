@@ -1,6 +1,6 @@
 {$meta_title = "Избранное" scope=root}
 {$page_name = "Избранное" scope=root}
-{* TODO меняется текст в адресной строке при переходе на сраницу избраного *}
+
 {if $wished_products|count}
 	<ul id="wished" class="tiny_products">
 		{foreach $wished_products as $product}

@@ -34,7 +34,7 @@ class Design extends Fivecms
 		} else {
 			$theme = $this->settings->theme;
 		}
-		$theme = "mobile_mod";
+		//$theme = "mobile_mod";
 		$this->smarty->compile_dir = $this->config->root_dir.'/compiled/'.$theme;
 		$this->smarty->template_dir = $this->config->root_dir.'/design/'.$theme.'/html';		
 
@@ -110,6 +110,7 @@ class Design extends Fivecms
 
 	public function is_mobile_browser()
 	{
+	    //if (true) return true; // TODO убрать перед выгрузкой
 		$user_agent = $_SERVER['HTTP_USER_AGENT']; 
 		$http_accept = isset($_SERVER['HTTP_ACCEPT'])?$_SERVER['HTTP_ACCEPT']:'';
 		

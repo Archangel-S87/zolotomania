@@ -203,12 +203,13 @@
 			{if $module=='ProductsView'}
 				{if !empty($category->name)}
 					{if empty($category->subcategories)}
-						{* TODO Определить кула будет вести ссылка назад*}
-						<a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.75 51.33"><g id="Слой_2" data-name="Слой 2"><g id="Слой_1-2" data-name="Слой 1"><line class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" x1="4.82" y1="25.66" x2="58.25" y2="25.66"/><polyline class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" points="33.83 48.83 2.5 25.66 33.83 2.5"/></g></g></svg></a>
+						<a href="/catalog" onclick="window.history.back(); return false;">
+							<svg><use xlink:href='#arrow_left'/></svg>
+						</a>
 					{/if}
 				{/if} 
 			{/if} 
-			<h1 id="uphere" {if $module == 'SurveysView' && empty($user->id)}blured{/if}">
+			<h1 id="uphere" {if $module == 'SurveysView' && empty($user->id)}blured{/if}>
 				<!--h1-->
 				{if !empty($h1_title)}
 					{$h1_title|escape}
@@ -230,10 +231,7 @@
 							{if !empty($category->name)}						
 								{$category->name|escape}
 							{/if} 
-							{if !empty($brand->name)}{$brand->name|escape}{/if} 
-						{elseif $module=='ProductView'}
-						{* TODO сделат так чтобы на странице товара здесь h1 не выводился он уже есть на странице *}
-							{* {if !empty($product->name)}{$product->name|escape}{/if} *}
+							{if !empty($brand->name)}{$brand->name|escape}{/if}
 						{/if}
 					{/if}
 				{/if}
@@ -246,8 +244,9 @@
 					{/if}
 				{/if} 
 			{elseif $module=='ProductView'}
-				{* TODO Определить кула будет вести ссылка назад*}
-				<a href="#" style="margin: 0 0 0 auto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60.75 51.33"><g id="Слой_2" data-name="Слой 2"><g id="Слой_1-2" data-name="Слой 1"><line class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" x1="4.82" y1="25.66" x2="58.25" y2="25.66"/><polyline class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" points="33.83 48.83 2.5 25.66 33.83 2.5"/></g></g></svg></a>
+				<a href="/" onclick="window.history.back(); return false;">
+					<svg><use xlink:href='#arrow_left'/></svg>
+				</a>
 			{/if} 
 		</div>
 	{/if}
@@ -261,20 +260,25 @@
 	<footer>
 		<div class="row">
 			<div id="logo">
-				<img onclick="window.location='/'" src="files/logo/logo.png?v={filemtime('files/logo/logo.png')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
+				<img onclick="window.location='/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
 			</div>
-			{* TODO Вывод телефона с админки *}
-			<a href="tel:8800123-45-67" class="topphone">8 (800) 123-45-67</a>
+			{if isset($settings->phone)}
+				<a href="tel:{$settings->phone|escape|replace:' ' :''}" class="topphone">{$settings->phone|escape}</a>
+			{/if}
 		</div>
 		<nav>
-		{* TODO Вставить меню *}
-			<ul>
-				<li><a href="#">Акции</a></li>
-				<li><a href="#">Ювелирные изделия</a></li>
-				<li><a href="#">Коллекции</a></li>
-				<li><a href="#">Бренды</a></li>
-				<li><a href="#">Подарки</a></li>
-			</ul>
+			{if $menus[17]->enabled}
+				{get_pages var="menu_1" menu_id=17}
+				{if $menu_1}
+					<ul>
+						{foreach $menu_1 as $p}
+							<li {if $page && $page->id == $p->id}class="selected"{/if}>
+								<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
+							</li>
+						{/foreach}
+					</ul>
+				{/if}
+			{/if}
 		</nav>
 		<div class="contact-profiles">
 				{if $settings->twitter}<div title="Twitter" onclick="window.open('{$settings->twitter|escape}','_blank');" class="twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#231f20"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-.139 9.237c.209 4.617-3.234 9.765-9.33 9.765-1.854 0-3.579-.543-5.032-1.475 1.742.205 3.48-.278 4.86-1.359-1.437-.027-2.649-.976-3.066-2.28.515.098 1.021.069 1.482-.056-1.579-.317-2.668-1.739-2.633-3.26.442.246.949.394 1.486.411-1.461-.977-1.875-2.907-1.016-4.383 1.619 1.986 4.038 3.293 6.766 3.43-.479-2.053 1.08-4.03 3.199-4.03.943 0 1.797.398 2.395 1.037.748-.147 1.451-.42 2.086-.796-.246.767-.766 1.41-1.443 1.816.664-.08 1.297-.256 1.885-.517-.439.656-.996 1.234-1.639 1.697z"/></svg></div>{/if}
@@ -300,8 +304,8 @@
 	</footer>
 
 
-	{if $uagent == 'ios' && $module != 'MainView'}
-	<a href="javascript:history.go(-1)" class="history_back">&lang;</a>
+	{if isset($uagent) && $uagent == 'ios' && $module != 'MainView'}
+		<a href="javascript:history.go(-1)" class="history_back">&lang;</a>
 	{/if}
 	{if $module == 'CartView'}
 		<script src="androidcore/baloon/js/baloon.js" type="text/javascript"></script>
@@ -646,6 +650,9 @@
 	
 	{* svg sprite *}
 	<svg style="display:none;">
+		<symbol id="arrow_left" viewBox="0 0 60.75 51.33">
+			<g id="Слой_2" data-name="Слой 2"><g id="Слой_1-2" data-name="Слой 1"><line class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" x1="4.82" y1="25.66" x2="58.25" y2="25.66"/><polyline class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" points="33.83 48.83 2.5 25.66 33.83 2.5"/></g></g>
+		</symbol>
 		<symbol id="arrow_tool" viewBox="0 0 24 24">
 			<path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
 			<path d="M0-.25h24v24H0z" fill="none"/>

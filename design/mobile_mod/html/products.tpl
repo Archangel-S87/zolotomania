@@ -124,7 +124,7 @@
 		<div class="page-pg categoryintro" style="{if !empty($brand->description) || !empty($category->description)}margin-bottom:16px;{else}margin:0 15px;{/if}"><div class="top cutouter" style="max-height:{$settings->cutmob|escape}px;"><div class="disappear" style="display:none;"></div><div class="cutinner"><!--desc-->{if !empty($brand->description)}{$brand->description}{elseif !empty($category->description)}{$category->description}{/if}<!--/desc--></div></div><div class="top cutmore" style="display:none;">Развернуть...</div></div>
 	{/if}
 {/if}
-{* TODO Сдклать так что если есть подкаьегории выволятся только они, если нет выводятся товары *}
+
 {* subcat start *}
 {if !empty($category->subcategories)}
 	<ul class="category_products separator">
