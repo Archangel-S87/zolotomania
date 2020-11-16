@@ -52,7 +52,6 @@ class Sberbank extends Fivecms
         } else {
             // Регистрирую ордер в сиситеме банка
             $form_url = $this->register_order();
-            // Сохраняю даныые у себя
         }
 
         if (!empty($form_url['error'])) {

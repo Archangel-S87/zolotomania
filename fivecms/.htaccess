@@ -2,5 +2,5 @@ DirectoryIndex index.php
 AddType application/octet-stream csv
 AuthName "5CMS"
 AuthType Basic
-AuthUserFile /Applications/MAMP/htdocs/zolotomania/fivecms/.passwd
+AuthUserFile C:\OpenServer\domains\zolotomania.loc/fivecms/.passwd
 require valid-user

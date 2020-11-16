@@ -5,7 +5,7 @@
 {$canonical="" scope=root}
 
 {* {include file='slides_mob.tpl'} *}
-<img alt="{$c->name|escape}" title="{$c->name|escape}" src="design/mobile_mod/images/banner.jpg" srcset="design/mobile_mod/images/banner@2x.jpeg" class="banner"/>
+<img src="design/mobile_mod/images/banner.jpg" srcset="design/mobile_mod/images/banner@2x.jpeg" class="banner" alt="Золотомания"/>
 {* categories start *}
 <section class="main">
 	<a class="main__gold" href="/catalog/zoloto-585">

@@ -34,15 +34,13 @@ class Design extends Fivecms
 		} else {
 			$theme = $this->settings->theme;
 		}
-		$theme = "mobile_mod";
-		$this->t;
+		//$theme = "mobile_mod";
+
 		$this->smarty->compile_dir = $this->config->root_dir.'/compiled/'.$theme;
 		$this->smarty->template_dir = $this->config->root_dir.'/design/'.$theme.'/html';		
 
 		// Создаем папку для скомпилированных шаблонов текущей темы
-		if(!is_dir($this->smarty->compile_dir))
-			mkdir($this->smarty->compile_dir, 0777);
-						
+		if(!is_dir($this->smarty->compile_dir)) mkdir($this->smarty->compile_dir, 0777);
 		$this->smarty->cache_dir = 'cache';
 				
 		$this->smarty->registerPlugin('modifier', 'resize', array($this, 'resize_modifier'));		

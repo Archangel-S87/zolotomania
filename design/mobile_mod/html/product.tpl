@@ -43,11 +43,17 @@
 				<div class="bm_good">	
 					<h1>{if !empty($product->name)}{$product->name|escape}{/if}</h1>
 					{if $product->vproperties}
-						{$cntname1 = 0}	
+						{$cntname1 = 0}
 						<span class="pricelist" style="display:none;">
 							{foreach $product->variants as $v}
 								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<span class="c{$v->id}" v_stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" v_unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" v_sku="{if $v->sku}Артикул {$v->sku}{/if}" v_bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
+								<span class="c{$v->id}"
+									  v_stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
+									  v_unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
+									  v_sku="{if $v->sku}Артикул {$v->sku}{/if}"
+									  v_bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">
+									{$v->price|convert}
+								</span>
 								{if $v->name1}{$cntname1 = 1}{/if}
 							{/foreach}
 						</span>
@@ -55,7 +61,9 @@
 						{$cntname2 = 0}
 						<span class="pricelist2" style="display:none;">
 							{foreach $product->variants as $v}
-								{if $v->compare_price > 0}<span class="c{$v->id}">{$v->compare_price|convert}</span>{/if}
+								{if $v->compare_price > 0}
+									<span class="c{$v->id}">{$v->compare_price|convert}</span>
+								{/if}
 								{if $v->name2}{$cntname2 = 1}{/if}
 							{/foreach}
 						</span>
@@ -82,7 +90,6 @@
 							</select>
 						</div>
 
-
 						<div class="skustock">
 							<div class="skustockleft">
 								
@@ -99,11 +106,24 @@
 							</div>
 						</div>
 					{else}
-										
+						<select class="b1c_option" name="variant" {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}>
+							{foreach $product->variants as $v}
+								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
+								<option {if $product->variant->id==$v->id}selected{/if} data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $v->sku}Артикул: {$v->sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}" value="{$v->id}" {if $v->compare_price > 0}data-cprice="{$v->compare_price|convert}"{/if} data-varprice="{$v->price|convert}">
+									{$v->name|escape}&nbsp;
+								</option>
+							{/foreach}
+						</select>
+
 						<div class="price">
+							<div id="amount" style="display: none;">
+								<input type="button" class="minus" value="−" />
+								<input type="number" class="amount" name="amount" value="1" size="2" data-max="{$settings->max_order_amount|escape}"/>
+								<input type="button" class="plus" value="+" />
+								<span class="umnozh">X</span>
+							</div>
 
 							<div class="price-block {if !$product->variant->compare_price > 0}pricebig{/if}">
-						
 								{if $product->variant->compare_price > 0}
 									<div class="compare_price">{$product->variant->compare_price|convert}</div>
 								{/if}
@@ -116,9 +136,14 @@
 					{if $product->body}
 						<div class="page-pg">{$product->body}</div>
 					{/if}
+
 					<div class="buttonsblock">
-						<input type="submit" class="buttonred" value="беру" data-result-text="добавлено" />
-						{include file='wishcomp.tpl'}
+						{if !$product->variant->reservation}
+							<input type="submit" class="buttonred" value="беру" data-result-text="добавлено"/>
+							{include file='wishcomp.tpl'}
+						{else}
+							<div class="reservation">В резерве</div>
+						{/if}
 					</div>
 					
 				</div>
@@ -132,8 +157,7 @@
 			{/if}	
 			{$votes = $settings->prods_votes|intval + $product->votes}
 			{$views = $settings->prods_views|intval + $product->views}
-			
-	
+
 		{else}
 			{if $settings->showsku == 1 && !empty($product->variant->sku)}
 				<p class="page-pg sku">Артикул {$product->variant->sku}</p>
