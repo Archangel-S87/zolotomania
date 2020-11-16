@@ -4,100 +4,23 @@
 {* Канонический адрес страницы *}
 {$canonical="" scope=root}
 
-{include file='slides_mob.tpl'}
-
+{* {include file='slides_mob.tpl'} *}
+<img alt="{$c->name|escape}" title="{$c->name|escape}" src="design/mobile_mod/images/banner.jpg" srcset="design/mobile_mod/images/banner@2x.jpeg" class="banner"/>
 {* categories start *}
-	{if $settings->purpose == 0}
-		{function name=categories_treemain}
-			{if $categories}
-				<ul class="category_products separator">
-					{foreach $categories as $c}
-						{if $c->visible}
-							<li class="product" onClick="window.location='/catalog/{$c->url}'">
-								<div class="product_info">
-									<h3>{$c->name|escape}</h3>
-								</div>
-								<div class="image">
-									{if $c->image}
-										<img alt="{$c->name|escape}" title="{$c->name|escape}" src="{$config->categories_images_dir}{$c->image}" />
-									{else}
-										<svg class="nophoto"><use xlink:href='#folder' /></svg>
-									{/if}
-								</div>
-							</li>
-						{/if}
-					{/foreach}
-					{if !empty($settings->show_brands)}
-							<li class="product svg_brands" onClick="window.location='/brands'">
-								<div class="image">
-									<svg viewBox="0 0 24 24"><use xlink:href='#brands' /></svg>
-								</div>
-								<div class="product_info">
-									<h3>Бренды</h3>
-								</div>
-							</li>
-					{/if}
-					{get_products var=discounted_products discounted=1 limit=3}
-					{if !empty($discounted_products) && $discounted_products|count > 2}
-							<li class="product svg_lowprice" onClick="window.location='/discounted'">
-								<div class="image">
-									<svg class="lowprice" viewBox="0 0 24 24"><use xlink:href='#lowprice' /></svg>
-								</div>
-								<div class="product_info">
-									<h3>Скидки</h3>
-								</div>
-							</li>
-					{/if}
-					{get_products var=featured_products featured=1 limit=3}
-					{if !empty($featured_products) && $featured_products|count > 2}
-							<li class="product svg_hit" onClick="window.location='/hits'">
-								<div class="image">
-									<svg class="hit" viewBox="0 0 24 24"><use xlink:href='#hit' /></svg>
-								</div>
-								<div class="product_info">
-									<h3>Лидеры продаж</h3>
-								</div>
-							</li>
-					{/if}
-					{get_products var=is_new_products is_new=1 limit=3}
-					{if !empty($is_new_products) && $is_new_products|count > 2}
-							<li class="product svg_new" onClick="window.location='/new'">
-								<div class="image">
-									<svg class="new" viewBox="0 0 24 24"><use xlink:href='#new' /></svg>
-								</div>
-								<div class="product_info">
-									<h3>Новинки</h3>
-								</div>
-							</li>
-					{/if}
-				</ul>
-			{/if}
-		{/function}
-		{categories_treemain categories=$categories}
-	{elseif $settings->purpose == 1}
-		{function name=services_categories_treemain level=1}
-				{if $services_categories}
-					<div class="maincatalog">Каталог</div>
-					<ul class="category_products separator" style="margin-bottom:10px;margin-top:0px;">
-						{foreach $services_categories as $ac2}
-							{if $ac2->visible}
-								<li class="product" onClick="window.location='/services/{$ac2->url}'">
-									<div class="image">
-									{if $ac2->image}
-										<img alt="{$ac2->menu|escape}" title="{$ac2->menu|escape}" src="{$config->services_categories_images_dir}{$ac2->image}" />
-									{else}
-										<svg class="nophoto"><use xlink:href='#folder' /></svg>
-									{/if}
-									</div>
-									<div class="product_info">
-										<h3>{$ac2->menu|escape}</h3>
-									</div>
-								</li>
-							{/if}
-						{/foreach}
-					</ul>
-				{/if}
-		{/function}
-		{services_categories_treemain services_categories=$services_categories}	
-	{/if}
+<section class="main">
+	<a class="main__gold" href="/catalog/zoloto-585">
+		
+		<div class="container">
+			<div class="main__link main__gold--link">золото 585</div>
+		</div>
+		<img src="design/mobile_mod/images/zoloto.jpg" srcset="design/mobile_mod/images/zoloto@2x.jpg" alt="bg">
+	</a>
+	<a class="main__silver" href="/catalog/serebro-925">
+		
+		<div class="container">
+			<div class="main__link main__silver--link">Серебро 925</div>
+		</div>
+		<img src="design/mobile_mod/images/serebro.jpg" srcset="design/mobile_mod/images/serebro@2x.jpg" alt="bg">
+	</a>
+</section>
 <!-- main.tpl @ -->

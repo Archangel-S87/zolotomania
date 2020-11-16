@@ -363,7 +363,7 @@
 		{/if}
 		
 		<input placeholder="ФИО*" name="name" type="text" value="{if !empty($name)}{$name|escape}{/if}" data-format=".+" data-notice="Введите ФИО" required />
-		<input placeholder="Телефон*" id="phone" name="phone" type="tel" value="{if !empty($phone)}{$phone|escape}{/if}" data-format=".+" data-notice="Укажите телефон" required />
+		<input type="tel" name="tel" id="tel" data-format=".+" data-notice="Введите телефон" value="{if isset($tel)}{$tel|escape}{/if}" maxlength="20"  placeholder="+7(___) ___-__-__" >
 		
 		{* загрузка файлов *}
 		{if $settings->attachment == 1 && empty($mobile_app)}
@@ -409,6 +409,16 @@
 	</div>
 	
 </form>
+<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+<script>
+	jQuery(function($){
+		const tel = $("#tel");
+		tel.click(function() {
+			$(this).setCursorPosition(3);
+		});
+		tel.mask('+7(999) 999-99-99');
+	});
+</script>
 {/if}
 
 {else}

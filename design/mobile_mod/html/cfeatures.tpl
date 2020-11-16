@@ -59,7 +59,7 @@
 			    {foreach $features as $f}
 						<div class="feature_column">
 							<div class="feature_name" data-feature="{$f->id}" onclick="hideShow1(this);return false;">{$f->name}</div>
-								<div class="feature_values">
+								<div class="feature_values feature_values-type">
 									{if $f->in_filter==2}
 										{$f_min="min[`$f->id`]"}
 										{$f_max="max[`$f->id`]"} 

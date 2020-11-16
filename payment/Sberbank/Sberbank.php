@@ -131,9 +131,9 @@ class Sberbank extends Fivecms
             $this->notify->print_log(__DIR__, 'get_form.log', $response['body']);
             $html = base64_encode($response['body']);
             return '<iframe src="data:text/html;base64,' . $html . '" width="100%"></iframe>';
-        } elseif ($j_body && (!$j_body->orderId || !$j_body->formUrl)) {
+        } elseif ($j_body && (empty($j_body->orderId) || empty($j_body->formUrl))) {
             $this->notify->print_log(__DIR__, 'get_form.log', $response['body']);
-            return 'Ошибка';
+            return ['error' => 'Ошибка'];
         }
 
         $this->save_register_order([

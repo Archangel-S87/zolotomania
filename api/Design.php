@@ -34,7 +34,8 @@ class Design extends Fivecms
 		} else {
 			$theme = $this->settings->theme;
 		}
-		//$theme = "mobile_mod";
+		$theme = "mobile_mod";
+		$this->t;
 		$this->smarty->compile_dir = $this->config->root_dir.'/compiled/'.$theme;
 		$this->smarty->template_dir = $this->config->root_dir.'/design/'.$theme.'/html';		
 

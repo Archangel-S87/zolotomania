@@ -199,7 +199,7 @@
 
 	{if $module != 'MainView'}
 	
-		<div class="breadcrumb">
+		<div class="breadcrumb" {if $module=='ProductView'}style="justify-content: flex-end;"{/if}>
 			{if $module=='ProductsView'}
 				{if !empty($category->name)}
 					{if empty($category->subcategories)}
@@ -209,7 +209,7 @@
 					{/if}
 				{/if} 
 			{/if} 
-			<h1 id="uphere" {if $module == 'SurveysView' && empty($user->id)}blured{/if}>
+			<h1 id="uphere" {if $module == 'SurveysView' && empty($user->id)}blured {/if}>
 				<!--h1-->
 				{if !empty($h1_title)}
 					{$h1_title|escape}
@@ -260,7 +260,7 @@
 	<footer>
 		<div class="row">
 			<div id="logo">
-				<img onclick="window.location='/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
+				<img onclick="window.location='/'" src="design/mobile_mod/images/logo.svg" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
 			</div>
 			{if isset($settings->phone)}
 				<a href="tel:{$settings->phone|escape|replace:' ' :''}" class="topphone">{$settings->phone|escape}</a>
