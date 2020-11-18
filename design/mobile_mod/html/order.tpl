@@ -111,7 +111,6 @@
 					<p class="orderstatus separator">
 						К оплате {$order->total_price|convert:$payment_method->currency_id}&nbsp;{$all_currencies[$payment_method->currency_id]->sign}
 					</p>
-					{* TODO Видимо из-за ошибки у меня перестала выводиться кнопка оплатить *}
 					{checkout_form order_id=$order->id module=$payment_method->module}
 				{/if}
 				
@@ -143,4 +142,3 @@
 
 
 
- 

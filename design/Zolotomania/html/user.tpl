@@ -57,7 +57,7 @@
 </div>
 {if !empty($user->comment)}
 	<div class="mainproduct blue">Информация для пользователя:</div>
-	<div class="user_comment">{$user->comment}</user>
+	<div class="user_comment">{$user->comment}</div>
 {/if}
 
 {if $orders}
