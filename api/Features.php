@@ -48,6 +48,7 @@ class Features extends Fivecms
 		$query = $this->db->placehold("INSERT INTO __features SET ?%", $feature);
 		$this->db->query($query);
 		$id = $this->db->insert_id();
+        if (isset($feature['position'])) return $id;
 		$query = $this->db->placehold("UPDATE __features SET position=id WHERE id=? LIMIT 1", $id);
 		$this->db->query($query);
 		return $id;

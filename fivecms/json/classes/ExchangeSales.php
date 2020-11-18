@@ -199,15 +199,19 @@ class ExchangeSales extends Exchange
 
             $products = [];
             foreach ($purchases as $purchase) {
-                $this->db->query("SELECT external_id FROM __products WHERE id=? LIMIT 1", $purchase->product_id);
-                $product_id = $this->db->result('external_id');
+                if ($purchase->product_id) {
+                    $this->db->query("SELECT external_id FROM __products WHERE id=? LIMIT 1", $purchase->product_id);
+                    $product_id = $this->db->result('external_id') ?: '';
+                }
 
-                $this->db->query("SELECT external_id FROM __variants WHERE id=? LIMIT 1", $purchase->variant_id);
-                $variant_id = $this->db->result('external_id');
+                if ($purchase->variant_id) {
+                    $this->db->query("SELECT external_id FROM __variants WHERE id=? LIMIT 1", $purchase->variant_id);
+                    $variant_id = $this->db->result('external_id') ?: '';
+                }
 
                 $products[] = [
-                    'product_id' => $product_id,
-                    'variant_id' => $variant_id,
+                    'product_id' => $product_id ?? '',
+                    'variant_id' => $variant_id ?? '',
                     'vendor_code' => $purchase->sku,
                     'product_name' => htmlspecialchars(trim($purchase->product_name)),
                     'amount' => $purchase->amount,

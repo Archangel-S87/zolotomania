@@ -89,7 +89,10 @@ class Categories extends Fivecms
 
 		$this->db->query("INSERT INTO __categories SET ?%", $category);
 		$id = $this->db->insert_id();
-		$this->db->query("UPDATE __categories SET position=id WHERE id=?", $id);	
+
+        if (empty($category['position'])) {
+            $this->db->query("UPDATE __categories SET position=id WHERE id=?", $id);
+        }
 
 		if ($copy_features && $category['parent_id'] > 0) {
 			$query = $this->db->placehold("INSERT INTO __categories_features SELECT ?, f.feature_id FROM __categories_features f WHERE f.category_id = ?", $id, $category['parent_id']);

@@ -64,6 +64,10 @@ class ExchangeCatalog extends Exchange
             'meta_description' => $category['description']
         ];
 
+        if (isset($category['position'])) {
+            $new_category['position'] = $category['position'];
+        }
+
         // Есть ли родительская категория?
         if ($category['parent_id']) {
             if ($parent_cat = $this->find_category_id($category['parent_id'])) {
@@ -96,17 +100,10 @@ class ExchangeCatalog extends Exchange
 
             if ($is_update && $category_id = $this->find_category_id($category['external_id'])) {
                 // Обновление категории
-                if (!empty($category['position'])) {
-                    $new_category['position'] = $category['position'];
-                }
                 $this->categories->update_category($category_id, $new_category);
             } else {
                 $new_category['external_id'] = $category['external_id'];
                 $category_id = $this->categories->add_category($new_category);
-                if (!empty($category['position'])) {
-                    $new_category['position'] = $category['position'];
-                    $this->categories->update_category($category_id, $new_category);
-                }
             }
 
             $this->dictionary->categories[$category['external_id']]['id'] = $category_id;
@@ -117,7 +114,7 @@ class ExchangeCatalog extends Exchange
             ];
 
         } elseif ($finish) {
-            Exchange::add_warning("Category {$new_category['name']} not import");
+            Exchange::add_warning("Для категории {$category['external_id']} не найдена родительская");
         } else {
             // откладываю импорт на потом
             $unloaded_categories[$category['external_id']] = $category;
@@ -311,7 +308,22 @@ class ExchangeCatalog extends Exchange
      */
     private function get_feature_id($property_name, $section)
     {
-        if ($feature_id = $_SESSION['features_mapping'][$property_name] ?? '') return $feature_id;
+        $feature_id = $_SESSION['features_mapping'][$property_name] ?? null;
+        if ($feature_id) {
+            if (empty($section['updated'])) {
+                // Обновляю свойство
+                $new_feature = [
+                    'name' => (string)$section['name'],
+                    'in_filter' => (int)$section['in_filter']
+                ];
+                if (!empty($section['position'])) {
+                    $new_feature['position'] = $section['position'];
+                }
+                $this->features->update_feature($feature_id, $new_feature);
+                $section['updated'] = 1;
+            }
+            return $feature_id;
+        }
 
         $this->db->query('SELECT id FROM __features WHERE name=?', (string)$section['name']);
         if (!$feature_id = $this->db->result('id')) {
@@ -319,11 +331,10 @@ class ExchangeCatalog extends Exchange
                 'name' => (string)$section['name'],
                 'in_filter' => (int)$section['in_filter']
             ];
-            $feature_id = $this->features->add_feature($new_feature);
             if (!empty($section['position'])) {
                 $new_feature['position'] = $section['position'];
-                $this->features->update_feature($feature_id, $new_feature);
             }
+            $feature_id = $this->features->add_feature($new_feature);
         }
 
         $_SESSION['features_mapping'][$property_name] = $feature_id;
