@@ -42,7 +42,7 @@
 					{$image = $purchase->product->images|first}
 					<span class="purimage"><a href="products/{$purchase->product->url}"><img src="{$image->filename|resize:100:100}" alt="{$purchase->product->name|escape}"></a></span>
 				{else}
-					<span class="purimage"><a href="products/{$purchase->product->url}"><svg class="nophoto"><use xlink:href='#no_photo' /></a></span>
+					<span class="purimage"><a href="products/{$purchase->product->url}"><svg class="nophoto"><use xlink:href='#no_photo' /></svg></a></span>
 				{/if}
 			</td>
 

@@ -5,9 +5,19 @@
 	{if isset($error)}
 	<div class="message_error">
 		{if $error == 'empty_name'}Введите имя
-		{elseif $error == 'empty_email'}Введите email
 		{elseif $error == 'empty_phone'}Введите Телефон
+		{elseif $error == 'invalid_tel'}Не корректный номер телефона
+		{elseif $error == 'empty_email'}Введите email
 		{elseif $error == 'empty_password'}Введите пароль
+		{elseif $error == 'user_exists'}
+			{if $user_exists_message == 'email'}
+				Пользователь с таким email уже зарегистрирован
+			{elseif $user_exists_message == 'phone'}
+				Пользователь с таким телефоном уже зарегистрирован
+			{else}
+				Пользователь с таким email и телефоном уже зарегистрирован
+			{/if}
+		{elseif $error == 'empty_address'}Укажите адрес
 		{elseif $error == 'user_exists'}Пользователь с таким email уже зарегистрирован
 		{else}{$error}{/if}
 	</div>
@@ -16,19 +26,29 @@
 
 	<form class="form separator" method="post">
 		<label>ФИО</label>
-		<input data-format=".+" data-notice="Введите имя" value="{$name|escape}" name="name" maxlength="255" type="text" required/>
+		<input data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" maxlength="255" type="text" required/>
 		
 		<label>Телефон</label>
-		<input data-format=".+" data-notice="Введите Телефон" value="{if !empty($phone)}{$phone|escape}{/if}" name="phone" maxlength="255" type="tel" required/>
+		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text"/>
 
-		<label>Адресс</label>
+		<label>Адрес</label>
 		<textarea name="address" type="text" rows="1" value="">{if isset($address)}{$address|escape}{/if}</textarea>
 
 		<label class="ch_passw"><a href='#' onclick="$('#password').show();return false;">Изменить пароль</a></label>
-		<input id="password" value="" name="password" type="password" style="display:none; margin-bottom: 20px;"/>
+		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px;"/>
 		<input id="logininput" type="submit" class="button buttonblue" value="Сохранить">
 	</form>
-	
+	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+	<script>
+		$(function ($) {
+			const tel = $("#tel");
+			tel.click(function() {
+				$(this).setCursorPosition(3);
+			});
+			tel.mask('+7(999) 999-99-99');
+		});
+	</script>
+
 	{if !empty($user->comment)}
 		<div class="mainproduct blue">Информация для пользователя:</div>
 		<div class="user_comment">{$user->comment}</div>

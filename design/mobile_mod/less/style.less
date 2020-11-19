@@ -234,7 +234,7 @@ svg.nophoto {
 .page-pg {
 	padding: 0 20px;
 	p{
-		margin: 5px;
+		margin: 5px 0;
 	}
 	img {
 		width: 100%;
@@ -251,7 +251,7 @@ svg.nophoto {
 	margin-bottom: 10px;
 }
 svg.nophoto {
-	height: 70%;
+	//height: 70%;
 	width: 70%;
 	display: inline-block;
 	vertical-align: middle;
@@ -748,9 +748,6 @@ footer {
 .skustock {
 	margin-top: 20px;
 }
-.skustockleft {
-
-}
 .sku {
 	margin-bottom: 0;
 	font-size: 16px;
@@ -821,7 +818,9 @@ footer {
 		a {
 			width: 100%;
 			height: 100%;
-			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 		img {
 			max-height: 100%;
@@ -900,8 +899,8 @@ footer {
 	display: none;
 }
 #deliveries, #payments {
-	margin-top: 20px;
-	margin-bottom: 20px;
+	//margin-top: 20px;
+	//margin-bottom: 20px;
 	padding: 0 20px;
 	list-style: none;
 	li {
@@ -913,6 +912,9 @@ footer {
 	}
 	label {
 		padding-bottom: 10px;
+	}
+	.description {
+		padding-top: 10px;
 	}
 }
 .delivery-header {
@@ -1078,9 +1080,15 @@ footer {
 //orderview
 .orderview {
 	h2 {
+		font-size: 20px;
 		padding: 0 20px 20px;
-		font-weight: 600;
+		font-weight: 500;
 	}
+}
+.user-name {
+	color: @red; 
+	font-size: 18px; 
+	padding: 0 20px;
 }
 .orderstatus {
 	font-size: 17px;
