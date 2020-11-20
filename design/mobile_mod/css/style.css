@@ -494,6 +494,10 @@ footer svg {
   -o-object-fit: contain;
      object-fit: contain;
 }
+.productsview .product svg.nophoto {
+  height: 100%;
+  width: 60px;
+}
 .productsview .product:nth-last-child(1) {
   border-bottom: 5px solid #e7e7e8;
 }
@@ -1646,8 +1650,7 @@ body .boxberry_container {
 .slider {
   display: block;
   overflow: hidden;
-  height: 600px;
-  height: 50vh;
+  height: 90vw;
   text-align: center;
   width: 100%;
 }
