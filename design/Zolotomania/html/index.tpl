@@ -317,7 +317,7 @@
 		<div class="side-shade2"></div>
 		{$bread_pos = 1}
 
-		{if !in_array($module, ['LoginView', 'RegisterView', 'WishlistView', 'CartView', 'OrderView'])}
+		{if !in_array($module, ['LoginView', 'RegisterView', 'UserView', 'WishlistView', 'CartView', 'OrderView', 'PageView'])}
 			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
 				<div class="uk-container">
 					{if $module == 'ProductsView'}

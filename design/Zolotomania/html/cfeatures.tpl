@@ -1,56 +1,121 @@
 <!-- incl. cfeatures -->
 <form method="get" action="{url page=null}">
-    <div class="features-wrap" style="flex:0 1 auto;">
-        {if !empty($features_variants)}
-            <div class="feature_column">
-                <div class="feature_values">
-                    <ul>
-                        {foreach $features_variants as $o }
-                            <li>
-                                <label for="feature1 ">
-                                    <input type="checkbox" name="v[]"
-                                           value="{$o}"{if !empty($smarty.get.v) && $o|in_array:$smarty.get.v} checked{/if} />
-                                    <span>{$o|escape}</span>
-                                </label>
-                            </li>
-                        {/foreach}
-                    </ul>
-                </div>
+
+    <style>
+        #cfeatures .feature_column {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 8px;
+            margin: 0 12px;
+            border-radius: 5px;
+            background: linear-gradient(0deg, #f4f4f4, #f9f9f9, #f4f4f4);
+            flex: 0 1 400px;
+            position: relative;
+        }
+        #cfeatures .feature_column.active .feature_name {
+            color: #d24a46;
+        }
+        #cfeatures .feature_name {
+            display: flex;
+            align-items: center;
+            color: #272727;
+            font-weight: 500;
+            text-align: left;
+            border-bottom: 1px solid #d24a46;
+            width: 100%;
+            height: 100%;
+            margin: 0 10px 0 0;
+            padding: 0 4px;
+        }
+        #cfeatures .feature_values {
+            display: none;
+            position: absolute;
+            z-index: 20;
+            top: 100%;
+            margin: 0;
+            background: #fff;
+            border: 1px solid #d24a46;
+            border-radius: 5px;
+            padding: 8px 0 8px 12px;
+            width: calc(100% - 30px);
+        }
+        #cfeatures .hide_feat {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            padding: 0;
+        }
+        #cfeatures .hide_feat span {
+            border-top: 4px solid;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            display: block;
+        }
+        #cfeatures .hide_feat.show {
+            transform: rotate(180deg);
+        }
+    </style>
+
+    {if !empty($features_variants)}
+        <div class="feature_column">
+            <div class="feature_values">
+                <ul>
+                    {foreach $features_variants as $o }
+                        <li>
+                            <label for="feature1 ">
+                                <input type="checkbox" name="v[]"
+                                       value="{$o}"{if !empty($smarty.get.v) && $o|in_array:$smarty.get.v} checked{/if} />
+                                <span>{$o|escape}</span>
+                            </label>
+                        </li>
+                    {/foreach}
+                </ul>
             </div>
-        {/if}
-        {if !empty($features_variants1)}
-            <div class="feature_column">
-                <div class="feature_name">Размер</div>
-                <div class="feature_values">
-                    <ul>
-                        {foreach $features_variants1 as $o  }
-                            <li>
-                                <label{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} class="checked-active"{/if}>
-                                    <input type="checkbox" name="v1[]"
-                                           value="{$o}"{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} checked{/if} />{$o|escape}
-                                </label>
-                            </li>
-                        {/foreach}
-                    </ul>
-                </div>
+        </div>
+    {/if}
+    {if !empty($features_variants1)}
+        <div class="feature_column features-variants-1">
+            <div class="feature_name" data-feature="variant_1">Размер</div>
+            <div class="hide_feat"><span></span></div>
+            <div class="feature_values">
+                <ul>
+                    {foreach $features_variants1 as $o}
+                        <li>
+                            <label{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} class="checked-active"{/if}>
+                                <input type="checkbox"
+                                       name="v1[]"
+                                       value="{$o}"{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} checked{/if} />
+                                <span class="chbox-value">{$o|escape}</span>
+                            </label>
+                        </li>
+                    {/foreach}
+                </ul>
             </div>
-        {/if}
-        {if !empty($features_variants2)}
-            <div class="feature_column">
-                <div class="feature_values">
-                    <ul>
-                        {foreach $features_variants2 as $o}
-                            <li>
-                                <input type="checkbox" id="feature3" name="v2[]"
-                                       value="{$o}"{if !empty($smarty.get.v2) && $o|in_array:$smarty.get.v2} checked{/if} />
-                                <label for="feature3">{$o|escape}</label>
-                            </li>
-                        {/foreach}
-                    </ul>
-                </div>
+        </div>
+    {/if}
+    {if !empty($features_variants2)}
+        <div class="feature_column features-variants-2">
+            <div class="feature_name" data-feature="variant_2">Цвет</div>
+            <div class="feature_values">
+                <ul>
+                    {foreach $features_variants2 as $o}
+                        <li>
+                            <input type="checkbox" id="feature3" name="v2[]"
+                                   value="{$o}"{if !empty($smarty.get.v2) && $o|in_array:$smarty.get.v2} checked{/if} />
+                            <label for="feature3">{$o|escape}</label>
+                        </li>
+                    {/foreach}
+                </ul>
             </div>
-        {/if}
-    </div>
+        </div>
+    {/if}
 
     <script>
         $(window).load(function () {
@@ -153,8 +218,9 @@
     {* Features *}
     {if !empty($features)}
         {foreach $features as $f}
-            <div class="feature_column">
+            <div class="feature_column feature-others">
                 <div class="feature_name" data-feature="{$f->id}">{$f->name}</div>
+                <div class="hide_feat"><span></span></div>
                 <div class="feature_values">
                     {if $f->in_filter==2}
                         {$f_min="min[`$f->id`]"}
@@ -188,9 +254,11 @@
                             {foreach $f->options as $k=>$o}
                                 <li>
                                     <label{if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})} class="checked-active"{/if}>
-                                        <input type="checkbox" name="{$f->id}[]"
-                                               {if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}checked="checked"{/if} value="{$o->value|escape}"/>
-                                        {$o->value|escape}
+                                        <input type="checkbox"
+                                               name="{$f->id}[]"
+                                               {if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}checked="checked"{/if}
+                                               value="{$o->value|escape}"/>
+                                        <span class="chbox-value">{$o->value|escape}</span>
                                     </label>
                                 </li>
                             {/foreach}
@@ -256,8 +324,7 @@
 
 <script>
     // expand used feature column
-    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_column').find('.hide_feat').addClass('show');
-    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_values').fadeIn('normal');
+    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_column').addClass('active');
     // expand used feature column end
 </script>
 

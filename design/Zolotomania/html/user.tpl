@@ -2,6 +2,15 @@
 {$meta_title = "Личный кабинет" scope=root}
 {$page_name = "Личный кабинет" scope=root}
 
+<h1 class="flex" style="justify-content: space-between; align-items: center; margin-top: 20px;">
+	<span>Личный кабинет</span>
+	{if $cart->total_products > 0}
+		<div class="balance_block" style="margin: 0;">
+			<a href="/#content" class="buttonred green cart_here" style="display:block;margin: 0;font-size: 15px;line-height: 20px;padding: 5px 10px;border-radius: 6px; width: auto;">Начать покупки</a>
+		</div>
+	{/if}
+</h1>
+
 {if isset($error)}
 	<div class="message_error">
 		{if $error == 'empty_name'}Введите имя
@@ -22,20 +31,21 @@
 		{else}{$error}{/if}
 	</div>
 {/if}
-<div class="user_form_block">	
-	<form style="display:table;" class="form" method="post">
+
+<div class="user_form_block flex" style="justify-content: center;">
+	<form style="display:block; text-align: center" class="form" method="post">
 		<label>ФИО</label>
-		<input data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" name="name" maxlength="255" type="text" required/>
+		<input data-format=".+" data-notice="Введите имя" value="{if isset($name)}{$name|escape}{/if}" name="name" maxlength="255" type="text" required style="text-align: center"/>
 	
 		<label for="tel">Телефон</label>
-		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text"/>
+		<input id="tel" placeholder="+7(___) ___-__-__" data-format=".+" data-notice="Введите Телефон" value="{if isset($phone)}{$phone|escape}{/if}" name="tel" maxlength="255" type="text" style="text-align: center"/>
 
 		<label>Адресс</label>
-		<textarea name="address" type="text" rows="1" value="">{if isset($address)}{$address|escape}{/if}</textarea>
+		<input name="address" type="text" value="{if isset($address)}{$address|escape}{/if}" style="text-align: center"/>
 		
 		<label class="ch_passw"><a href='#' onclick="$('#password').show();return false;">Изменить пароль</a></label>
-		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px;"/>
-		<input id="logininput" type="submit" class="button" value="Сохранить">
+		<input placeholder="Введите новый пароль" id="password" value="" name="password" type="password" style="display:none; margin-bottom: 10px; text-align: center"/>
+		<input id="logininput" type="submit" class="button" value="Сохранить" style="display: inline-block; float: none;">
 	</form>
 
 	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
@@ -48,12 +58,6 @@
 			tel.mask('+7(999) 999-99-99');
 		});
 	</script>
-	
-	{if $cart->total_products>0}
-	<div class="balance_block">
-		<a href="/#content" class="buttonred green cart_here">Начать покупки</a>
-	</div>
-	{/if}
 </div>
 {if !empty($user->comment)}
 	<div class="mainproduct blue">Информация для пользователя:</div>
@@ -61,7 +65,7 @@
 {/if}
 
 {if $orders}
-	<div class="mainproduct blue">Ваши заказы:</div>
+	<div class="mainproduct blue">История заказов:</div>
 	<ul id="orders_history">
 		{foreach name=orders item=order from=$orders}
 			<li>

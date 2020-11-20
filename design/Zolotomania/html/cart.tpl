@@ -185,9 +185,8 @@
 
                 <div class="form cart_form">
 
-                    <label>Комментарий к заказу</label>
-                    <textarea name="comment" id="order_comment"
-                              rows="1">{if !empty($comment)}{$comment|escape}{/if}</textarea>
+                    <label></label>
+                    <textarea name="comment" id="order_comment" rows="1" placeholder="Комментарий к заказу">{if !empty($comment)}{$comment|escape}{/if}</textarea>
 
                     {include file='antibot.tpl'}
 
@@ -461,7 +460,8 @@
                     <div class="del_main">
                         <div class="del_left">
                             <label>ФИО *</label>
-                            <input name="name" type="text" value="{if !empty($name)}{$name|escape}{/if}"
+                            <input name="name" type="text"
+                                   value="{if !empty($name)}{$name|escape}{/if}"
                                    data-format=".+"
                                    data-notice="Введите ФИО"/>
                         </div>
@@ -525,8 +525,7 @@
                     {* загрузка файлов @ *}
 
                     <label>Комментарий к заказу</label>
-                    <textarea name="comment" id="order_comment"
-                              rows="1">{if !empty($comment)}{$comment|escape}{/if}</textarea>
+                    <textarea name="comment" id="order_comment" rows="1">{if !empty($comment)}{$comment|escape}{/if}</textarea>
 
                     {include file='conf.tpl'}
                     {include file='antibot.tpl'}
@@ -557,4 +556,3 @@
         }
     </script>
 {/literal}
-				

@@ -121,7 +121,6 @@ function ajax_filter(){
 						$('#cfeatures').html(data.filter_block);
 						ajax_process=false;
 						$('#cfeatures').css('opacity','1');
-						console.log('checked');
 						$('.sliderButton').click();
 					}},error:function(jqXHR,exception){
 						ajax_process=false;$('#cfeatures').css('opacity','1');

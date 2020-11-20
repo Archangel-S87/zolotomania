@@ -22,6 +22,7 @@ class ExchangeUsers extends Exchange
 
     protected function export()
     {
+        // TODO добавить выгрузку всех юзеров без истории покупки
         $this->db->query("SELECT u.email, u.password, u.name, u.balance, u.created, u.order_payd, u.phone, u.partner_id, u.ref_views, g.name as group_name, g.external_id as group_id FROM __users as u LEFT JOIN __groups as g ON u.group_id = g.id WHERE u.external_id = u.phone");
         $db_users = $this->db->results();
 

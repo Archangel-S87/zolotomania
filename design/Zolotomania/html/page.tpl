@@ -1,7 +1,7 @@
 {* Канонический адрес страницы *}
 {$canonical="/{$page->url}" scope=root}
 
-<h1 data-page="{$page->id}">{if !empty($h1_title)}{$h1_title|escape}{else}{$page->header|escape}{/if}</h1>
+<h1 data-page="{$page->id}" style="margin-top: 20px;">{if !empty($h1_title)}{$h1_title|escape}{else}{$page->header|escape}{/if}</h1>
 
 <div itemscope itemtype="http://schema.org/Article">
 	<meta content="{$meta_title|escape}" itemprop="name">

@@ -15,7 +15,7 @@
             {if !empty($cart) && $cart->total_products>0}
                 <div class="checkout">
                     <div class="button fleft" onClick="$.fancybox.close();">Продолжить покупки</div>
-                    <div class="button fright" onClick="window.location='/cart'"><span>Оформить заказ</span></div>
+                    <div class="button fright" onClick="window.location='/cart'"><span>Купить эту красоту</span></div>
                 </div>
             {else}
                 <span id="cart_total">Ваша корзина пуста</span>

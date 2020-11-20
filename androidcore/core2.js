@@ -50,10 +50,15 @@ $(function () {
 
 // Cfeatures
 function hideShow1(el) {
+    $('.feature_column .feature_name').each(function () {
+        if (el === this) return true;
+        $(this).removeClass('show').siblings('div.feature_values').slideUp('fast');
+        $('.feat-block').removeClass('show');
+    });
     $(el).toggleClass('show').siblings('div.feature_values').slideToggle('fast');
     $('.feat-block').toggleClass('show');
     return false;
-};
+}
 $("#features input:checked, #features select#choosenf").closest('#content .feature_column').find('.hideBtn').toggleClass('show');
 $("#features input:checked, #features select#choosenf").closest('#content .feature_values').slideToggle('normal');
 

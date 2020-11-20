@@ -84,7 +84,7 @@ class Dictionary
         $property = [
             'external_id' => (string)$value['id'],
             'name' => (string)$value['name'],
-            'in_filter' => $values['in_filter'] ?? '',
+            'in_filter' => $value['in_filter'] ?? '',
             'values' => $values,
             'binding_categories' => $binding_categories
         ];
