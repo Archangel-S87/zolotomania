@@ -171,6 +171,7 @@ a {
   border: none;
   background: #ed1c2b;
   letter-spacing: 1px;
+  font-family: 'Golos Text', Arial, Tahoma, sans-serif;
 }
 .buttonblue {
   font-size: 14px;
@@ -182,6 +183,7 @@ a {
   padding: 12px 15px 10px;
   white-space: pre-wrap;
   line-height: 1.6;
+  font-family: 'Golos Text', Arial, Tahoma, sans-serif;
 }
 a.buttonblue {
   display: inline-block;
@@ -197,6 +199,7 @@ a.buttonblue {
   background: #ffffff;
   min-width: 105px;
   text-align: center;
+  font-family: 'Golos Text', Arial, Tahoma, sans-serif;
 }
 .have-no svg,
 svg.nophoto {
@@ -674,6 +677,9 @@ footer svg {
 }
 .productview .page-pg p {
   margin-bottom: 4px;
+}
+.productview .wishcomp span {
+  display: block;
 }
 .comeback {
   position: absolute;
