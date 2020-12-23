@@ -59,7 +59,7 @@ class Cart extends Fivecms
 				{
 					$items[$variant->id] = new stdClass();
 					$items[$variant->id]->variant = $variant;
-					if($variant->stock > 0)
+					if($variant->stock > 0 && !$variant->reservation)
 						$items[$variant->id]->amount = $session_items[$variant->id];
 					else {
 						$items[$variant->id]->amount = 0;

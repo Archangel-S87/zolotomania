@@ -17,7 +17,7 @@
 	{if !isset($hideform)}	
 		<form class="form login_form separator" method="post">
 			<label>Телефон</label>
-			<input id="login" type="text" name="user_login" data-format=".+" data-notice="Введите номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="+7(___) ___-__-__"/>
+			<input id="login" type="tel" name="user_login" data-format=".+" data-notice="Введите номер телефона" value="{if isset($email)}{$email|escape}{/if}" maxlength="255" placeholder="+7(___) ___-__-__"/>
 			<label>Пароль (<a href="user/preminder">напомнить</a>)</label>
 			<input type="password" name="password" data-format=".+" data-notice="Введите пароль" value="" />
 	
@@ -27,11 +27,7 @@
 		<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
 		<script>
 			$(function ($) {
-				const login = $("#login");
-				login.click(function() {
-					$(this).setCursorPosition(3);
-				});
-				login.mask('+7(999) 999-99-99');
+				$("#login").mask('+7(999) 999-99-99');
 			});
 		</script>
 		{if !empty($settings->ulogin)}

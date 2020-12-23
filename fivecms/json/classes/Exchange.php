@@ -47,21 +47,19 @@ class Exchange extends Fivecms
      * Базовые методы
      * @var array
      */
-    protected static $base_mods = [
-        'check_auth',
-        'init',
-        'file'
-    ];
+    protected static $base_mods = ['check_auth', 'init', 'file'];
+
+    /**
+     * Текущий запрос
+     * @var Exchange
+     */
+    protected static $request_exchange;
 
     /**
      * Что синхранизируем
      * @var array
      */
-    private $types = [
-        'sales',
-        'catalog',
-        'users'
-    ];
+    private $types = ['sales', 'catalog', 'users'];
 
     /**
      * Что делаем
@@ -70,10 +68,22 @@ class Exchange extends Fivecms
     protected $mods = [];
 
     /**
-     * Вызваный метод синхронизации
+     * Вызваный мод синхронизации
+     * @var string
+     */
+    private $mode_name;
+
+    /**
+     * Вызваный класс синхронизации
      * @var self
      */
     private $type;
+
+    /**
+     * Название вызванного класса
+     * @var string
+     */
+    private $type_name;
 
     /**
      * Каталог для хранения временных файлов
@@ -136,9 +146,49 @@ class Exchange extends Fivecms
                 'memory' => self::return_size($memory),
                 'time' => $time
             ];
+
+            self::print_log($request);
         }
 
         print json_encode($request, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Пишет ответ сервера в файл лога
+     * @param $data mixed
+     */
+    private static function print_log($data)
+    {
+        // Не пишем базовые моды в лог
+        if (in_array(self::$request_exchange->mode_name, self::$base_mods)) return;
+
+        $request = [
+            'type' => self::$request_exchange->type_name,
+            'mode' => self::$request_exchange->mode_name
+        ];
+
+        $data = array_merge($request, $data);
+        $log[date_format(date_create(), 'Y-m-d H:i:s')] = $data;
+        $data = json_encode($log, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        $filename = self::$request_exchange->temp_dir . 'log.txt';
+        $current_time = time();
+
+        if (!file_exists($filename)) {
+            file_put_contents($filename, $current_time . PHP_EOL);
+        }
+
+        $file = fopen($filename, 'r');
+        $save_date = (int)fgets($file);
+        fclose($file);
+
+        $expiration_date = 2 * 24 * 60 * 60; // срок хранения файла три дня
+        if (($save_date + $expiration_date) < $current_time) {
+            unlink($filename);
+            file_put_contents($filename, $current_time . PHP_EOL);
+        }
+
+        file_put_contents($filename, $data, FILE_APPEND);
     }
 
     /**
@@ -153,7 +203,8 @@ class Exchange extends Fivecms
         exit;
     }
 
-    public static function error_read_file($file, Exception $exception) {
+    public static function error_read_file($file, Exception $exception)
+    {
         $file = basename($file);
         self::error("При чтении файла $file произошла ошибка " . $exception->getMessage());
     }
@@ -222,7 +273,7 @@ class Exchange extends Fivecms
      */
     public function start_type()
     {
-        $type = $this->request->get('type');
+        $this->type_name = $type = $this->request->get('type');
         if ($type && in_array($type, $this->types)) {
             $class_name = 'Exchange' . ucfirst($type);
             $path = JSON_DIR . 'classes/' . $class_name . '.php';
@@ -245,8 +296,9 @@ class Exchange extends Fivecms
      */
     public function start_mode()
     {
-        $mode = $this->request->get('mode');
+        $mode = $this->mode_name = $this->request->get('mode');
         $type = $this->type;
+        self::$request_exchange = $this;
         if ($mode && in_array($mode, $type->mods) && method_exists($type, $mode)) {
             call_user_func([$type, $mode]);
         } else {

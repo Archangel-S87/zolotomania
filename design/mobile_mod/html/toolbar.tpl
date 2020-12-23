@@ -4,7 +4,7 @@
 		
 		<div class="row">
 			<div id="logo">
-				<img onclick="window.location='/'" src="design/mobile_mod/images/logo.svg" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
+				<img onclick="window.location='/'" src="files/logo/logo.svg" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
 			</div>
 			{if isset($settings->phone)}
 				<a href="tel:{$settings->phone|escape|replace:' ' :''}" class="topphone">{$settings->phone|escape}</a>
@@ -32,7 +32,7 @@
 				<span class="username" onclick="window.location='/user/logout'">выйти</span>
 			{else}
 				<span class="username" onclick="window.location='/user/login'">Вход</span>
-				<span class="username" onclick="window.location='/user/register'">Регистрация</span>
+				<span class="username" onclick="window.location='/user/register'">Хочу с вами</span>
 			{/if}
 			</div>
 		</div>

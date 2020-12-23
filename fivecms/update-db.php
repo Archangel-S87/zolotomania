@@ -33,6 +33,9 @@ class UpdateDB extends Fivecms
         // Создание таблицы оплаты в сбере
         $this->create_table_payments_sber();
 
+        // Создание таблицы users_data
+        $this->create_table_users_data();
+
         // Обновление таблицы групп пользователей
         //$this->update_table_groups();
 
@@ -65,8 +68,16 @@ class UpdateDB extends Fivecms
 
     private function update_table_orders()
     {
-        if (!$this->check_column('shop_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders ADD shop_id INT(4) NOT NULL");
+        if ($this->check_column('shop_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders DROP shop_id");
+        }
+
+        if (!$this->check_column('shop_external_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders ADD shop_external_id VARCHAR(80) NULL DEFAULT NULL");
+        }
+
+        if (!$this->check_column('external_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders ADD external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER `shop_id`, ADD INDEX(`external_id`)");
         }
 
         // Возможен пустой email
@@ -112,6 +123,13 @@ class UpdateDB extends Fivecms
             $this->db->query("ALTER TABLE __{$table_mame} ADD UNIQUE (`external_id`)");
         }
 
+    }
+
+    private function create_table_users_data()
+    {
+        if ($this->check_table('users_data')) return;
+        $table_name = $this->config->db_prefix . 'users_data';
+        $this->db->query("CREATE TABLE {$table_name} (`id` INT(11) NOT NULL, `birthday` DATE NULL DEFAULT NULL, `region` VARCHAR(40) NULL DEFAULT NULL, `district` VARCHAR(40) NULL DEFAULT NULL, `city` VARCHAR(40) NULL DEFAULT NULL, `street` VARCHAR(40) NULL DEFAULT NULL, `house` VARCHAR(10) NULL DEFAULT NULL, `apartment` VARCHAR(10) NULL DEFAULT NULL, UNIQUE (`id`)) ENGINE = MyISAM");
     }
 
     private function check_table($table_name)

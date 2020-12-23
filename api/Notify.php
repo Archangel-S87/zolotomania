@@ -76,9 +76,10 @@ class Notify extends Fivecms
      */
     public function check_sms_send($phone, $user_id)
     {
-        $this->db->query("SELECT is_activate FROM __users_confirm_sms WHERE phone=? AND user_id=?", $phone, (int)$user_id);
+        $this->db->query("SELECT id, is_activate FROM __users_confirm_sms WHERE phone=? AND user_id=?", $phone, (int)$user_id);
         $res = $this->db->result();
         if (!$res) return false;
+        $_SESSION['confirm_id'] = $res->id;
         return !$res->is_activate;
     }
 
@@ -89,7 +90,7 @@ class Notify extends Fivecms
      */
     public function check_sms_code($code)
     {
-        $this->db->query("SELECT * FROM __users_confirm_sms WHERE id=?", (int)$_SESSION['confirm_id']);
+        $this->db->query("SELECT * FROM __users_confirm_sms WHERE id=? ORDER BY created LIMIT 1", (int)$_SESSION['confirm_id']);
         $confirm = $this->db->result();
         if ($confirm && $confirm->code == $code) {
             return $confirm;
@@ -100,7 +101,9 @@ class Notify extends Fivecms
 
     public function activate_confirm()
     {
-        $this->db->query("UPDATE __users_confirm_sms SET is_activate=1 WHERE id=?", (int)$_SESSION['confirm_id']);
+        $this->db->query("SELECT * FROM __users_confirm_sms WHERE id=? ORDER BY created LIMIT 1", (int)$_SESSION['confirm_id']);
+        $confirm_sms = $this->db->result();
+        $this->db->query("DELETE FROM __users_confirm_sms WHERE user_id=?", $confirm_sms->user_id);
         unset($_SESSION['confirm_id']);
     }
 
@@ -119,6 +122,9 @@ class Notify extends Fivecms
             'dadr' => $phone,
             'text' => $message
         ];
+
+        if ($this->config->is_localhost) return 1;
+
         return file_get_contents('http://gateway.api.sc/get?' . http_build_query($data));
     }
 

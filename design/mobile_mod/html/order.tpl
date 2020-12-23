@@ -135,77 +135,91 @@
 
 {* Для всех кроме магазинов *}
 {if !$group || ($group && $group->name != 'Магазины')}
-    {* Не даем оплачивать пока не разрешено *}
-    {api module=delivery method=get_deliveries var=deliveries enabled=1}
 
-    {if !$order->paid && $order->status != 3}
-        {* Выбор способа оплаты *}
-        {if $payment_methods && !isset($payment_method) && $order->total_price>0}
-            <div class="cart-blue">
-                <span class="whitecube">3</span>
-                <h2>Выберите вариант оплаты</h2>
-            </div>
-            <form id="orderform" method="post">
-                <ul id="deliveries">
-                    {foreach $payment_methods as $payment_method}
-                        <li>
-                            <div class="checkbox">
-                                <input type=radio name=payment_method_id value='{$payment_method->id}'
-                                       {if $payment_method@first}checked{/if} id=payment_{$payment_method->id}>
-                            </div>
-                            <span class="delivery-header">
-								<label for="payment_{$payment_method->id}">	{$payment_method->name}, к оплате {$order->total_price|convert:$payment_method->currency_id}&nbsp;{if isset($all_currencies[$payment_method->currency_id]->sign)}{$all_currencies[$payment_method->currency_id]->sign}{/if}</label>
-							</span>
-                            {if $payment_method->description}
-                                <a class="hideBtn" href="javascript://"
-                                   onclick="hideShow(this);return false;">подробнее</a>
-                            {/if}
-                            <div class="description" id="hideCont">
-                                {$payment_method->description}
-                            </div>
-                        </li>
-                    {/foreach}
-                </ul>
-                <input type='submit' class="button buttonblue" value='Подтвердить выбор' style="margin-bottom:15px;">
-            </form>
-            {$payment_control = 0}
-        {elseif !empty($payment_method)}
-            <div class="page-pg">
-                {if empty($settings->payment_control) ||
-                ( $settings->payment_control==1 && in_array($order->status, array(1,2)) ) ||
-                ( $settings->payment_control==2 && (empty($deliveries|count) || !empty($delivery)) )
-                }
-                    {$payment_control = 1}
-                    <p class="orderstatus separator">
-                        К оплате: {$order->total_price|convert:$payment_method->currency_id}
-                        &nbsp;{if isset($all_currencies[$payment_method->currency_id]->sign)}{$all_currencies[$payment_method->currency_id]->sign}{/if}
-                    </p>
-                    {* Форма оплаты, генерируется модулем оплаты *}
-                    {checkout_form order_id=$order->id module=$payment_method->module}
-                {/if}
-
-                {* Выбраный способ оплаты *}
-                <p class="orderstatus">Способ оплаты: {$payment_method->name}</p>
-                <form id="paymentform" method=post>
-                    <input type=submit
-                           id="reset_payment"
-                           class="button buttonblue"
-                           name='reset_payment_method'
-                           value='Выбрать другой способ оплаты'>
-                </form>
-            </div>
+    {if (!$order->paid && $order->status != 3)}
+        {if isset($payment_method) && $order->total_price > 0}
+            {* Форма оплаты, генерируется модулем оплаты *}
+            {checkout_form order_id=$order->id module=$payment_method->module}
         {/if}
     {/if}
+
     <div class="page-pg">
-        <div class="attention">
+        <div class="attention" style="display:table;clear:both;width:300px;text-align:center;padding:0 15px 8px 15px;margin: 20px auto 20px auto;background-color:#bcd4e4;color:#000;">
             <p style="font-size:16px;text-transform:uppercase;">Спасибо за заказ!</p>
-            {if empty($order->paid) && $order->status != 3}
-                <div>
-                    {if !empty($payment_control) && $order->payment_method_id == 40}
-                        <p>Вы выбрали вариант онлайн-оплаты, произведите ее на этой странице.</p>
-                    {/if}
-                </div>
-            {/if}
         </div>
     </div>
+
+{*    *}{* Не даем оплачивать пока не разрешено *}
+{*    {api module=delivery method=get_deliveries var=deliveries enabled=1}*}
+
+{*    {if !$order->paid && $order->status != 3}*}
+{*        *}{* Выбор способа оплаты *}
+{*        {if $payment_methods && !isset($payment_method) && $order->total_price>0}*}
+{*            <div class="cart-blue">*}
+{*                <span class="whitecube">3</span>*}
+{*                <h2>Выберите вариант оплаты</h2>*}
+{*            </div>*}
+{*            <form id="orderform" method="post">*}
+{*                <ul id="deliveries">*}
+{*                    {foreach $payment_methods as $payment_method}*}
+{*                        <li>*}
+{*                            <div class="checkbox">*}
+{*                                <input type=radio name=payment_method_id value='{$payment_method->id}'*}
+{*                                       {if $payment_method@first}checked{/if} id=payment_{$payment_method->id}>*}
+{*                            </div>*}
+{*                            <span class="delivery-header">*}
+{*								<label for="payment_{$payment_method->id}">	{$payment_method->name}, к оплате {$order->total_price|convert:$payment_method->currency_id}&nbsp;{if isset($all_currencies[$payment_method->currency_id]->sign)}{$all_currencies[$payment_method->currency_id]->sign}{/if}</label>*}
+{*							</span>*}
+{*                            {if $payment_method->description}*}
+{*                                <a class="hideBtn" href="javascript://"*}
+{*                                   onclick="hideShow(this);return false;">подробнее</a>*}
+{*                            {/if}*}
+{*                            <div class="description" id="hideCont">*}
+{*                                {$payment_method->description}*}
+{*                            </div>*}
+{*                        </li>*}
+{*                    {/foreach}*}
+{*                </ul>*}
+{*                <input type='submit' class="button buttonblue" value='Подтвердить выбор' style="margin-bottom:15px;">*}
+{*            </form>*}
+{*            {$payment_control = 0}*}
+{*        {elseif !empty($payment_method)}*}
+{*            <div class="page-pg">*}
+{*                {if empty($settings->payment_control) ||*}
+{*                ( $settings->payment_control==1 && in_array($order->status, array(1,2)) ) ||*}
+{*                ( $settings->payment_control==2 && (empty($deliveries|count) || !empty($delivery)) )*}
+{*                }*}
+{*                    {$payment_control = 1}*}
+{*                    <p class="orderstatus separator">*}
+{*                        К оплате: {$order->total_price|convert:$payment_method->currency_id}*}
+{*                        &nbsp;{if isset($all_currencies[$payment_method->currency_id]->sign)}{$all_currencies[$payment_method->currency_id]->sign}{/if}*}
+{*                    </p>*}
+{*                    *}{* Форма оплаты, генерируется модулем оплаты *}
+{*                    {checkout_form order_id=$order->id module=$payment_method->module}*}
+{*                {/if}*}
+
+{*                *}{* Выбраный способ оплаты *}
+{*                <p class="orderstatus">Способ оплаты: {$payment_method->name}</p>*}
+{*                <form id="paymentform" method=post>*}
+{*                    <input type=submit*}
+{*                           id="reset_payment"*}
+{*                           class="button buttonblue"*}
+{*                           name='reset_payment_method'*}
+{*                           value='Выбрать другой способ оплаты'>*}
+{*                </form>*}
+{*            </div>*}
+{*        {/if}*}
+{*    {/if}*}
+{*    <div class="page-pg">*}
+{*        <div class="attention">*}
+{*            <p style="font-size:16px;text-transform:uppercase;">Спасибо за заказ!</p>*}
+{*            {if empty($order->paid) && $order->status != 3}*}
+{*                <div>*}
+{*                    {if !empty($payment_control) && $order->payment_method_id == 40}*}
+{*                        <p>Вы выбрали вариант онлайн-оплаты, произведите ее на этой странице.</p>*}
+{*                    {/if}*}
+{*                </div>*}
+{*            {/if}*}
+{*        </div>*}
+{*    </div>*}
 {/if}

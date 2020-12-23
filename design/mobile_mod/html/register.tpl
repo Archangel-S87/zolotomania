@@ -9,7 +9,7 @@
 		{if $error == 'empty_name'}Введите имя
 		{elseif $error == 'empty_email'}Введите email
 		{elseif $error == 'empty_password'}Введите пароль
-		{elseif $error == 'user_exists'}Пользователь с таким email уже зарегистрирован
+		{elseif $error == 'user_exists'}Пользователь с таким телефонам уже зарегистрирован
 		{elseif $error == 'captcha'}Не пройдена проверка на бота
 		{elseif $error == 'ip'}Вы уже регистрировались. Если забыли пароль - воспользуйтесь его востановлением.
 		{elseif $error == 'wrong_name'}В поле 'ФИО' может использоваться только кириллица		
@@ -33,11 +33,7 @@
 	<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
 	<script>
 		jQuery(function($){
-			const tel = $("#tel");
-			tel.click(function() {
-				$(this).setCursorPosition(3);
-			});
-			tel.mask('+7(999) 999-99-99');
+			$("#tel").mask('+7(999) 999-99-99');
 		});
 	</script>
 	{if !empty($settings->ulogin)}

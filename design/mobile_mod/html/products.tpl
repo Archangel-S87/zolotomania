@@ -216,7 +216,7 @@
 								{if !empty($settings->show_cart_wishcomp)}
 									<span class="amount_wrap" style="display:none;"><input type="number" min="1" size="2" name="amount" value="1">&nbsp;x&nbsp;</span>
 								{/if}
-								<span ID="priceold" class="compare_price"></span> <span ID="price" class="price"></span> <span class="currency">{$currency->sign|escape}{if $settings->b9manage}/<span class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}</span>
+								<span ID="priceold" class="compare_price"></span> <span ID="price" class="price"></span> <span class="currency">{if !$v->reservation}{$currency->sign|escape}{/if}{if $settings->b9manage}/<span class="unit">{if $product->variant->unit}{$product->variant->unit}{else}{$settings->units}{/if}</span>{/if}</span>
 								</div>
 				
 							{else}

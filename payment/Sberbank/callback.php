@@ -1,12 +1,5 @@
 <?php
 
-/*
- * T4632247232-api T4632247232
- * токен для использования в запросах 55psnbbg3thon7g2jgd433vok4
- * Ключ для расшифровки контрольной суммы в Callback : atmiumq7192mp5bob3p8u0189o
- */
-
-// Работаем в корневой директории
 chdir ('../../');
 require_once('api/Fivecms.php');
 require_once('payment/Sberbank/Sberbank.php');
@@ -67,3 +60,10 @@ $fivecms->orders->set_pay((int)$order->id);
 
 // Спишем товары
 $fivecms->orders->close((int)$order->id);
+
+// Ставлю у ордера статус новый, что бы отправился в 1С
+$fivecms->db->query('UPDATE __orders SET status=0 WHERE id=?', $order_id);
+
+c_log("Ордер оплачен {$order->id}");
+
+echo 0;

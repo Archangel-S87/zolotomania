@@ -25,7 +25,38 @@
 </div>
 {/if}
 
-<form class="form register_form" method="post" style="margin-top: 70px; position:relative;">
+<style>
+	.login-btn-wrap {
+		margin: 50px auto 10px;
+		display: flex;
+		width: 400px;
+		max-width: 400px;
+		justify-content: space-around;
+		align-items: center;
+	}
+	.login-btn {
+		width: 40%;
+		text-align: center;
+	}
+	.login-btn.active {
+		background-color: #dbc0ce;
+		border: 2px solid #dbc0ce;
+	}
+	.login-btn.active span {
+		color: #d24a46;
+	}
+</style>
+
+<div class="login-btn-wrap">
+	<a href="/user/register" class="button login-btn active" onclick="window.location='/user/register'">
+		<span class="username">Регистрация</span>
+	</a>
+	<a href="/user/login" class="button login-btn" onclick="window.location='/user/login'">
+		<span class="username">Вход</span>
+	</a>
+</div>
+
+<form class="form register_form" method="post" style="margin-top: 10px; position:relative;">
 	<a href="/" class="form-back-page" onclick="window.history.back(); return false;"></a>
 	<h1>Регистрация</h1>
 	

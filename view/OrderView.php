@@ -144,6 +144,82 @@ class OrderView extends View
         return $this->design->fetch('order.tpl');
     }
 
+    private function bad_payment()
+    {
+        if ($order_id = $this->request->get('orderId', 'integer'))
+            $order = $this->orders->get_order((int)$order_id);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return false;
+
+        if (!$order) return false;
+
+        $purchases = $this->orders->get_purchases(['order_id' => intval($order->id)]);
+        if (!$purchases) return false;
+
+        $products_ids = [];
+        $variants_ids = [];
+
+        foreach ($purchases as $purchase) {
+            $products_ids[] = $purchase->product_id;
+            $variants_ids[] = $purchase->variant_id;
+        }
+        $products = [];
+
+        $products_temp = $this->products->get_products([
+            'id' => $products_ids,
+            'limit' => count($products_ids)
+        ]);
+        foreach ($products_temp as $p) {
+            $products[$p->id] = $p;
+        }
+
+        $images = $this->products->get_images(['product_id' => $products_ids]);
+        foreach ($images as $image) {
+            $products[$image->product_id]->images[] = $image;
+        }
+
+        $variants = [];
+        foreach ($this->variants->get_variants(['id' => $variants_ids]) as $v) {
+            $variants[$v->id] = $v;
+        }
+
+        foreach ($variants as $variant) {
+            $products[$variant->product_id]->variants[] = $variant;
+        }
+
+        $product = null;
+        foreach ($products as &$product) {
+            if (isset($product->variants[0]))
+                $product->variant = $product->variants[0];
+            if (isset($product->images[0]))
+                $product->image = $product->images[0];
+            $product->features = $this->features->get_product_options(['product_id' => $product->id]);
+        }
+
+        foreach ($purchases as &$purchase) {
+            if (!empty($products[$purchase->product_id]))
+                $purchase->product = $products[$purchase->product_id];
+            if (!empty($variants[$purchase->variant_id])) {
+                $purchase->variant = $variants[$purchase->variant_id];
+                $purchase->features = $this->features->get_product_options(['product_id' => $product->id]);
+            }
+        }
+
+        $this->design->assign('order', $order);
+        $this->design->assign('purchases', $purchases);
+
+        // Способ оплаты
+        if ($order->payment_method_id) {
+            $payment_method = $this->payment->get_payment_method($order->payment_method_id);
+            $this->design->assign('payment_method', $payment_method);
+        }
+
+        $this->design->assign('meta_title', 'Ошибка при оплате');
+        return $this->design->fetch('bad_payment.tpl');
+    }
+
     private function download()
     {
         $file = $this->request->get('file');
@@ -184,16 +260,15 @@ class OrderView extends View
         if (!empty($module_name) && is_file("payment/$module_name/$module_name.php")) {
             include_once("payment/$module_name/$module_name.php");
             $module = new $module_name();
-            //$form = $module->checkout_form($params['order_id'], $params['button_text']);
             $form = $module->checkout_form($params['order_id'], $params['button_text'] ?? null);
         }
         return $form;
     }
 
-    private function bad_payment()
+    private function after_payment()
     {
-        if ($url = $this->request->get('url', 'string'))
-            $order = $this->orders->get_order((string)$url);
+        if ($order_id = $this->request->get('orderId', 'integer'))
+            $order = $this->orders->get_order((int)$order_id);
         elseif (!empty($_SESSION['order_id']))
             $order = $this->orders->get_order(intval($_SESSION['order_id']));
         else
@@ -201,20 +276,12 @@ class OrderView extends View
 
         if (!$order) return false;
 
-        $this->design->assign('order', $order);
-
         // Способ оплаты
         if ($order->payment_method_id) {
             $payment_method = $this->payment->get_payment_method($order->payment_method_id);
+            $this->design->assign('payment_method', $payment_method);
         }
-        // TODO детальная расшифровка ошибок требует подключение модуля и получение статуса
 
-        $this->design->assign('meta_title', 'Ошибка при оплате');
-        return $this->design->fetch('bad_payment.tpl');
-    }
-
-    private function after_payment()
-    {
         $this->design->assign('meta_title', 'Спасибо за покупку!');
         return $this->design->fetch('after_payment.tpl');
     }

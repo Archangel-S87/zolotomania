@@ -6,6 +6,12 @@
 	{$canonical="/services{if !empty($current_page_num) && $current_page_num>1}?page={$current_page_num}{/if}" scope=root}
 {/if}
 
+<style>
+	#content > h1 {
+		margin-top: 20px;
+	}
+</style>
+
 {if !empty($keyword)}
 	{$meta_title = $keyword scope=root}
 	{$meta_description = $keyword scope=root}
@@ -52,6 +58,36 @@
 
 	{* subcat start *}
 	{if (isset($page->url) && $page->url == 'services') || (isset($nopage) && $nopage == 1)}
+		<style>
+			ul.tiny_products.parentscat {
+				display: block;
+			}
+			.product .image {
+				display: none;
+			}
+			ul.tiny_products.parentscat li.product {
+				display: block;
+				padding: 5px 0 5px 10px;
+				border-radius: 0;
+				border: none;
+				box-shadow: none;
+				width: auto;
+				text-align: left;
+			}
+			.relcontent.parentscat .product h3 {
+				display: inline-block;
+				margin: 0;
+			}
+			.parentscat .product_info {
+				padding: 0;
+				width: auto;
+				display: inline-block;
+			}
+			ul.tiny_products.parentscat li.product:hover {
+				background-color: transparent;
+				box-shadow: none;
+			}
+		</style>
 		{function name=services_categories_tree2 level=1}
 			{if !empty($services_categories)}
 				<ul class="relcontent tiny_products parentscat" style="margin-bottom: 0px !important;">
@@ -148,19 +184,19 @@
 		</div>
 	{/if}
 
-	{if !empty($service->images)}
-		<ul id="gallerypic" class="tiny_products">
-			{foreach $service->images as $i=>$image}
-					<li class="product">
-						<div class="image">
-							<a rel="nofollow" data-rel="gallery" href="{$image->filename|resize:800:600:w:$config->resized_services_images_dir}" class="zoom" title="{$category->name|escape}">
-								<img src="{$image->filename|resize:400:400:false:$config->resized_services_images_dir}" alt="{$category->name|escape}" />
-							</a>
-						</div>
-					</li>
-			{/foreach}
-		</ul>
-	{/if}
+{*	{if !empty($service->images)}*}
+{*		<ul id="gallerypic" class="tiny_products">*}
+{*			{foreach $service->images as $i=>$image}*}
+{*					<li class="product">*}
+{*						<div class="image">*}
+{*							<a rel="nofollow" data-rel="gallery" href="{$image->filename|resize:800:600:w:$config->resized_services_images_dir}" class="zoom" title="{$category->name|escape}">*}
+{*								<img src="{$image->filename|resize:400:400:false:$config->resized_services_images_dir}" alt="{$category->name|escape}" />*}
+{*							</a>*}
+{*						</div>*}
+{*					</li>*}
+{*			{/foreach}*}
+{*		</ul>*}
+{*	{/if}*}
 	<!--noindex-->
 	{$settings->advertservice}
 	<!--/noindex-->

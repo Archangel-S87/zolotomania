@@ -441,7 +441,7 @@
 							</span>
 						</div>
 			
-						{if $purchase->product}
+						{if !empty($purchase->product)}
 							<div class="oprdname"><a class="related_product_name" href="index.php?module=ProductAdmin&id={$purchase->product->id}&return={$smarty.server.REQUEST_URI|urlencode}">{$purchase->product_name}</a></div>
 						{else}
 							{$purchase->product_name}				
@@ -456,7 +456,7 @@
 					</div>
 					<div class="amount cell">			
 						<span class=view_purchase>
-							{$purchase->amount} {if $purchase->variant->unit}{$purchase->variant->unit}{else}{$settings->units}{/if}
+							{$purchase->amount} {if !empty($purchase->variant->unit)}{$purchase->variant->unit}{else}{$settings->units}{/if}
 						</span>
 						<span class="edit_purchase" style='display:none;'>
 							{if $purchase->variant}
@@ -470,21 +470,21 @@
 					</div>
 					<div class="icons cell instock" title="{$tr->stock_available|escape}">		
 						{if !$order->closed}
-							{if !$purchase->product}
+							{if !empty($purchase->product)}
 							<img src='design/images/error.png' alt='{$tr->product} {$tr->was_deleted}' title='{$tr->product} {$tr->was_deleted}' > {*Товар был удалён*}
-							{elseif !$purchase->variant}
+							{elseif !empty($purchase->variant)}
 							<img src='design/images/error.png' alt='{$tr->product_variant} {$tr->was_deleted}' title='{$tr->product_variant} {$tr->was_deleted}' > {*Вариант товара был удалён*}
-							{elseif $purchase->variant->stock < $purchase->amount}
+							{elseif isset($purchase->variant) && $purchase->variant->stock < $purchase->amount}
 							<img src='design/images/error.png' alt='{$tr->stock_available|escape} {$purchase->variant->stock}' title='{$tr->stock_available|escape} {$purchase->variant->stock}'  > {*{$tr->stock_available|escape} {$purchase->variant->stock}*}
-							{else}
+							{elseif isset($purchase->variant)}
 							[ {$purchase->variant->stock|escape} ]&nbsp;&nbsp;
 							{/if}
-						{else}
-							{if !$purchase->product}
+						{elseif $order->closed}
+							{if !empty($purchase->product)}
 							<img src='design/images/error.png' alt='{$tr->product} {$tr->was_deleted}' title='{$tr->product} {$tr->was_deleted}' > {*Товар был удалён*}
-							{elseif !$purchase->variant}
+							{elseif !empty($purchase->variant)}
 							<img src='design/images/error.png' alt='{$tr->product_variant} {$tr->was_deleted}' title='{$tr->product_variant} {$tr->was_deleted}' > {*Вариант товара был удалён*}
-							{else}
+							{elseif isset($purchase->variant)}
 							[ {$purchase->variant->stock|escape} ]&nbsp;&nbsp;
 							{/if}
 						{/if}

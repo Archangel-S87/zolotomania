@@ -57,3 +57,10 @@ Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
 ###
 
+### Импорт ордеров
+POST https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=sales&mode=import&filename=import_orders.json
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=4052fc909fa86da149c87b3af1b961bd;
+###
+

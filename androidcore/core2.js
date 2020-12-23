@@ -1119,3 +1119,39 @@ $(window).load(function () {
         b.fancybox.init()
     })
 })(jQuery);
+
+// Выставление курсора вполе на позицию pos
+$.fn.setCursorPosition = function(pos) {
+    if ($(this).get(0).setSelectionRange) {
+        $(this).get(0).setSelectionRange(pos, pos);
+    } else if ($(this).get(0).createTextRange) {
+        let range = $(this).get(0).createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
+};
+// Автоматическая высота textarea
+jQuery.fn.extend({
+    autoHeightTextarea: function () {
+        function autoHeight_(element) {
+            element = $(element);
+
+            element.css({
+                'height': 'auto',
+                'overflow-y': 'hidden'
+            });
+            if (element.val()) {
+                element.height(element[0].scrollHeight);
+            }
+            return element;
+        }
+        return this.each(function() {
+            autoHeight_(this).on('input', function() {
+                autoHeight_(this);
+            });
+        });
+    }
+});
+$('textarea').autoHeightTextarea();

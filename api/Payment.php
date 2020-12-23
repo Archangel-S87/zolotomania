@@ -89,6 +89,15 @@ class Payment extends Fivecms
     	return $modules;
 
 	}
+
+    public function get_payment_module($module_name) {
+        $module = null;
+        if (!empty($module_name) && is_file("payment/$module_name/$module_name.php")) {
+            include_once("payment/$module_name/$module_name.php");
+            $module = new $module_name();
+        }
+        return $module;
+    }
 	
 	public function get_payment_deliveries($id)
 	{

@@ -89,6 +89,39 @@
 						{include file='send_user_message.tpl'}
 						<input style="margin-left: 10px;" id="backform" type="button" class="button_green" value="{$tr->send_message}" />
 					</li>
+					<li style="padding: 20px 0;">
+						<h2>Адрес</h2>
+						<ul style="padding-left: 20px;">
+							<li>
+								<label for="region" style="width: 120px;" class=property>Область</label>
+								<input id="region" type="text" name="user_data[region]" value="{$user_data->region}" style="width: 140px;">
+							</li>
+							<li>
+								<label for="district" style="width: 120px;" class=property>Район</label>
+								<input id="district" type="text" name="user_data[district]" value="{$user_data->district}" style="width: 140px;">
+							</li>
+							<li>
+								<label for="city" style="width: 120px;" class=property>Город</label>
+								<input id="city" type="text" name="user_data[city]" value="{$user_data->city}" style="width: 140px;">
+							</li>
+							<li>
+								<label for="street" style="width: 120px;" class=property>Улица</label>
+								<input id="street" type="text" name="user_data[street]" value="{$user_data->street}" style="width: 140px;">
+							</li>
+							<li>
+								<label for="house" style="width: 120px;" class=property>Дом</label>
+								<input id="house" type="text" name="user_data[house]" value="{$user_data->house}" style="width: 140px;">
+							</li>
+							<li>
+								<label for="apartment" style="width: 120px;" class=property>Квартира</label>
+								<input id="apartment" type="text" name="user_data[apartment]" value="{$user_data->apartment}" style="width: 140px;">
+							</li>
+						</ul>
+					</li>
+					<li>
+						<label for="birthday" style="width: 140px;" class=property>День рождения</label>
+						<input id="birthday" type="text" name="user_data[birthday]" value="{$user_data->birthday|date}" style="width: 100px;">
+					</li>
 					<li><label style="width: 140px;" class=property>{$tr->register_date}</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->created|date}" /></li>
 					<li><label style="width: 140px;" class=property>IP</label><input style="width: 100px;" name="email" class="fivecms_inp" type="text" disabled value="{$user->last_ip|escape}" /></li>
 					<li><label style="width: 140px;" class=property>{if !empty($user->partner_id)}<a class="bluelink" href="index.php?module=UserAdmin&id={$user->partner_id}" target="_blank">{$tr->referer}</a>{else}{$tr->referer}{/if}</label><input style="width: 100px;" disabled name="partner_id" class="fivecms_inp" type="text" value="{$user->partner_id}" /></li>
@@ -98,10 +131,22 @@
 					</li>
 				</ul>
 			</div>
+
 			<script src="/js/jquery/maskedinput/dist/jquery.maskedinput.min.js"></script>
+			<script src="design/js/jquery/datepicker/jquery.ui.datepicker-ru.js"></script>
+
 			<script>
 				$(function ($) {
 					$("#phone").mask('+7(999) 999-99-99');
+				});
+
+				$('#birthday').datepicker({
+					regional:'ru',
+					changeMonth: true,
+					changeYear: true,
+					minDate: '-99y',
+					maxDate: '-14y',
+					yearRange: 'c-20:c+5'
 				});
 			</script>
 			<!-- Параметры страницы (The End)-->

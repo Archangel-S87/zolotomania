@@ -4,7 +4,7 @@ require_once('View.php');
 
 class RegisterView extends View
 {
-    const DEFAULT_STATUS = 0; // Активен ли пользователь сразу после регистрации (0 или 1)
+    const DEFAULT_STATUS = 1; // Активен ли пользователь сразу после регистрации (0 или 1)
 
     private $template = 'register.tpl';
 

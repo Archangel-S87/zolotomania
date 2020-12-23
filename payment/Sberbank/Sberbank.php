@@ -1,5 +1,18 @@
 <?php
 
+/*
+ * Кабинет тестовый https://3dsec.sberbank.ru/mportal3
+ * Вход T4632247232-operator/T4632247232
+ * токен 55psnbbg3thon7g2jgd433vok4
+ * ключ atmiumq7192mp5bob3p8u0189o
+ * API T4632247232-api/T4632247232
+ * Тестовые карты https://securepayments.sberbank.ru/wiki/doku.php/test_cards
+ *
+ * Кабинет боевой https://securepayments.sberbank.ru/mportal3
+ * Вход P4632247232-operator/*
+ * API P4632247232-api/N2rfSA)GXM7q*vY
+ */
+
 require_once('api/Fivecms.php');
 
 class Sberbank extends Fivecms
@@ -27,7 +40,7 @@ class Sberbank extends Fivecms
         return $this->order;
     }
 
-    public function checkout_form($order_id)
+    public function checkout_form($order_id, $button_text = null, $print = true)
     {
         $this->set_order($order_id);
 
@@ -47,11 +60,19 @@ class Sberbank extends Fivecms
                 $form_url = $this->register_order(++$last_order->trial);
             } else {
                 // Вывести ошибку
-                return "<p class='checkout_button'>{$status->actionCodeDescription}</p>";
+                if (!$print) {
+                    return "<p class='checkout_button'>{$status->actionCodeDescription}</p>";
+                } else {
+                    return $status->actionCodeDescription;
+                }
             }
         } else {
             // Регистрирую ордер в сиситеме банка
             $form_url = $this->register_order();
+        }
+
+        if (!$print) {
+            return $form_url;
         }
 
         if (!empty($form_url['error'])) {
@@ -104,8 +125,8 @@ class Sberbank extends Fivecms
             'token' => $this->payment_settings['token_sber'],
             'orderNumber' => $this->order->id . self::SUFFIX_ORDER . $index,
             'amount' => (int)($price * 100),
-            'returnUrl' => "{$this->config->root_url}/order/{$this->order->url}?after_payment=1",
-            'failUrl' => "{$this->config->root_url}/order/{$this->order->url}?bad_payment=1",
+            'returnUrl' => "{$this->config->root_url}/order?orderId={$this->order->id}&after_payment=1",
+            'failUrl' => "{$this->config->root_url}/order?orderId={$this->order->id}&bad_payment=1",
             'description' => "Оплата заказа №{$this->order->id}",
             'jsonParams' => json_encode($user_data),
             'phone' => $this->order->phone

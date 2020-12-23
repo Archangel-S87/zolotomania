@@ -138,22 +138,15 @@
 		{if $module == 'MainView'}
 
 		<div class="container flex">
-			<div class="header__left"></div>
+			<div class="header__left" style="color:#d24a46;font-size:24px;text-align:left;font-weight: bold;font-style: italic;">Сделай жизнь чуточку лучше!</div>
 			<div class="header__right">
 				<div id="top_phone">
-						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
-							<span uk-icon="icon: receiver; ratio: 1.25"></span>
-							{if $settings->phone && $settings->tel}
-								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{elseif $settings->phone}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							{elseif $settings->tel}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{/if}
-						</div>
+					<div class="divider {if $settings->phone}twophone{else}onephone{/if}">
+						<span uk-icon="icon: receiver; ratio: 1.25" style="align-items: center;"></span>
+						{if $settings->phone}
+							<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
+						{/if}
+					</div>
 				</div>
 				<nav class="menu">
 					<div class="inner">
@@ -174,7 +167,6 @@
 
 									<div class="svgwrapper" title="Контакты" onClick="window.location='/contacts'">
 										<span uk-icon="icon:  location; ratio: 1.25"></span>
-
 									</div>
 
 									<div class="svgwrapper" title="Статьи" onClick="window.location='/articles'">
@@ -205,9 +197,7 @@
 						<span class="hline">|</span>
 						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
 					{else}
-						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
+						<span class="username" onclick="window.location='/user/register'">Хочу с вами</span>
 					{/if}
 				</div>
 			</div>
@@ -229,22 +219,16 @@
 		{/if}
 		{if $module != 'MainView'}
 		<div class="container flex">
-			<div class="header__left">
+			<div class="flex header__left" style="align-items: center;justify-content: space-between;">
 				<img class="logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
+				<span style="font-size: 22px;color:#d24a46;font-style: italic;font-weight: bold;">Сделай жизнь чуточку лучше!</span>
 			</div>
 			<div class="header__right">
 				<div id="top_phone">
-					<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
-						<span uk-icon="icon: receiver; ratio: 1.25"></span>
-						{if $settings->phone && $settings->tel}
+					<div class="divider {if $settings->phone}twophone{else}onephone{/if}">
+						<span uk-icon="icon: receiver; ratio: 1.25" style="text-align: center"></span>
+						{if $settings->phone}
 							<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-						{elseif $settings->phone}
-
-							<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-						{elseif $settings->tel}
-
-							<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 						{/if}
 					</div>
 				</div>
@@ -298,9 +282,7 @@
 						<span class="hline">|</span>
 						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
 					{else}
-						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
+						<span class="username" onclick="window.location='/user/register'">Хочу с вами</span>
 					{/if}
 				</div>
 
@@ -312,12 +294,12 @@
 
 
 
-	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}">
+	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}" style="position:relative;z-index: 1;">
 	{if $module != 'MainView'}
 		<div class="side-shade2"></div>
 		{$bread_pos = 1}
 
-		{if !in_array($module, ['LoginView', 'RegisterView', 'UserView', 'WishlistView', 'CartView', 'OrderView', 'PageView'])}
+		{if !in_array($module, ['LoginView', 'RegisterView', 'UserView', 'WishlistView', 'CartView', 'OrderView', 'PageView', 'ServicesView'])}
 			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
 				<div class="uk-container">
 					{if $module == 'ProductsView'}
@@ -386,26 +368,72 @@
 		<div class="container flex">
 
 					<div class="footer__column friendly-resources">
-						<a class="npk" href="//zoloto-rezerv.ru" target="_blank">
+						<a class="button npk" href="//zoloto-rezerv.ru" target="_blank">
 							<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
 							<span>НПК "Ваш Золотой РезервЪ"</span>
 						</a>
-						<a class="au-ag" href="//скупка-золото.рф" target="_blank">
+						<a class="button au-ag" href="//скупка-золото.рф" target="_blank">
 							<span>Скупка Au/Ag</span>
 						</a>
+						<a class="footer__adress--all button" href="/oplata" style="margin-top: 20px;">Оплата</a>
             		</div>
 
-					<div class="footer__column">
-						<div class="uk-h4" id="footer#5">
+					<div class="footer__column flex" style="flex-direction: column;align-items: center;position:relative;">
+						<style>
+							.our_services {
+								display: inline-block;
+								position: absolute;
+								top: 0;
+								left: 50%;
+								transform: translateX(-50%);
+								z-index: 10;
+							}
+							#our_services_wrapper {
+								display: none;
+								padding: 15px;
+								border: 1px solid #d24a46;
+								border-radius: 4px;
+								background-color: #fff;
+							}
+							#our_services_wrapper.active {
+								display: block;
+							}
+							#our_services_wrapper li {
+								text-align: center;
+								margin-right: 0;
+							}
+							#our_services_wrapper li a {
+								font-size: 16px;
+							}
+						</style>
+{*						{if $menus[17]->enabled}*}
+{*							{get_pages var="menu_1" menu_id=17}*}
+{*							{if $menu_1}*}
+{*								<div class="our_services">*}
+{*									<ul id="our_services_wrapper" class="footer__list footer__menu">*}
+{*										{foreach $menu_1 as $p}*}
+{*											<li {if $page && $page->id == $p->id}class="selected"{/if} class="footer__menu">*}
+{*												<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>*}
+{*											</li>*}
+{*										{/foreach}*}
+{*									</ul>*}
+{*								</div>*}
+{*							{/if}*}
+{*						{/if}*}
+						<a id="our_services" class="footer__adress--all button" href="/services" style="margin-bottom: 20px;">Наши сервисы для вас</a>
+						<a class="footer__adress--all button" href="/adresa-magazinov">Наши магазины</a>
+						<a class="footer__adress--all button" href="/policy" style="margin-top: 20px;">Политика конфиденциальности
+						</a>
+					</div>
+					<div class="footer__column flex" style="flex-direction: column; align-items: flex-end;">
+						<div class="uk-h4" id="footer#5" style="text-align: right;font-size: 20px;">
 							{if $settings->phone && $settings->tel}
 								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
 							{elseif $settings->phone}
-
 								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
 							{elseif $settings->tel}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
+								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;margin-bottom:3px;margin-left:10px;">{$settings->tel|escape}</span>
 							{/if}
 						</div>
 						<div id="footer#6">
@@ -415,38 +443,20 @@
 								{if $settings->facebook}<div title="Facebook" onclick="window.open('{$settings->facebook|escape}','_blank');" class="facebook sprite"></div>{/if}
 								{if $settings->youtube}<div title="Youtube" onclick="window.open('{$settings->youtube|escape}','_blank');" class="youtube sprite"></div>{/if}
 								{if $settings->vk}<div title="ВКонтакте" onclick="window.open('{$settings->vk|escape}','_blank');"
-								class="vk sprite"></div>{/if}
+													   class="vk sprite"></div>{/if}
 								{if $settings->insta}<div title="Instagram" onclick="window.open('{$settings->insta|escape}','_blank');"
-								class="insta sprite"></div>{/if}
+														  class="insta sprite"></div>{/if}
 								{if $settings->viber}<div title="Viber" onclick="window.open('viber://chat?number={$settings->viber}','_blank');"
-								class="viber sprite"></div>{/if}
+														  class="viber sprite"></div>{/if}
 								{if $settings->whatsapp}<div title="Whatsapp" onclick="window.open('https://api.whatsapp.com/send?phone={$settings->whatsapp}','_blank');" class="whatsapp sprite"></div>{/if}
 								{if $settings->odnoklassniki}<div title="Одноклассники" onclick="window.open('{$settings->odnoklassniki|escape}','_blank');" class="ok sprite"></div>{/if}
 								{if $settings->telegram}<div title="Telegram" onclick="window.open('{$settings->telegram|escape}','_blank');" class="telegram sprite"></div>{/if}
 							</div>
 						</div>
 					</div>
-					<div class="footer__column">
-						<ul class="footer__list footer__adress">
-							<li class="footer__adress--item">Курск, Красная площадь, 2\4</li>
-						</ul>
-						<a class="footer__adress--all button" href="/adresa-magazinov">Все магазины</a>
-					</div>
 
-		<div class="footer__bottom">
-  			{if $menus[17]->enabled}
-				{get_pages var="menu_1" menu_id=17}
-				{if $menu_1}
-				<ul class="footer__list footer__menu flex">
-					{foreach $menu_1 as $p}
-					<li {if $page && $page->id == $p->id}class="selected"{/if} class="footer__menu">
-						<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
-					</li>
-					{/foreach}
-				</ul>
-				{/if}
-			{/if}
-  		</div>
+		<div class="flex footer__bottom" style="flex-direction: column; align-items: flex-end;">
+			{$settings->rekvizites}
 		</div>
 
 	</footer>

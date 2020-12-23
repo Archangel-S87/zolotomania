@@ -220,6 +220,7 @@
 							</span>
 							{if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}<span class="bonus">+ <span class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span></span>{/if}
 						</div>
+						<div class="additional-information">При оформлении в рассрочку <strong>{($product->variant->price / 12)|convert} {$currency->sign|escape}</strong>/месяц</div>
 					{else}
 						{if $product->variants|count==1  && !$product->variant->name}{else}<span class="b1c_caption" style="display: none;"> </span>{/if}
 						
@@ -229,7 +230,16 @@
 						<select class="b1c_option" name="variant" {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}>
 							{foreach $product->variants as $v}
 								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<option {if $product->variant->id==$v->id}selected{/if} data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $v->sku}Артикул: {$v->sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}" value="{$v->id}" {if $v->compare_price > 0}data-cprice="{$v->compare_price|convert}"{/if} data-varprice="{$v->price|convert}">
+								<option {if $product->variant->id==$v->id}selected{/if}
+										data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
+										data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
+										data-sku="{if $v->sku}Артикул: {$v->sku}{/if}"
+										data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}"
+										value="{$v->id}"
+										{if $v->compare_price > 0}
+											data-cprice="{$v->compare_price|convert}"
+										{/if}
+										data-varprice="{$v->price|convert}">
 									{$v->name|escape}&nbsp;
 								</option>
 							{/foreach}
@@ -266,7 +276,45 @@
 							</span>
 							{if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}<span class="bonus">+ <span class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span></span>{/if}
 						</div>
+						<div class="additional-information">При оформлении в рассрочку <strong>{($product->variant->price / 12)|convert} {$currency->sign|escape}</strong>/месяц</div>
 					{/if}
+
+					<style>
+						#content ul li {
+							list-style: none;
+						}
+					</style>
+					<p style="font-weight: bold;">При получении в наших магазинах:</p>
+					<ul class="product__add-info" style="margin: 10px 0 20px;">
+						<li class="product__add-info--item">
+							✅ Бесплатная доставка: 48 часов (Курск, Курская область)
+						</li>
+						<li class="product__add-info--item">
+							✅ Заказ до трёх украшений
+						</li>
+						<li class="product__add-info--item">
+							✅ Возможность поменять на новое изделие (30 дней)
+						</li>
+						<li class="product__add-info--item">
+							✅ Удобные способы оплаты
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							Рассрочка (3,6,9,12 месяцев)
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							Наличные/терминал
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							Обмен старого золота на новое
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							Оплата маннингами (бонусами) до 100% покупки
+						</li>
+						<li class="product__add-info--item">
+							✅ Ремонт наших украшения - с 50% скидкой
+						</li>
+					</ul>
+
 					<div class="buy uk-flex">
 						{if !$product->variant->reservation}
 							<div class="wishprod">
@@ -363,30 +411,20 @@
 				{$product->annotation}
 			</div>
 		{/if}
-		{if $product->features}
-			<div id="tab2" class="tab_content">
-				<ul class="features">
-				{foreach $product->features as $f}
-				<li>
-					<label class="featurename"><span>{$f->name|escape}:</span></label>
-					<label class="lfeature">{$f->value|escape}</label>
-				</li>
-				{/foreach}
-				</ul>
-			</div>
-			{/if}
-		{* Add info *}	
-			<ul class="product__add-info">
-				<li class="product__add-info--item">
-					Бесплатная доставка
-				</li>
-				<li class="product__add-info--item">
-					Примерка до 3 украшений
-				</li>	
-				<li class="product__add-info--item">	
-					Удобные способы оплаты
-				</li>	
-			</ul>
+{*		{if $product->features}*}
+{*			<div id="tab2" class="tab_content">*}
+{*				<ul class="features">*}
+{*				{foreach $product->features as $f}*}
+{*				<li>*}
+{*					<label class="featurename"><span>{$f->name|escape}:</span></label>*}
+{*					<label class="lfeature">{$f->value|escape}</label>*}
+{*				</li>*}
+{*				{/foreach}*}
+{*				</ul>*}
+{*			</div>*}
+{*		{/if}*}
+		{* Add info *}
+
 		{* Add info @ *}
 		{* Share *}
 		<div class="annot-brand share_wrapper">

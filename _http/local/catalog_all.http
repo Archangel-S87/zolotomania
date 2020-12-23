@@ -1,5 +1,11 @@
 ### Авторизация
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=check_auth
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=check_auth
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+###
+
+### Инит
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=init
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 ###
@@ -13,8 +19,8 @@ Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 < E:/OpenServer/domains/zolotomania.loc/_temp/v8_837_2df7b.zip
 ###
 
-### Распаковка архива из папки temp
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&unpacking=true&filename=full_v8_DC95_833a.zip
+### Распаковка архива из папки temp/catalog
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=catalog&mode=file&unpacking=true&filename=full_v8_FF67_49e.zip
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
@@ -42,8 +48,15 @@ Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 ###
 
 
+### Распаковка архива из папки temp/users
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=users&mode=file&unpacking=true&filename=full_v8_D797_4b.zip
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###
+
 ### Импорт пользователей
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=users&mode=import&filename=import_users.json
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=users&mode=import&filename=import_users (shop).json
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
@@ -51,7 +64,15 @@ Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
 
 
 ### Экспорт ордеров
-POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-01-01&date_end=2020-10-09&status=0
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-12-10&date_end=2020-12-12&status=0
+Cache-Control: no-cache
+Authorization: Basic YWRtaW46djRpNmsxaWc5
+Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;
+###
+
+
+### Распаковка архива из папки temp/sales
+POST http://zolotomania.loc/fivecms/json/1c_exchange.php?type=sales&mode=file&unpacking=true&filename=full_v8_61A4_3f.zip
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: XDEBUG_SESSION=1; PHPSESSID=52onmc7rptq70dme5r49flf7duv3vdoo;

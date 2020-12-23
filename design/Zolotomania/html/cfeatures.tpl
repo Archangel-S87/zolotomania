@@ -61,6 +61,19 @@
         #cfeatures .hide_feat.show {
             transform: rotate(180deg);
         }
+        .feature_selected {
+            position: absolute;
+            bottom: 0;
+            right: 40px;
+            text-align: right;
+            padding: 8px 10px 0;
+            height: 30px;
+            color: #dbc0ce;
+            max-width: 280px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
     </style>
 
     {if !empty($features_variants)}
@@ -84,6 +97,7 @@
         <div class="feature_column features-variants-1">
             <div class="feature_name" data-feature="variant_1">Размер</div>
             <div class="hide_feat"><span></span></div>
+            <div class="feature_selected"></div>
             <div class="feature_values">
                 <ul>
                     {foreach $features_variants1 as $o}
@@ -221,6 +235,7 @@
             <div class="feature_column feature-others">
                 <div class="feature_name" data-feature="{$f->id}">{$f->name}</div>
                 <div class="hide_feat"><span></span></div>
+                <div class="feature_selected"></div>
                 <div class="feature_values">
                     {if $f->in_filter==2}
                         {$f_min="min[`$f->id`]"}
@@ -325,6 +340,18 @@
 <script>
     // expand used feature column
     $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_column').addClass('active');
+
+    $('#content .feature_column').each(function () {
+        const inputs = $('input:checked', this);
+        let selected = '';
+        inputs.each(function (index) {
+            selected += $(this).val();
+            if (inputs.length !== ++index) {
+                selected += ', ';
+            }
+        });
+        $('.feature_selected', this).html(selected)
+    });
     // expand used feature column end
 </script>
 

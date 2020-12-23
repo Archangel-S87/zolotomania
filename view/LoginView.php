@@ -125,7 +125,7 @@ class LoginView extends View
             $size = StrLen($chars) - 1;
             $password = null;
             while ($max--) $password .= $chars[rand(0, $size)];
-            $this->users->update_user($user->id, array('password' => $password));
+            $this->users->update_user($user->id, ['password' => $password, 'enabled' => 1]);
 
             // Отправляем письмо пользователю для восстановления пароля
             $this->notify->email_password_remind($user->id, $password);
