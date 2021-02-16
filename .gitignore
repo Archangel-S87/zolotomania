@@ -18,3 +18,4 @@ files/**/*.png
 fivecms/cml/temp/
 fivecms/json/temp/*
 payment/Sberbank/log
+payment/SberbankCredit/log

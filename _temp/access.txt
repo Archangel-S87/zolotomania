@@ -1,65 +1,7 @@
-https://xn--80anekfhdba3b2k.com/fivecms
-
-http://zolotomania.loc/fivecms/
-логин: admin
-пароль: v4i6k1ig9
-
-БД
-Имя базы zmania1_xn8sbta5
-Пароль 4FY6Uu6s
-PhpMyAdmin https://solar.beget.com/phpMyAdmin/index.php?db=zmania1_xn8sbta5&lang=ru
-
-Тестовый сервер
-https://dev.xn----8sbtgmhidba7b6k.xn--p1ai
-https://dev.xn----8sbtgmhidba7b6k.xn--p1ai/fivecms
-
-БД
-Имя базы zmania1_devxn881
-Пароль Wfq8UWbg
-PhpMyAdmin https://solar.beget.com/phpMyAdmin/index.php?db=zmania1_devxn881&lang=ru
 
 
-FTP
-Сервер glazatov.beget.tech
-Логин glazatov_admin
-Пароль ZM27071988
-
-СБЕР
-https://3dsec.sberbank.ru/mportal3/admin
-Login T4632247232-operator
-Password T4632247232
-Тестовые карты
-https://securepayments.sberbank.ru/wiki/doku.php/test_cards
 
 
-{
-    "id": "b26d8574-6686-11ea-a213-00155d036796", // обязательно
-    "name": "Иванов Иван Иванович", // обязательно при добавлении
-    "email": "123@test.ru", // по умолчани ''
-    "password": "b588b5abbfd8f963d0f796d9908dadce", // по умолчани ''
-    "birthday": "1991-09-28", // по умолчани null
-    "address": {
-        "region": "Область",
-        "district": "Район",
-        "city": "Город",
-        "street": "Улица",
-        "house": "Дом",
-        "apartment": "Квартира"
-    },
-    "phone": "+71234567891", // обязательно
-    "group_id": "Бронза", // по умолчани '' id группы из 1C
-    "enabled": 0 // по умолчани 0 Активен ли пользователь на сайте
-    "partner_id": "", // по умолчани '' Кто пригласил пользователя. id пользователя из 1с
-    "ref_views": 0, // по умолчани 0 Количество переходов по реферальной ссылке
-    "status": "ADD", // по умолчани ADD Если пользователя нужно удалить выставить статус DELETE
-    "balance": 100.00, // по умолчани 0.00 Количество накопленных бонусов
-    "bonus_type": "", // по умолчани '' Тип бонуса. Не используется у нас
-    "order_payd": 0.00  // по умолчани 0.00 Итоговая сумма покупок
-}
 
-Заказ 21608
-76ae1b15-a897-11ea-a21c-00155d036796
 
-Заказ 21638
-Заказ 21648
-В 1с сумма заказа 20190 рублей
+
