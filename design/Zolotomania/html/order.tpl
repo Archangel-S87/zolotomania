@@ -13,6 +13,12 @@
     {*{if $order->paid == 1}, оплата поступила{/if}*}
 </h1>
 
+<style>
+    #purchases1 .missing-items {
+        text-decoration: line-through;
+    }
+</style>
+
 <h2 style="text-transform:uppercase;">Детали заказа:</h2>
 {* Список покупок *}
 <table id="purchases1">
@@ -43,18 +49,27 @@
                     <span class="purimage">
 						<a href="products/{$purchase->product->url}"><img src="{$image->filename|resize:100:100}" alt="{$purchase->product->name|escape}"></a>
 					</span>
-                {else}
+                {elseif !empty($purchase->product->url)}
                     <span class="purimage">
 						<a href="products/{$purchase->product->url}"><svg class="nophoto"><use xlink:href='#no_photo'/></svg></a>
+					</span>
+                {else}
+                    <span class="purimage">
+						<svg class="nophoto"><use xlink:href='#no_photo'/></svg>
 					</span>
                 {/if}
             </td>
 
             {* Название товара *}
             <td class="name">
-                <a href="products/{$purchase->product->url}">{$purchase->product_name|escape}</a>
+                {if !empty($purchase->product->url)}
+                    <a href="products/{$purchase->product->url}">{$purchase->product_name|escape}</a>
+                {else}
+                    <span class="missing-items">{$purchase->product_name|escape}</span>
+                {/if}
+
                 {$purchase->variant_name|escape}
-                {if $order->paid && $purchase->variant->attachment}
+                {if $order->paid && !empty($purchase->variant->attachment)}
                     <a class="download_attachment" href="order/{$order->url}/{$purchase->variant->attachment}">скачать
                         файл</a>
                 {/if}
@@ -162,9 +177,34 @@
 {if !$group || ($group && $group->name != 'Магазины')}
 
     {if (!$order->paid && $order->status != 3)}
-        {if isset($payment_method) && $order->total_price > 0}
-            {* Форма оплаты, генерируется модулем оплаты *}
-            {checkout_form order_id=$order->id module=$payment_method->module}
+        {if !$missing_items}
+            <style>
+                .action {
+                    align-items: center;
+                    justify-content: center;
+                }
+                .action > a.checkout_button {
+                    margin: 12px 10px 20px;
+                }
+                .action > p {
+                    width: 100%;
+                }
+            </style>
+            <div class="action flex">
+                {if isset($payment_method) && $order->total_price > 0}
+                    {* Форма оплаты, генерируется модулем оплаты *}
+                    {checkout_form order_id=$order->id module=$payment_method->module}
+                {/if}
+                <form method="get">
+                    <input type="submit" name="new_order" value="Оформить заново" class='checkout_button'>
+                </form>
+            </div>
+        {else}
+            <div class="page-pg">
+                <div class="attention" style="display:table;clear:both;width:300px;text-align:center;padding:15px 15px 8px 15px;margin: 20px auto 20px auto;">
+                    <p>В заказе есть отсутствующий товар. Оплата невозможна</p>
+                </div>
+            </div>
         {/if}
     {/if}
 

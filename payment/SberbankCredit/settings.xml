@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<name>
+		Сбербанк кредит
+	</name>
+
+	<settings>
+		<variable>login</variable>
+		<name>Логин</name>
+	</settings>
+
+	<settings>
+		<variable>pass</variable>
+		<name>Пароль</name>
+	</settings>
+
+	<settings>
+		<variable>key_sber</variable>
+		<name>Сикретный ключ</name>
+	</settings>
+
+	<settings>
+		<variable>installments</variable>
+		<name>Параметры интернет кредитования</name>
+		<options>
+			<name>Кредит</name>
+			<value>CREDIT</value>
+		</options>
+		<options>
+			<name>Рассрочка</name>
+			<value>INSTALLMENT</value>
+		</options>
+	</settings>
+
+	<settings>
+		<variable>test_server</variable>
+		<name>Тестовый</name>
+		<options>
+			<name>Нет</name>
+			<value>0</value>
+		</options>
+		<options>
+			<name>Да</name>
+			<value>1</value>
+		</options>
+	</settings>
+
+	<settings>
+		<variable>test_dummy</variable>
+		<name>Тестовая заглушка</name>
+		<options>
+			<name>Нет</name>
+			<value>0</value>
+		</options>
+		<options>
+			<name>Да</name>
+			<value>1</value>
+		</options>
+	</settings>
+
+</module>

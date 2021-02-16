@@ -1,7 +1,4 @@
-Сайт лежит на пашкином хосте
-http://mmark.beget.tech/fivecms
-
-http://xn--80anekfhdba3b2k.com/fivecms
+https://xn--80anekfhdba3b2k.com/fivecms
 
 http://zolotomania.loc/fivecms/
 логин: admin

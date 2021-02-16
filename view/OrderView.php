@@ -22,9 +22,102 @@ class OrderView extends View
             return $this->after_payment();
         } elseif ($this->request->get('bad_payment') && $this->request->get('orderId')) {
             return $this->bad_payment();
+        } elseif ($this->request->get('new_order')) {
+            return $this->new_order();
         } else {
             return $this->fetch_order();
         }
+    }
+
+    /**
+     * Помещает все товары текущего заказа в корзину
+     * Удаляет текущий заказ
+     */
+    private function new_order()
+    {
+        if ($url = $this->request->get('url', 'string'))
+            $order = $this->orders->get_order((string)$url);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return;
+
+        if (!$order) return;
+
+        $purchases = $this->orders->get_purchases(['order_id' => $order->id]);
+
+        foreach ($purchases as $purchase) {
+            if ($variant_id = $this->variants->get_variant_id_by_external_id($purchase->variant_external_id)) {
+                $this->cart->add_item($variant_id);
+            }
+        }
+
+        $this->orders->update_order($order->id, ['status' => 3]);
+
+        // Перенаправляем на корзина
+        header('Location: ' . $this->config->root_url . '/cart');
+        die();
+    }
+
+    /**
+     * Получает данные заказа
+     * @param $purchases array
+     * @return array
+     */
+    private function get_data_purchases($purchases)
+    {
+        $product_external_ids = [];
+        $variant_external_id = [];
+        $missing_items = [];
+
+        foreach ($purchases as $purchase) {
+            $product_external_ids[] = $purchase->product_external_id;
+            $variant_external_id[] = $purchase->variant_external_id;
+            $missing_items[$purchase->variant_external_id] = $purchase->variant_external_id;
+        }
+
+        $products_temp = $this->products->get_products(['external_id' => $product_external_ids, 'limit' => count($product_external_ids)]);
+        $products = [];
+        foreach ($products_temp as $p) {
+            $products[$p->external_id] = $p;
+        }
+
+        $images = $this->products->get_images(['product_external_id' => $product_external_ids]);
+        foreach ($images as $image) {
+            $products[$image->product_external_id]->images[] = $image;
+        }
+
+        $variants = [];
+        foreach ($this->variants->get_variants(['external_id' => $variant_external_id]) as $v) {
+            $variants[$v->external_id] = $v;
+            unset($missing_items[$v->external_id]);
+        }
+
+        $this->design->assign('missing_items', $missing_items);
+
+        foreach ($variants as $variant) {
+            $products[$variant->external_id]->variants[] = $variant;
+        }
+
+        $product = null;
+        foreach ($products as &$product) {
+            if (isset($product->variants[0]))
+                $product->variant = $product->variants[0];
+            if (isset($product->images[0]))
+                $product->image = $product->images[0];
+            $product->features = $this->features->get_product_options(['product_id' => $product->id]);
+        }
+
+        foreach ($purchases as &$purchase) {
+            if (!empty($products[$purchase->product_external_id]))
+                $purchase->product = $products[$purchase->product_external_id];
+            if (!empty($variants[$purchase->variant_external_id])) {
+                $purchase->variant = $variants[$purchase->variant_external_id];
+                $purchase->features = $this->features->get_product_options(['product_id' => $product->id]);
+            }
+        }
+
+        return $purchases;
     }
 
     function fetch_order()
@@ -54,58 +147,11 @@ class OrderView extends View
             }
         }
 
-        $products_ids = [];
-        $variants_ids = [];
-
-        foreach ($purchases as $purchase) {
-            $products_ids[] = $purchase->product_id;
-            $variants_ids[] = $purchase->variant_id;
-        }
-        $products = [];
-        //foreach($this->products->get_products(array('id'=>$products_ids)) as $p)
-        $products_temp = $this->products->get_products([
-            'id' => $products_ids,
-            'limit' => count($products_ids)
-        ]);
-        foreach ($products_temp as $p) {
-            $products[$p->id] = $p;
-        }
-
-        $images = $this->products->get_images(['product_id' => $products_ids]);
-        foreach ($images as $image) {
-            $products[$image->product_id]->images[] = $image;
-        }
-
-        $variants = [];
-        foreach ($this->variants->get_variants(['id' => $variants_ids]) as $v) {
-            $variants[$v->id] = $v;
-        }
-
-        foreach ($variants as $variant) {
-            $products[$variant->product_id]->variants[] = $variant;
-        }
-
-        $product = null;
-        foreach ($products as &$product) {
-            if (isset($product->variants[0]))
-                $product->variant = $product->variants[0];
-            if (isset($product->images[0]))
-                $product->image = $product->images[0];
-            $product->features = $this->features->get_product_options(['product_id' => $product->id]);
-        }
-
+        $purchases = $this->get_data_purchases($purchases);
         $total_weight = 0;
         $total_volume = 0;
         $subtotal = 0;
-        foreach ($purchases as &$purchase) {
-            if (!empty($products[$purchase->product_id]))
-                $purchase->product = $products[$purchase->product_id];
-            if (!empty($variants[$purchase->variant_id])) {
-                $purchase->variant = $variants[$purchase->variant_id];
-
-                $purchase->features = $this->features->get_product_options(['product_id' => $product->id]);
-
-            }
+        foreach ($purchases as $purchase) {
             $total_weight += $purchase->amount * $this->features->get_product_option_weight($purchase->product_id);
             $total_volume += $purchase->amount * $this->features->get_product_option_volume($purchase->product_id);
             $subtotal += $purchase->price * $purchase->amount;
@@ -158,54 +204,7 @@ class OrderView extends View
         $purchases = $this->orders->get_purchases(['order_id' => intval($order->id)]);
         if (!$purchases) return false;
 
-        $products_ids = [];
-        $variants_ids = [];
-
-        foreach ($purchases as $purchase) {
-            $products_ids[] = $purchase->product_id;
-            $variants_ids[] = $purchase->variant_id;
-        }
-        $products = [];
-
-        $products_temp = $this->products->get_products([
-            'id' => $products_ids,
-            'limit' => count($products_ids)
-        ]);
-        foreach ($products_temp as $p) {
-            $products[$p->id] = $p;
-        }
-
-        $images = $this->products->get_images(['product_id' => $products_ids]);
-        foreach ($images as $image) {
-            $products[$image->product_id]->images[] = $image;
-        }
-
-        $variants = [];
-        foreach ($this->variants->get_variants(['id' => $variants_ids]) as $v) {
-            $variants[$v->id] = $v;
-        }
-
-        foreach ($variants as $variant) {
-            $products[$variant->product_id]->variants[] = $variant;
-        }
-
-        $product = null;
-        foreach ($products as &$product) {
-            if (isset($product->variants[0]))
-                $product->variant = $product->variants[0];
-            if (isset($product->images[0]))
-                $product->image = $product->images[0];
-            $product->features = $this->features->get_product_options(['product_id' => $product->id]);
-        }
-
-        foreach ($purchases as &$purchase) {
-            if (!empty($products[$purchase->product_id]))
-                $purchase->product = $products[$purchase->product_id];
-            if (!empty($variants[$purchase->variant_id])) {
-                $purchase->variant = $variants[$purchase->variant_id];
-                $purchase->features = $this->features->get_product_options(['product_id' => $product->id]);
-            }
-        }
+        $purchases = $this->get_data_purchases($purchases);
 
         $this->design->assign('order', $order);
         $this->design->assign('purchases', $purchases);

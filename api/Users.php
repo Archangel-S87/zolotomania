@@ -25,9 +25,14 @@ class Users extends Fivecms
             $group_id_filter = $this->db->placehold('AND u.group_id in(?@)', (array)$filter['group_id']);
 
         if (isset($filter['keyword']) AND !empty($filter['keyword'])) {
-            $keywords = explode(' ', $filter['keyword']);
-            foreach ($keywords as $keyword) {
-                $keyword_filter .= $this->db->placehold('AND (u.name LIKE "%' . $this->db->escape(trim($keyword)) . '%" OR u.email LIKE "%' . $this->db->escape(trim($keyword)) . '%")');
+            $keywords = $filter['keyword'];
+            if (!preg_match('/^\+7[\d]{3,15}$/i', $keywords)) {
+                $keywords = explode(' ', $filter['keyword']);
+                foreach ($keywords as $keyword) {
+                    $keyword_filter .= $this->db->placehold('AND (u.name LIKE "%' . $this->db->escape(trim($keyword)) . '%" OR u.email LIKE "%' . $this->db->escape(trim($keyword)) . '%")');
+                }
+            } else {
+                $keyword_filter = $this->db->placehold('AND (u.phone LIKE "' . $this->db->escape(trim($keywords)) . '%")');
             }
         }
 
@@ -101,7 +106,7 @@ class Users extends Fivecms
             $where = $this->db->placehold(' WHERE u.id=? ', intval($id));
 
         // Выбираем пользователя
-        $query = $this->db->placehold("SELECT u.id, u.email, u.password, u.name, u.address, u.balance, u.group_id, u.enabled, u.last_ip, u.created, u.order_payd, u.phone, u.partner_id, u.comment, u.withdrawal, u.ref_views, g.discount, g.name as group_name FROM __users u LEFT JOIN __groups g ON u.group_id=g.id $where LIMIT 1", $id);
+        $query = $this->db->placehold("SELECT u.id, u.external_id, u.email, u.password, u.name, u.address, u.balance, u.group_id, u.enabled, u.last_ip, u.created, u.order_payd, u.phone, u.partner_id, u.comment, u.withdrawal, u.ref_views, g.discount, g.name as group_name FROM __users u LEFT JOIN __groups g ON u.group_id=g.id $where LIMIT 1", $id);
         $this->db->query($query);
         $user = $this->db->result();
 

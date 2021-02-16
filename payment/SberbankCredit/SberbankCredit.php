@@ -1,12 +1,12 @@
 <?php
 
 /*
+ * Документация https://pokupay.ru/documents
+ *
  * Кабинет тестовый https://3dsec.sberbank.ru/mportal3
- * Вход T4632247232-operator/T4632247232
- * токен 55psnbbg3thon7g2jgd433vok4
+ * Вход T4632247232-credit-operator/T4632247232-credit
+ * API T4632247232-credit-api/T4632247232-credit
  * ключ atmiumq7192mp5bob3p8u0189o
- * API T4632247232-api/T4632247232
- * Тестовые карты https://securepayments.sberbank.ru/wiki/doku.php/test_cards
  *
  * Кабинет боевой https://securepayments.sberbank.ru/mportal3
  * Вход P4632247232-operator/*
@@ -15,15 +15,17 @@
 
 require_once('api/Fivecms.php');
 
-class Sberbank extends Fivecms
+class SberbankCredit extends Fivecms
 {
-    const TEST_SERVER = 'https://3dsec.sberbank.ru/payment/rest/';
-    const TEST_FORM = 'https://3dsec.sberbank.ru/payment/merchants/sbersafe_id/payment_ru.html';
-    const PROD_SERVER = 'https://securepayments.sberbank.ru/payment/rest/';
-    const PROD_FORM = 'https://securepayments.sberbank.ru/payment/merchants/sbersafe_sberid/payment_ru.html';
+    const TEST_SERVER = 'https://3dsec.sberbank.ru/';
+    const PROD_SERVER = 'https://securepayments.sberbank.ru/';
+
+    const REGISTER = 'sbercredit/register.do';
+    const STATUS = 'payment/rest/getOrderStatusExtended.do';
+    const FORM = 'sbercredit/rbs-common.html';
 
     // Суффикс для подстановки в системе банка ордера
-    const SUFFIX_ORDER = '_ref_';
+    const SUFFIX_ORDER = '_ref_credit_';
 
     private $order;
     private $payment_method;
@@ -49,14 +51,20 @@ class Sberbank extends Fivecms
 
         if ($last_order) {
             // получаю статус в сбере
-            $status = $this->get_order_status_extended($last_order->order_sber);
+            $status = $this->get_order_status_extended($last_order->order_id . self::SUFFIX_ORDER . $last_order->trial);
 
             if (!$status) {
                 $form_url = $this->register_order();
             } elseif (isset($status->orderStatus) && $status->orderStatus == 0) {
                 // Ордер ожидает оплаты
-                $url = $this->payment_settings['test_server'] ? self::TEST_FORM : self::PROD_FORM;
-                $url .= '?mdOrder=' . htmlentities($last_order->order_sber);
+
+                $url = ($this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER) . self::FORM . '?mdOrder=' . htmlentities($last_order->order_sber);
+
+                // Включение заглушки
+                if ($this->payment_settings['test_server'] && $this->payment_settings['test_dummy']) {
+                    $url .= '&dummy=true';
+                }
+
                 $form_url['url'] = $url;
             } elseif (isset($status->orderStatus) && $status->orderStatus == 6) {
                 // Если просрочен регистрирую новый ордер
@@ -88,18 +96,18 @@ class Sberbank extends Fivecms
 
     /**
      * Получает расширеный статус ордера в сбере
-     * @param $order_sber
+     * @param $order_sber string
      * @return false|stdClass
      */
     public function get_order_status_extended($order_sber)
     {
         $data = [
-            'token' => $this->payment_settings['token_sber'],
-            'orderId' => $order_sber,
+            'userName' => $this->payment_settings['login'],
+            'password' => $this->payment_settings['pass'],
+            'orderNumber' => $order_sber,
         ];
 
-        $url = $this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER;
-        $url .= 'getOrderStatusExtended.do';
+        $url = ($this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER) . self::STATUS;
 
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded'
@@ -124,19 +132,36 @@ class Sberbank extends Fivecms
             'Доставка' => $delivery->name,
         ];
 
+        $orderBundle = [
+            'cartItems' => [
+                'items' => $this->get_cart_items($this->order->id)
+            ],
+            'installments' => [
+                'productID' => 10,
+                'productType' => $this->payment_settings['installments']
+            ]
+        ];
+
         $data = [
-            'token' => $this->payment_settings['token_sber'],
+            'userName' => $this->payment_settings['login'],
+            'password' => $this->payment_settings['pass'],
             'orderNumber' => $this->order->id . self::SUFFIX_ORDER . $index,
             'amount' => (int)($price * 100),
+            'currency' => 643,
             'returnUrl' => "{$this->config->root_url}/order?orderId={$this->order->id}&after_payment=1",
             'failUrl' => "{$this->config->root_url}/order?orderId={$this->order->id}&bad_payment=1",
             'description' => "Оплата заказа №{$this->order->id}",
+            'sessionTimeoutSecs' => 1,
             'jsonParams' => json_encode($user_data),
-            'phone' => $this->order->phone
+            'orderBundle' => json_encode($orderBundle)
         ];
 
-        $url = $this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER;
-        $url .= $this->payment_settings['payment_method'] . '.do';
+        // Включение заглушки
+        if ($this->payment_settings['test_server'] && $this->payment_settings['test_dummy']) {
+            $data['dummy'] = true;
+        }
+
+        $url = ($this->payment_settings['test_server'] ? self::TEST_SERVER : self::PROD_SERVER) . self::REGISTER;
 
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded'
@@ -167,6 +192,39 @@ class Sberbank extends Fivecms
         ]);
 
         return ['url' => $j_body->formUrl];
+    }
+
+    /**
+     * Формирование заказаных позиций
+     * @param $order_id string
+     * @return array
+     */
+    public function get_cart_items($order_id)
+    {
+        $exclude_name = ['\'', '&', '-', '#', '%', '|', ';', '='];
+        $items = [];
+
+        $purchases = $this->orders->get_purchases(['order_id' => (int)$order_id]);
+        foreach ($purchases as $index => $purchase) {
+
+            $price = (int)($purchase->price * 100);
+
+            $item = [
+                'positionId' => $index + 1,
+                'name' => str_replace($exclude_name, '', $purchase->product_name),
+                'quantity' => [
+                    'value' => $purchase->amount,
+                    'measure' => $purchase->unit
+                ],
+                'itemAmount' => $price,
+                'itemPrice' => $price,
+                'itemCode' => $purchase->product_external_id
+            ];
+
+            $items[] = $item;
+        }
+
+        return $items;
     }
 
     /**

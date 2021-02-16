@@ -474,17 +474,20 @@
                             <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
                                    type="submit" name="check_buy" class="button hideablebutton checkout"
                                    value="Оплатить"/>
+                            <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
+                                   type="submit" name="check_buy_credit" class="button hideablebutton checkout"
+                                   value="В рассрочку"/>
                         </div>
-
                         <div class="tab-data shop-data{if $purchase_method =='i_pickup'} active{/if}">
-                            <div class="row" style="justify-content: space-around;">
-                                <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
-                                       type="submit" name="check_buy" class="button hideablebutton checkout"
-                                       value="Оплатить"/>
-                                <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
-                                       type="submit" name="check_order" class="button hideablebutton checkout"
-                                       value="Заказать"/>
-                            </div>
+                            <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
+                                   type="submit" name="check_buy" class="button hideablebutton checkout"
+                                   value="Оплатить"/>
+                            <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
+                                   type="submit" name="check_buy_credit" class="button hideablebutton checkout"
+                                   value="В рассрочку"/>
+                            <input {if $settings->counters || $settings->analytics}onclick="{if $settings->counters}ym({$settings->counters},'reachGoal','cart'); {/if}{if $settings->analytics}ga ('send', 'event', 'cart', 'order_button');{/if} return true;"{/if}
+                                   type="submit" name="check_order" class="button hideablebutton checkout"
+                                   value="Заказать"/>
                         </div>
 
                     {/if}

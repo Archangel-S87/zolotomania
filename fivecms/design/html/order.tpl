@@ -459,13 +459,13 @@
 							{$purchase->amount} {if !empty($purchase->variant->unit)}{$purchase->variant->unit}{else}{$settings->units}{/if}
 						</span>
 						<span class="edit_purchase" style='display:none;'>
-							{if $purchase->variant}
+							{if !empty($purchase->variant)}
 								{math equation="max(x,y)" x=$purchase->variant->stock+$purchase->amount*($order->closed) y=$purchase->amount assign="loop"}
 							{else}
 								{math equation="x" x=$purchase->amount assign="loop"}
 							{/if}
 							<input class="edit_amount" type="number" max="{$loop}" name="purchases[amount][{$purchase->id}]" value="{$purchase->amount}" />
-							<span class="unit">{if $purchase->variant->unit}{$purchase->variant->unit}{else}{$settings->units}{/if}</span>	
+							<span class="unit">{if !empty($purchase->variant->unit)}{$purchase->variant->unit}{else}{$settings->units}{/if}</span>
 						</span>			
 					</div>
 					<div class="icons cell instock" title="{$tr->stock_available|escape}">		

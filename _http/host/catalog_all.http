@@ -51,7 +51,7 @@ Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;
 
 
 ### Экспорт ордеров
-POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2020-11-01 00:00:00&date_end=2020-12-08 11:00:00
+POST https://xn----8sbtgmhidba7b6k.xn--p1ai/fivecms/json/1c_exchange.php?type=sales&mode=export&date_begin=2021-01-01 00:00:00&date_end=2021-01-12 11:00:00&status=1
 Cache-Control: no-cache
 Authorization: Basic YWRtaW46djRpNmsxaWc5
 Cookie: PHPSESSID=a995dd276d12a528733977e5fc9603c2;

@@ -34,6 +34,7 @@ class CartView extends View
 
         // Удаление товара из корзины
         if ($delete_variant_id = intval($this->request->get('delete_variant'))) {
+            unset($_SESSION['cart']['error_stock']);
             $this->cart->delete_item($delete_variant_id);
             if (!isset($_POST['submit_order']) || $_POST['submit_order'] != 1)
                 header('location: ' . $this->config->root_url . '/cart/');
@@ -74,6 +75,12 @@ class CartView extends View
             // Если нажали на кнопку оплатить
             $this->receipt_order();
             $this->check_buy();
+        }
+
+        if ($this->request->post('check_buy_credit')) {
+            // Если нажали на кнопку оформить кредит
+            $this->receipt_order();
+            $this->check_buy_credit();
         }
 
         if ($this->request->post('check_order')) {
@@ -466,18 +473,14 @@ class CartView extends View
             }
 
             // Проверка адреса
-            $error_address = false;
             $data_address = $this->request->post('user_data');
+            $error_address = false;
             foreach ($data_address as $input => $value) {
-                if (!$value) {
-                    $error_address = true;
-                }
+                $value = trim($value);
+                if ($value == '' && $input != 'apartment') $error_address = true;
                 $_SESSION['cart']['users_address_list'][$input] = $value;
             }
-            if (!$error_address) {
-                $order->address = implode(', ', $data_address);
-            }
-
+            $order->address = !$error_address ? implode(', ', $data_address) : '';
 
         } else {
             // Приветси в магазин
@@ -559,7 +562,7 @@ class CartView extends View
 
         unset($_POST['bonus']);
 
-        $this->save_order();
+        $this->save_order(true);
 
         unset($_SESSION['cart']);
 
@@ -605,10 +608,49 @@ class CartView extends View
         }
     }
 
+    /*
+     * Кнопка взять кредит
+     */
+    private function check_buy_credit()
+    {
+        if (isset($_SESSION['cart']['error']) || isset($_SESSION['cart']['error_stock'])) return;
+
+        $payment_methods = $this->payment->get_payment_methods(['enabled' => 1]);
+        foreach ($payment_methods as $payment_method) {
+            if ($payment_method->module == 'SberbankCredit') {
+                $this->order->payment_method_id = $payment_method->id;
+                break;
+            }
+        }
+        $this->save_order();
+
+        // формирование ссылки для оплаты
+        $payment = $this->payment->get_payment_module('SberbankCredit');
+        if (!($payment instanceof SberbankCredit)) return;
+        $form_url = $payment->checkout_form($this->order->id, null, false);
+
+        unset($_SESSION['cart']['error_sber']);
+
+        if (!is_array($form_url)) {
+            $_SESSION['cart']['error_sber'] = $form_url;
+        } elseif (isset($form_url['url'])) {
+            unset($_SESSION['cart']);
+            header('Location: ' . $form_url['url']);
+        } else {
+            $html = '';
+            if (isset($form_url['error'])) {
+                $html .= "<p>{$form_url['error']}</p>";
+            }
+            $html .= '<p>При оплате возникла ошибка</p>';
+            $_SESSION['cart']['error_sber'] = $html;
+        }
+    }
+
     /**
      * Сохранение заказа
+     * @param bool $reservation_variants
      */
-    private function save_order()
+    private function save_order($reservation_variants = false)
     {
         $bonus = $_SESSION['cart']['bonus'];
 
@@ -644,7 +686,9 @@ class CartView extends View
             if (!$variant || $variant->reservation) continue;
 
             // Помечаю вариант как в резерве
-            $this->variants->update_variant($variant_id, ['reservation' => 1]);
+            if ($reservation_variants) {
+                $this->variants->update_variant($variant_id, ['reservation' => 1]);
+            }
 
             $purchase = [
                 'order_id' => $order_id,

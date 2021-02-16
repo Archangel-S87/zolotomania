@@ -189,7 +189,7 @@
 	{/if}
 
 	<div class="separator">
-		<a href="user/logout" class="button buttonblue">Разлогиниться</a>
+		<a href="user/logout" class="button buttonblue">Выйти</a>
 	</div>
 
 </div>

@@ -91,7 +91,7 @@ class UserAdmin extends Fivecms
 		{
 			$this->design->assign('user', $user);
 			
-			$orders = $this->orders->get_orders(array('user_id'=>$user->id));
+			$orders = $this->orders->get_orders(['user_external_id' => $user->external_id]);
 			$this->design->assign('orders', $orders);
 
 			$filter = array();

@@ -188,7 +188,8 @@ class ExchangeUsers extends Exchange
         }
 
         // Присвоение юзеру external_id не равный номеру телефона
-        if (isset($json_user['status']) && $json_user['status'] == 'UPDATE') {
+        $new_external_id = isset($json_user['status']) && $json_user['status'] == 'UPDATE';
+        if ($new_external_id) {
             $this->db->query('SELECT id FROM __users WHERE phone=? AND external_id=phone LIMIT 1', $json_user['phone']);
         } else {
             $this->db->query('SELECT id FROM __users WHERE external_id=? LIMIT 1', $json_user['id']);
@@ -206,20 +207,25 @@ class ExchangeUsers extends Exchange
                 continue;
             }
 
+            $json_val = '';
+            if (is_string($json_user[$key])) {
+                $json_val = trim($json_user[$key]);
+            }
+
             switch ($key) {
                 case 'id':
-                    $user->external_id = (string)trim($json_user[$key]);
+                    $user->external_id = $json_val;
                     break;
                 case 'balance':
                 case 'order_payd':
-                    $user->$key = (float)$json_user[$key];
+                    $user->$key = (float)$json_val;
                     break;
                 case 'group_id':
-                    $user->$key = $this->get_group_id(trim($json_user[$key]));
+                    $user->$key = $this->get_group_id($json_val);
                     break;
                 case 'address':
                     foreach ($default_user[$key] as $field => $val) {
-                        $user_data->$field = $json_user[$key][$field] ?? null;
+                        $user_data->$field = trim($json_user[$key][$field] ?? null);
                     }
                     break;
                 case 'address_full':
@@ -229,30 +235,39 @@ class ExchangeUsers extends Exchange
                     $user_data->birthday = $json_user['birthday'] ?? null;
                     break;
                 case 'partner_id':
-                    $user->$key = $this->get_partner_id(trim($json_user[$key]));
+                    $user->$key = $this->get_partner_id($json_val);
                     break;
                 case 'enabled':
                 case 'ref_views':
-                    $user->$key = (int)$json_user[$key];
+                    $user->$key = (int)$json_val;
                     break;
                 default:
-                    $user->$key = (string)trim($json_user[$key]);
+                    $user->$key = $json_val;
             }
         }
 
         $user = (array)$user;
 
+        // Добавление юзера
         if (!$user_id) {
-            // Добавление юзера
             $this->db->query("INSERT INTO __users SET ?%", $user);
             if (!$user_id = $this->db->insert_id()) {
                 Exchange::add_warning("Пользователь с id {$json_user['id']} и номером телефона {$json_user['phone']} не добавлен");
             } else {
                 $this->users->update_user_data($user_id, $user_data);
             }
-        } else {
-            $this->db->query("UPDATE __users SET ?% WHERE id=?", $user, $user_id);
-            $this->users->update_user_data($user_id, $user_data);
+            return;
+        }
+
+        // Обновление юзера
+        $this->db->query("UPDATE __users SET ?% WHERE id=?", $user, $user_id);
+        $this->users->update_user_data($user_id, $user_data);
+
+        // Обновление заказов юзера
+        if ($new_external_id) {
+            foreach ($this->orders->get_orders(['user_id' => $user_id]) ?: [] as $order) {
+                $this->orders->update_order($order->id, ['user_external_id' => $user->external_id]);
+            }
         }
     }
 

@@ -36,6 +36,9 @@ class UpdateDB extends Fivecms
         // Создание таблицы users_data
         $this->create_table_users_data();
 
+        // Модификацмя таблицы покупки
+        $this->update_table_purchases();
+
         // Обновление таблицы групп пользователей
         //$this->update_table_groups();
 
@@ -76,12 +79,35 @@ class UpdateDB extends Fivecms
             $this->db->query("ALTER TABLE __orders ADD shop_external_id VARCHAR(80) NULL DEFAULT NULL");
         }
 
+        if ($this->check_column('shop_external_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders CHANGE shop_external_id shop_external_id VARCHAR(80) NULL DEFAULT NULL AFTER external_id");
+        }
+
         if (!$this->check_column('external_id', 'orders')) {
             $this->db->query("ALTER TABLE __orders ADD external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER `shop_id`, ADD INDEX(`external_id`)");
         }
 
+        if ($this->check_column('external_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders CHANGE external_id external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER id");
+        }
+
+        if (!$this->check_column('user_external_id', 'orders')) {
+            $this->db->query("ALTER TABLE __orders ADD user_external_id VARCHAR(80) NOT NULL AFTER user_id, ADD INDEX (`user_external_id`)");
+        }
+
         // Возможен пустой email
         $this->db->query("ALTER TABLE __orders CHANGE email email VARCHAR(255) NULL");
+    }
+
+    private function update_table_purchases()
+    {
+        if (!$this->check_column('product_external_id', 'purchases')) {
+            $this->db->query("ALTER TABLE __purchases ADD product_external_id VARCHAR(100) NULL DEFAULT NULL AFTER product_id, ADD INDEX (`product_external_id`)");
+        }
+
+        if (!$this->check_column('variant_external_id', 'purchases')) {
+            $this->db->query("ALTER TABLE __purchases ADD variant_external_id VARCHAR(100) NULL DEFAULT NULL AFTER variant_id, ADD INDEX (`variant_external_id`)");
+        }
     }
 
     private function update_table_variants()

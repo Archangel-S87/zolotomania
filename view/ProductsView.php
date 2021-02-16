@@ -30,6 +30,13 @@ class ProductsView extends View
 		if($mode == 'popular')
 			$filter['in_stock'] = 1;
 
+		// Проверка на пользователя
+        $is_shop = $this->group && $this->group->name == 'Магазины';
+        if (!$is_shop) {
+            // Отображать товары у которых есть картинка
+            $filter['is_images'] = 1;
+        }
+
 		// Если задан бренд, выберем его из базы
 		if ($val = $this->request->get('b')) {
             $filter['brand_id'] = $val;
@@ -200,10 +207,8 @@ class ProductsView extends View
 			$filter['maxCurr'] = $this->money->noFormat($filter['maxCurr'],'deconvert');
 
 		// Постраничная навигация
-		
 		$items_per_page = $filter['on_page'];	
 		// Текущая страница в постраничном выводе
-		//$current_page = $this->request->get('page', 'int');	
 		$current_page = $this->request->get('page', 'integer');	
 		// Если не задана, то равна 1
 		$current_page = max(1, $current_page);
@@ -306,15 +311,13 @@ class ProductsView extends View
                 // Принудительно показываю все варианты товаров в фильтре
                 unset($filter['variants1']);
                 unset($filter['limit']);
-				foreach($this->products->get_products($filter) as $p)
-					$products_all[$p->id] = $p;
-				$products_all_ids = array_keys($products_all);
+				$products_all_ids = $this->products->get_all_products_ids_in_categories($filter);
 			}
-			
+
 			if($this->settings->b10manage==1){
 				$namevar='name';
 				$features_variants = array();
-				$temp_variants = $this->variants->get_value_variants(array('product_id'=>$products_all_ids, 'in_stock'=>true), $namevar);
+				$temp_variants = $this->variants->get_value_variants(array('product_id'=>$products_all_ids ?? '', 'in_stock'=>true), $namevar);
 				foreach($temp_variants as &$variant)
 					$features_variants[$variant->$namevar] = $variant->$namevar;  
 				asort($features_variants);

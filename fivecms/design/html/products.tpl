@@ -30,7 +30,7 @@
 			<h1>{if !empty($keyword)}{$tr->search_by|escape} "{$keyword}"{else}{$tr->no_products|escape}{/if}</h1>
 		{/if}
 	
-		<a class="add" href="{url module=ProductAdmin return=$smarty.server.REQUEST_URI}">{$tr->add_product|escape}</a>
+{*		<a class="add" href="{url module=ProductAdmin return=$smarty.server.REQUEST_URI}">{$tr->add_product|escape}</a>*}
 	
 	</div>	
 	

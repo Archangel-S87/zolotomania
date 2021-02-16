@@ -120,4 +120,4 @@ debug = true;
 is_localhost = true;
 
 ;Переключиться в мобильную версию
-is_mobile = false;
+;is_mobile = true;

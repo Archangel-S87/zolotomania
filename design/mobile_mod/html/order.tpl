@@ -13,8 +13,7 @@
             <div class="image">
                 {if !empty($purchase->product->images)}
                     {$image = $purchase->product->images|first}
-                    <a href="products/{$purchase->product->url}"><img src="{$image->filename|resize:100:100}"
-                                                                      alt="{$purchase->product->name|escape}"></a>
+                    <a href="products/{$purchase->product->url}"><img src="{$image->filename|resize:100:100}" alt="{$purchase->product->name|escape}"></a>
                 {else}
                     <a href="products/{$purchase->product->url}">
                         <svg class="nophoto">
@@ -137,9 +136,20 @@
 {if !$group || ($group && $group->name != 'Магазины')}
 
     {if (!$order->paid && $order->status != 3)}
-        {if isset($payment_method) && $order->total_price > 0}
-            {* Форма оплаты, генерируется модулем оплаты *}
-            {checkout_form order_id=$order->id module=$payment_method->module}
+        {if !$missing_items}
+            {if isset($payment_method) && $order->total_price > 0}
+                {* Форма оплаты, генерируется модулем оплаты *}
+                {checkout_form order_id=$order->id module=$payment_method->module}
+            {/if}
+            <form method="get">
+                <input type="submit" name="new_order" value="Новый заказ" class='checkout_button'>
+            </form>
+        {else}
+            <div class="page-pg">
+                <div class="attention" style="display:table;clear:both;width:300px;text-align:center;padding:15px 15px 8px 15px;margin: 20px auto 20px auto;">
+                    <p>В заказе есть отсутствующий товар. Оплата невозможна</p>
+                </div>
+            </div>
         {/if}
     {/if}
 

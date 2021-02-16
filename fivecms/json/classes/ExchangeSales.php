@@ -51,7 +51,7 @@ class ExchangeSales extends Exchange
 
         $order_id = $json_order['id'] ?? null;
 
-        $this->db->query("SELECT id FROM __users WHERE external_id=? LIMIT 1", $json_order['user_id']);
+        $this->db->query("SELECT id, external_id, name, phone, email  FROM __users WHERE external_id=? LIMIT 1", $json_order['user_id']);
         $user = $this->db->result();
 
         if (!$user) {
@@ -59,23 +59,38 @@ class ExchangeSales extends Exchange
             return;
         }
 
-        $order = new stdClass;
+        $order = null;
+        if ($order_id && is_numeric($order_id)) {
+            $order = $this->orders->get_order((int)$order_id);
+        } elseif ($order_id && !is_numeric($order_id)) {
+            $this->db->query("SELECT * FROM __orders WHERE external_id=? LIMIT 1", $order_id);
+            $order = $this->db->result();
+        }
+
+        $order = $order ?: new stdClass;
+
         $order->user_id = $user->id;
+
+        if (!$order && !is_numeric($order_id)) {
+            $order->external_id = $order_id;
+        }
 
         if (!empty($json_order['name'])) {
             $order->name = $json_order['name'];
-        } else {
+        } elseif (empty($order->name)) {
             $order->name = $user->name;
         }
 
         if (!empty($json_order['phone'])) {
             $order->phone = $json_order['phone'];
-        } else {
+        } elseif (empty($order->phone)) {
             $order->phone = $user->phone;
         }
 
         if (!empty($json_order['email'])) {
             $order->email = $json_order['email'];
+        } elseif (!isset($order->email)) {
+            $order->email = $user->email;
         }
 
         if (!empty($json_order['address'])) {
@@ -94,26 +109,14 @@ class ExchangeSales extends Exchange
             $order->total_price = (float)$json_order['total_price'];
         }
 
-        $order->closed = (int)($json_order['closed'] ?? 0);
-
-        $save_order = false;
-        if ($order_id && is_numeric($order_id)) {
-            $save_order = $this->orders->get_order((int)$order_id);
-        } elseif ($order_id && !is_numeric($order_id)) {
-            $this->db->query("SELECT * FROM __orders WHERE external_id=? LIMIT 1", $order_id);
-            $save_order = $this->db->result();
+        if (isset($json_order['closed'])) {
+            $order->closed = (int)$json_order['closed'];
         }
 
-        if (!$save_order && !is_numeric($order_id)) {
-            $order->external_id = $order_id;
-        } elseif ($save_order) {
-            $order_id = $save_order->id;
-        }
-
-        if ($order_id && $save_order) {
-            $this->orders->update_order($order_id, $order);
-        } else {
+        if (empty($order->id)) {
             $order_id = $this->orders->add_order($order);
+        } else {
+            $order_id = $this->orders->update_order((int)$order->id, $order);
         }
 
         if (empty($json_order['products'])) return;
@@ -153,7 +156,9 @@ class ExchangeSales extends Exchange
             $purchase = [
                 'order_id' => $order_id,
                 'product_id' => $product ? $product->id : 0,
+                'product_external_id' => $product ? $product->external_id : '',
                 'variant_id' => $variant ? $variant->id : 0,
+                'variant_external_id' => $variant ? $variant->external_id : '',
                 'sku' => $json_product['vendor_code'] ?? ($variant->sku ?? ''),
                 'product_name' => $json_product['product_name'] ?? $product->name,
                 'unit' => $json_product['unit'] ?? $this->settings->units
@@ -184,7 +189,9 @@ class ExchangeSales extends Exchange
         }
 
         // Удалим товары, которых нет в файле
-        $this->db->query("DELETE FROM __purchases WHERE order_id=? AND id NOT IN (?@)", $order_id, $purchases_ids);
+        if ($purchases_ids) {
+            $this->db->query("DELETE FROM __purchases WHERE order_id=? AND id NOT IN (?@)", $order_id, $purchases_ids);
+        }
     }
 
     protected function export()
@@ -243,19 +250,9 @@ class ExchangeSales extends Exchange
 
             $products = [];
             foreach ($purchases as $purchase) {
-                if ($purchase->product_id) {
-                    $this->db->query("SELECT external_id FROM __products WHERE id=? LIMIT 1", $purchase->product_id);
-                    $product_id = $this->db->result('external_id') ?: '';
-                }
-
-                if ($purchase->variant_id) {
-                    $this->db->query("SELECT external_id FROM __variants WHERE id=? LIMIT 1", $purchase->variant_id);
-                    $variant_id = $this->db->result('external_id') ?: '';
-                }
-
                 $products[] = [
-                    'product_id' => $product_id ?? '',
-                    'variant_id' => $variant_id ?? '',
+                    'product_id' => $purchase->product_external_id,
+                    'variant_id' => $purchase->variant_external_id,
                     'vendor_code' => $purchase->sku,
                     'product_name' => htmlspecialchars(trim($purchase->product_name)),
                     'amount' => $purchase->amount,

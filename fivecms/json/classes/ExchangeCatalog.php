@@ -158,6 +158,7 @@ class ExchangeCatalog extends Exchange
                 $depth = $reader->depth();
                 $reader->read();
                 do {
+                    if (!$reader->value()) continue;
                     $this->import_product($reader->value(), $is_update);
                 } while ($reader->next() && $reader->depth() > $depth);
             } else {
@@ -189,9 +190,17 @@ class ExchangeCatalog extends Exchange
         }
 
         // Ид категории
-        $category_id = $this->find_category_id($json_product['category_id']);
+        if (empty($json_product['category_id'])) {
+            Exchange::add_warning("Товар с id {$json_product['id']}, Категория не определена");
+        }
+        $category_id = $this->find_category_id($json_product['category_id'] ?? '');
 
         $description = $json_product['description'] ?? '';
+
+        if (empty($json_product['name'])) {
+            Exchange::add_warning("Товар с id {$json_product['id']}, Название товара не определена");
+            return;
+        }
 
         $new_product = [
             'name' => $json_product['name'],
@@ -258,7 +267,7 @@ class ExchangeCatalog extends Exchange
         }
 
         // Свойства товара
-        foreach ($json_product['properties'] as $property) {
+        foreach ($json_product['properties'] ?? [] as $property) {
 
             if (!$property['Раздел'] ?? null) {
                 Exchange::add_warning("Товар с id {$json_product['id']}, Раздел свойства не опредён");
