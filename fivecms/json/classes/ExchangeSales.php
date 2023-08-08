@@ -266,7 +266,6 @@ class ExchangeSales extends Exchange
             // Способ оплаты
             $payment_method = $this->payment->get_payment_method($order->payment_method_id);
 
-
             $item = [
                 'id' => $order->id,
                 'external_id' => $order->external_id,
