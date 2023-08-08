@@ -41,27 +41,25 @@ class Exchange extends Fivecms
      * Режим отладки
      * @var array|bool
      */
-    private static $debug = true;
+    protected static $debug = true;
 
     /**
      * Базовые методы
      * @var array
      */
-    protected static $base_mods = [
-        'check_auth',
-        'init',
-        'file'
-    ];
+    protected static $base_mods = ['check_auth', 'init', 'file'];
+
+    /**
+     * Текущий запрос
+     * @var Exchange
+     */
+    protected static $request_exchange;
 
     /**
      * Что синхранизируем
      * @var array
      */
-    private $types = [
-        'sales',
-        'catalog',
-        'users'
-    ];
+    private $types = ['sales', 'catalog', 'users', 'report'];
 
     /**
      * Что делаем
@@ -70,10 +68,22 @@ class Exchange extends Fivecms
     protected $mods = [];
 
     /**
-     * Вызваный метод синхронизации
+     * Вызваный мод синхронизации
+     * @var string
+     */
+    private $mode_name;
+
+    /**
+     * Вызваный класс синхронизации
      * @var self
      */
     private $type;
+
+    /**
+     * Название вызванного класса
+     * @var string
+     */
+    private $type_name;
 
     /**
      * Каталог для хранения временных файлов
@@ -123,26 +133,64 @@ class Exchange extends Fivecms
         if (self::$warning) $request['warning'] = self::$warning;
 
         if (self::$debug) {
-            $memory = memory_get_usage(true) - self::$debug['start_memory'];
-            $time = microtime(true) - self::$debug['start_time'];
-
-            if ($time < 10) {
-                $time = @round($time, 4) . ' s';
-            } else {
-                $time = sprintf('%02d:%02d:%02d', $time / 3600, ($time % 3600) / 60, ($time % 3600) % 60);
-            }
-
-            $request['debug'] = [
-                'memory' => self::return_size($memory),
-                'time' => $time
-            ];
+            $request['debug'] = self::print_debug();
+            self::print_log($request);
         }
 
-        print json_encode($request, JSON_PRETTY_PRINT);
+        print json_encode($request, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
     /**
-     * Отправляет клиенту ошибку в формате json. Останаливает выполнение скрипта
+     * Формирует информацию для отладки
+     * @return array
+     */
+    protected static function print_debug() {
+        $memory = memory_get_usage(true) - self::$debug['start_memory'];
+        $time = microtime(true) - self::$debug['start_time'];
+
+        if ($time < 10) {
+            $time = @round($time, 4) . ' s';
+        } else {
+            $time = sprintf('%02d:%02d:%02d', $time / 3600, ($time % 3600) / 60, ($time % 3600) % 60);
+        }
+
+        return [
+            'memory' => self::return_size($memory),
+            'time' => $time
+        ];
+    }
+
+    /**
+     * Пишет ответ сервера в файл лога
+     * @param $response mixed
+     */
+    private static function print_log($response)
+    {
+        // Не пишем базовые моды в лог
+        if (in_array(self::$request_exchange->mode_name, ['check_auth', 'init'])) return;
+
+        $filename = self::$request_exchange->temp_dir . 'log.txt';
+
+        $data = [];
+        if (file_exists($filename)) {
+            $data = json_decode(file_get_contents($filename), true) ?: [];
+        }
+
+        while (count($data) > 50) {
+            array_shift($data);
+        }
+
+        parse_str($_SERVER['QUERY_STRING'], $request);
+        $response = array_merge($request, $response);
+
+        $data[date('Y-m-d H:i:s')] = $response;
+        $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        file_put_contents($filename, $data);
+    }
+
+    /**
+     * Отправляет клиенту ошибку в формате json. Останавливает выполнение скрипта
      * @param $message
      * @param int $code
      */
@@ -153,7 +201,8 @@ class Exchange extends Fivecms
         exit;
     }
 
-    public static function error_read_file($file, Exception $exception) {
+    public static function error_read_file($file, Exception $exception)
+    {
         $file = basename($file);
         self::error("При чтении файла $file произошла ошибка " . $exception->getMessage());
     }
@@ -222,7 +271,7 @@ class Exchange extends Fivecms
      */
     public function start_type()
     {
-        $type = $this->request->get('type');
+        $this->type_name = $type = $this->request->get('type');
         if ($type && in_array($type, $this->types)) {
             $class_name = 'Exchange' . ucfirst($type);
             $path = JSON_DIR . 'classes/' . $class_name . '.php';
@@ -245,8 +294,9 @@ class Exchange extends Fivecms
      */
     public function start_mode()
     {
-        $mode = $this->request->get('mode');
+        $mode = $this->mode_name = $this->request->get('mode');
         $type = $this->type;
+        self::$request_exchange = $this;
         if ($mode && in_array($mode, $type->mods) && method_exists($type, $mode)) {
             call_user_func([$type, $mode]);
         } else {

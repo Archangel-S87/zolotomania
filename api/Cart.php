@@ -59,7 +59,7 @@ class Cart extends Fivecms
 				{
 					$items[$variant->id] = new stdClass();
 					$items[$variant->id]->variant = $variant;
-					if($variant->stock > 0)
+					if($variant->stock > 0 && !$variant->reservation)
 						$items[$variant->id]->amount = $session_items[$variant->id];
 					else {
 						$items[$variant->id]->amount = 0;
@@ -80,7 +80,11 @@ class Cart extends Fivecms
 				// Пример в шаблоне {$purchase->product->category->id}	
                 foreach($products as &$product){
 					$product->categories = $this->categories->get_categories(array('product_id'=>$product->id));
-					$product->category = reset($product->categories);        
+					$product->category = reset($product->categories);
+					$product->label1 = 'размер';
+                    if (in_array($product->category->id, [3, 7, 16, 17])) {
+                        $product->label1 = 'высота, см';
+                    }
 				}
 			
 				foreach($items as $variant_id=>$item)
@@ -210,7 +214,7 @@ class Cart extends Fivecms
 				
 			}
 		}
-			
+
 		return $cart;
 	}
 	

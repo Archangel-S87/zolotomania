@@ -18,9 +18,106 @@ class OrderView extends View
         // Скачивание файла
         if ($this->request->get('file')) {
             return $this->download();
+        } elseif ($this->request->get('after_payment') && $this->request->get('orderId')) {
+            return $this->after_payment();
+        } elseif ($this->request->get('bad_payment') && $this->request->get('orderId')) {
+            return $this->bad_payment();
+        } elseif ($this->request->get('new_order')) {
+            return $this->new_order();
         } else {
             return $this->fetch_order();
         }
+    }
+
+    /**
+     * Помещает все товары текущего заказа в корзину
+     * Удаляет текущий заказ
+     */
+    private function new_order()
+    {
+        if ($url = $this->request->get('url', 'string'))
+            $order = $this->orders->get_order((string)$url);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return;
+
+        if (!$order) return;
+
+        $purchases = $this->orders->get_purchases(['order_id' => $order->id]);
+
+        foreach ($purchases as $purchase) {
+            if ($variant_id = $this->variants->get_variant_id_by_external_id($purchase->variant_external_id)) {
+                $this->cart->add_item($variant_id);
+            }
+        }
+
+        $this->orders->update_order($order->id, ['status' => 3]);
+
+        // Перенаправляем на корзина
+        header('Location: ' . $this->config->root_url . '/cart');
+        die();
+    }
+
+    /**
+     * Получает данные заказа
+     * @param $purchases array
+     * @return array
+     */
+    private function get_data_purchases($purchases)
+    {
+        $product_external_ids = [];
+        $variant_external_id = [];
+        $missing_items = [];
+
+        foreach ($purchases as $purchase) {
+            $product_external_ids[] = $purchase->product_external_id;
+            $variant_external_id[] = $purchase->variant_external_id;
+            $missing_items[$purchase->variant_external_id] = $purchase->variant_external_id;
+        }
+
+        $products_temp = $this->products->get_products(['external_id' => $product_external_ids, 'limit' => count($product_external_ids)]);
+        $products = [];
+        foreach ($products_temp as $p) {
+            $products[$p->external_id] = $p;
+        }
+
+        $images = $this->products->get_images(['product_external_id' => $product_external_ids]);
+        foreach ($images as $image) {
+            $products[$image->product_external_id]->images[] = $image;
+        }
+
+        $variants = [];
+        foreach ($this->variants->get_variants(['external_id' => $variant_external_id]) as $v) {
+            $variants[$v->external_id] = $v;
+            unset($missing_items[$v->external_id]);
+        }
+
+        $this->design->assign('missing_items', $missing_items);
+
+        foreach ($variants as $variant) {
+            $products[$variant->external_id]->variants[] = $variant;
+        }
+
+        $product = null;
+        foreach ($products as &$product) {
+            if (isset($product->variants[0]))
+                $product->variant = $product->variants[0];
+            if (isset($product->images[0]))
+                $product->image = $product->images[0];
+            $product->features = $this->features->get_product_options(['product_id' => $product->id ?? 0]);
+        }
+
+        foreach ($purchases as &$purchase) {
+            if (!empty($products[$purchase->product_external_id]))
+                $purchase->product = $products[$purchase->product_external_id];
+            if (!empty($variants[$purchase->variant_external_id])) {
+                $purchase->variant = $variants[$purchase->variant_external_id];
+                $purchase->features = $this->features->get_product_options(['product_id' => $product->id ?? 0]);
+            }
+        }
+
+        return $purchases;
     }
 
     function fetch_order()
@@ -37,7 +134,8 @@ class OrderView extends View
         $purchases = $this->orders->get_purchases(['order_id' => intval($order->id)]);
         if (!$purchases) return false;
 
-        if (!$this->user || $this->user->id != $order->user_id) return false;
+        // TODO Включить на prod
+        //if (!$this->user || $this->user->id != $order->user_id) return false;
 
         if ($this->request->method('post')) {
             if ($payment_method_id = $this->request->post('payment_method_id', 'integer')) {
@@ -49,58 +147,11 @@ class OrderView extends View
             }
         }
 
-        $products_ids = [];
-        $variants_ids = [];
-
-        foreach ($purchases as $purchase) {
-            $products_ids[] = $purchase->product_id;
-            $variants_ids[] = $purchase->variant_id;
-        }
-        $products = [];
-        //foreach($this->products->get_products(array('id'=>$products_ids)) as $p)
-        $products_temp = $this->products->get_products([
-            'id' => $products_ids,
-            'limit' => count($products_ids)
-        ]);
-        foreach ($products_temp as $p) {
-            $products[$p->id] = $p;
-        }
-
-        $images = $this->products->get_images(['product_id' => $products_ids]);
-        foreach ($images as $image) {
-            $products[$image->product_id]->images[] = $image;
-        }
-
-        $variants = [];
-        foreach ($this->variants->get_variants(['id' => $variants_ids]) as $v) {
-            $variants[$v->id] = $v;
-        }
-
-        foreach ($variants as $variant) {
-            $products[$variant->product_id]->variants[] = $variant;
-        }
-
-        $product = null;
-        foreach ($products as &$product) {
-            if (isset($product->variants[0]))
-                $product->variant = $product->variants[0];
-            if (isset($product->images[0]))
-                $product->image = $product->images[0];
-            $product->features = $this->features->get_product_options(['product_id' => $product->id]);
-        }
-
+        $purchases = $this->get_data_purchases($purchases);
         $total_weight = 0;
         $total_volume = 0;
         $subtotal = 0;
-        foreach ($purchases as &$purchase) {
-            if (!empty($products[$purchase->product_id]))
-                $purchase->product = $products[$purchase->product_id];
-            if (!empty($variants[$purchase->variant_id])) {
-                $purchase->variant = $variants[$purchase->variant_id];
-
-                $purchase->features = $this->features->get_product_options(['product_id' => $product->id]);
-
-            }
+        foreach ($purchases as $purchase) {
             $total_weight += $purchase->amount * $this->features->get_product_option_weight($purchase->product_id);
             $total_volume += $purchase->amount * $this->features->get_product_option_volume($purchase->product_id);
             $subtotal += $purchase->price * $purchase->amount;
@@ -137,6 +188,35 @@ class OrderView extends View
 
         // Выводим заказ
         return $this->design->fetch('order.tpl');
+    }
+
+    private function bad_payment()
+    {
+        if ($order_id = $this->request->get('orderId', 'integer'))
+            $order = $this->orders->get_order((int)$order_id);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return false;
+
+        if (!$order) return false;
+
+        $purchases = $this->orders->get_purchases(['order_id' => intval($order->id)]);
+        if (!$purchases) return false;
+
+        $purchases = $this->get_data_purchases($purchases);
+
+        $this->design->assign('order', $order);
+        $this->design->assign('purchases', $purchases);
+
+        // Способ оплаты
+        if ($order->payment_method_id) {
+            $payment_method = $this->payment->get_payment_method($order->payment_method_id);
+            $this->design->assign('payment_method', $payment_method);
+        }
+
+        $this->design->assign('meta_title', 'Ошибка при оплате');
+        return $this->design->fetch('bad_payment.tpl');
     }
 
     private function download()
@@ -179,13 +259,29 @@ class OrderView extends View
         if (!empty($module_name) && is_file("payment/$module_name/$module_name.php")) {
             include_once("payment/$module_name/$module_name.php");
             $module = new $module_name();
-            //$form = $module->checkout_form($params['order_id'], $params['button_text']);
-            if (isset($params['button_text']))
-                $form = $module->checkout_form($params['order_id'], $params['button_text']);
-            else
-                $form = $module->checkout_form($params['order_id'], null);
+            $form = $module->checkout_form($params['order_id'], $params['button_text'] ?? null);
         }
         return $form;
     }
 
+    private function after_payment()
+    {
+        if ($order_id = $this->request->get('orderId', 'integer'))
+            $order = $this->orders->get_order((int)$order_id);
+        elseif (!empty($_SESSION['order_id']))
+            $order = $this->orders->get_order(intval($_SESSION['order_id']));
+        else
+            return false;
+
+        if (!$order) return false;
+
+        // Способ оплаты
+        if ($order->payment_method_id) {
+            $payment_method = $this->payment->get_payment_method($order->payment_method_id);
+            $this->design->assign('payment_method', $payment_method);
+        }
+
+        $this->design->assign('meta_title', 'Спасибо за покупку!');
+        return $this->design->fetch('after_payment.tpl');
+    }
 }

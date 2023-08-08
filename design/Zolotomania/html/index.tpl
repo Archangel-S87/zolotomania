@@ -28,7 +28,7 @@
 			{else}
 				{$seo_two = ''}
 			{/if}
-			{if $category->seo_type == 1 && !empty($product->variant->price)}
+			{if isset($category->seo_type) && $category->seo_type == 1 && !empty($product->variant->price)}
 				{$seo_description = $seo_one|cat:$product->name|cat:" ✩ за "|cat:($product->variant->price|convert|strip:'')|cat:" "|cat:$currency->sign|cat:$seo_two}
 			{else}
 				{$seo_description = $seo_one|cat:$product->name|cat:$seo_two}
@@ -49,13 +49,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=2, user-scalable=yes"/>
 	<meta name="format-detection" content="telephone=no"/>
 
-	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/fonts.css"/>
+	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/fonts/fonts.css"/>
 	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/style.css?v={filemtime("design/{$settings->theme|escape}/css/style.css")}"/>
-	<script src="js/jquery/jquery-1.12.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/custom.css?v={filemtime("design/{$settings->theme|escape}/css/custom.css")}"/>
 
+	<script src="/js/jquery/jquery-1.12.4.min.js"></script>
     <script src="design/{$settings->theme|escape}/js/mask.js"></script>
     <script src="design/{$settings->theme|escape}/js/main.js"></script>
-	<link rel="stylesheet" type="text/css" href="design/{$settings->theme|escape}/css/{$settings->colortheme|escape}.css?v={filemtime("design/{$settings->theme|escape}/css/{$settings->colortheme|escape}.css")}"/>
 
 	<!--canonical-->{if isset($canonical)}<link rel="canonical" href="{$config->root_url}{$canonical}"/>{/if}<!--/canonical-->
 	{if !empty($current_page_num) && $current_page_num==2}<link rel="prev" href="{$config->root_url}{url page=null}">{/if}
@@ -63,8 +63,8 @@
 	{if !empty($current_page_num) && $current_page_num<$total_pages_num}<link rel="next" href="{$config->root_url}{url page=$current_page_num+1}">{/if}
 	{if !empty($current_page_num) && $current_page_num > 1}<meta name=robots content="index,follow">{/if}
 
-	<link href="favicon.ico" rel="icon" type="image/x-icon"/>
-	<link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+	<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+	<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 
 	{if $module == 'ProductView'}
 		<meta name="twitter:url"  property="og:url" content="{$config->root_url}{$smarty.server.REQUEST_URI}">
@@ -133,201 +133,55 @@
 
 <body {if $module}class="{$module|lower}"{/if}>
 	{* header *}
-	<header>
-
-		{if $module == 'MainView'}
+	<header {if $module !== 'MainView'}class="bottom-border"{/if}>
 
 		<div class="container flex">
 			<div class="header__left">
-				<a href="//zoloto-rezerv.ru" target="_blank">
-					<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
-				</a>
-				<a href="//скупка-золото.рф" target="_blank">
-					<span>Скупка золота</span>
-				</a>
-			</div>
-			<div class="header__right">
-				<div id="top_phone">
-						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
-							<span uk-icon="icon: receiver; ratio: 1.25"></span>
-							{if $settings->phone && $settings->tel}
-								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{elseif $settings->phone}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							{elseif $settings->tel}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{/if}
-						</div>
-				</div>
-				<nav class="menu">
-					<div class="inner">
-
-						<div class="topinfowrapper">
-							{if $settings->purpose == 0 || in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-
-								{get_wishlist_products var=wished_products}
-								<span id="uiwishlist"></span>
-								<div id="wishlist">
-									{include file='wishlist_informer.tpl'}
-								</div>
-							{elseif $settings->purpose == 1 && !in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-								<div class="servicesheader">
-									<div class="svgwrapper" title="Личный кабинет" onClick="window.location='/user'">
-										<span uk-icon="icon: user; ratio: 1.25"></span>
-									</div>
-
-									<div class="svgwrapper" title="Контакты" onClick="window.location='/contacts'">
-										<span uk-icon="icon:  location; ratio: 1.25"></span>
-
-									</div>
-
-									<div class="svgwrapper" title="Статьи" onClick="window.location='/articles'">
-										<span uk-icon="icon:  file-text; ratio: 1.25"></span>
-									</div>
-
-									<div class="svgwrapper" title="Новости" onClick="window.location='/blog'">
-										<span uk-icon="icon:  info; ratio: 1.25"></span>
-									</div>
-								</div>
-							{/if}
-
-						</div>
-
+				<div class="slogan">Сделай жизнь чуточку лучше!</div>
+				{if $settings->phone}
+					<div id="top_phone">
+						<span class="second-level font first_phone"
+							  onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'"
+							  style="cursor:pointer;">{$settings->phone|escape}</span>
 					</div>
-					<div class="cart fixed-cart" onClick="window.location='/cart'" style="cursor:pointer;">
-							<div class="cart__icon"></div>
-
-							<div id="cart_informer">
-								{include file='cart_informer.tpl'}
-							</div>
-					</div>
-				</nav>
-				<div id="welcome">
-					<span uk-icon="icon: user; ratio: 1.25"></span>
-					{if $user}
-						<span class="username" onclick="window.location='/user'">Кабинет</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
-					{else}
-						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
-					{/if}
-				</div>
+				{/if}
 			</div>
-		</div>
-
-		<div class="MainView__header" style="background: url('/design/Zolotomania/images/tiffany-two-models-1.jpg');">
-			<div class="MainView__header-content">
-				<div class="header__logo" onclick="window.location='{$config->root_url}/'">
-					<span class="header__logo--big">З</span>олото<span class="header__logo--big">М</span>ания<sup>®</sup>
-					<span class="header__logo--sub">первый ювелирный</span>
-				</div>
-				<!--img class="logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" /-->
-				<h1 class="MainView__header--title"> Подарки  </h1>
-				<h2 class="MainView__header--subtitle">для любимых  </h2>
-			</div>
-
-		</div>
-
-		{/if}
-		{if $module != 'MainView'}
-		<div class="container flex">
-			<div class="header__left">
+			<div class="header__center">
 				<img class="logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
 			</div>
 			<div class="header__right">
-				<div id="top_phone">
-						<div class="divider {if $settings->phone && $settings->tel}twophone{else}onephone{/if}">
-							<span uk-icon="icon: receiver; ratio: 1.25"></span>
-							{if $settings->phone && $settings->tel}
-								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{elseif $settings->phone}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							{elseif $settings->tel}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{/if}
-						</div>
+				<div class="">
+					{get_wishlist_products var=wished_products}
+					<div id="wishlist" class="header-icon">
+						{include file='wishlist_informer.tpl'}
+					</div>
+					<div id="cart_informer" class="header-icon">
+						{include file='cart_informer.tpl'}
+					</div>
 				</div>
-				<nav class="menu">
-					<div class="inner">
-
-						<div class="topinfowrapper">
-							{if $settings->purpose == 0 || in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-
-								{get_wishlist_products var=wished_products}
-								<span id="uiwishlist"></span>
-								<div id="wishlist">
-									{include file='wishlist_informer.tpl'}
-								</div>
-							{elseif $settings->purpose == 1 && !in_array($module, array('ProductView', 'ProductsView', 'CartView', 'OrderView', 'BrowsedView', 'CompareView', 'WishlistView'))}
-								<div class="servicesheader">
-									<div class="svgwrapper" title="Личный кабинет" onClick="window.location='/user'">
-										<span uk-icon="icon: user; ratio: 1.25"></span>
-									</div>
-
-									<div class="svgwrapper" title="Контакты" onClick="window.location='/contacts'">
-										<span uk-icon="icon:  location; ratio: 1.25"></span>
-
-									</div>
-
-									<div class="svgwrapper" title="Статьи" onClick="window.location='/articles'">
-										<span uk-icon="icon:  file-text; ratio: 1.25"></span>
-									</div>
-
-									<div class="svgwrapper" title="Новости" onClick="window.location='/blog'">
-										<span uk-icon="icon:  info; ratio: 1.25"></span>
-									</div>
-								</div>
-							{/if}
-
-						</div>
-
-					</div>
-					<div class="cart fixed-cart" onClick="window.location='/cart'" style="cursor:pointer;">
-							<div class="cart__icon"></div>
-
-							<div id="cart_informer">
-								{include file='cart_informer.tpl'}
-							</div>
-					</div>
-				</nav>
-				<div id="welcome">
-					<span uk-icon="icon: user; ratio: 1.25"></span>
+				<div class="" style="margin-left: 20px;">
+					<a href="" class="btn">Отзывы</a>
 					{if $user}
-						<span class="username" onclick="window.location='/user'">Кабинет</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/logout'">Выйти</span>
+						{if $module == 'UserView'}
+							<a href="/user/logout" class="btn">Выйти</a>
+						{else}
+							<a href="/user" class="btn">Кабинет</a>
+						{/if}
 					{else}
-						<span class="username" onclick="window.location='/user/login'">Вход</span>
-						<span class="hline">|</span>
-						<span class="username" onclick="window.location='/user/register'">Регистрация</span>
+						<a href="/user" class="btn">я с вами</a>
 					{/if}
 				</div>
-
-
-
-
 			</div>
 		</div>
-		{/if}
 	</header>
 	{* header end*}
 
-
-
-	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}">
+	<div id="container" class="catid{if $module == 'ProductsView'}{foreach from=$category->path item=cat}{$cat->id|escape}{/foreach}{/if}" style="position:relative;z-index: 1;">
 	{if $module != 'MainView'}
 		<div class="side-shade2"></div>
 		{$bread_pos = 1}
 
-		{if !in_array($module, ['LoginView', 'RegisterView', 'WishlistView', 'CartView', 'OrderView'])}
+		{if !in_array($module, ['LoginView', 'RegisterView', 'UserView', 'WishlistView', 'CartView', 'OrderView', 'ProductsView', 'PageView', 'ServicesView'])}
 			<div class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
 				<div class="uk-container">
 					{if $module == 'ProductsView'}
@@ -351,6 +205,9 @@
 							{/foreach}
 						{/if}
 					{elseif $module == 'ProductView'}
+						<a href="#" class="button-back" onclick="window.history.back(); return false;">
+							<svg><use xlink:href='#arrow_left'/></svg>
+						</a>
 						{if $category}
 							{foreach from=$category->path item=cat}
 								<span itemscope itemprop="itemListElement" itemtype="http://schema.org/ListItem">
@@ -393,232 +250,134 @@
 	</div>
 
 	<footer class="footer">
-		<div class="container flex">
-
-
-					<div class="footer__column">
-    					<div class="uk-panel uk-margin-remove-first-child  uk-margin-remove-top">
-    					    <div class="uk-child-width-expand uk-grid-column-small uk-flex-middle uk-grid" uk-grid="">
-    					    	<div class="uk-width-auto@m uk-first-column">
-    					    		<img class="footer__logo logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
-    					    	</div>
-
-                			</div>
-						</div>
-
-
-            		</div>
-
-
-
-					<div class="footer__column">
-						<div class="uk-h4" id="footer#5">
-							{if $settings->phone && $settings->tel}
-								<span class="second-level font first_phone" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{elseif $settings->phone}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->phone|escape}</span>
-							{elseif $settings->tel}
-
-								<span class="second-level font" onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'" style="cursor:pointer;">{$settings->tel|escape}</span>
-							{/if}
-						</div>
-						<div id="footer#6">
-							<div class="contact-profiles">
-								{if $settings->twitter}<div title="Twitter" onclick="window.open('{$settings->twitter|escape}','_blank');" class="twitter sprite"></div>{/if}
-								{if $settings->google}<div title="Google+" onclick="window.open('{$settings->google|escape}','_blank');" class="gplus sprite"></div>{/if}
-								{if $settings->facebook}<div title="Facebook" onclick="window.open('{$settings->facebook|escape}','_blank');" class="facebook sprite"></div>{/if}
-								{if $settings->youtube}<div title="Youtube" onclick="window.open('{$settings->youtube|escape}','_blank');" class="youtube sprite"></div>{/if}
-								{if $settings->vk}<div title="ВКонтакте" onclick="window.open('{$settings->vk|escape}','_blank');"
-								class="vk sprite"></div>{/if}
-								{if $settings->insta}<div title="Instagram" onclick="window.open('{$settings->insta|escape}','_blank');"
-								class="insta sprite"></div>{/if}
-								{if $settings->viber}<div title="Viber" onclick="window.open('viber://chat?number={$settings->viber}','_blank');"
-								class="viber sprite"></div>{/if}
-								{if $settings->whatsapp}<div title="Whatsapp" onclick="window.open('https://api.whatsapp.com/send?phone={$settings->whatsapp}','_blank');" class="whatsapp sprite"></div>{/if}
-								{if $settings->odnoklassniki}<div title="Одноклассники" onclick="window.open('{$settings->odnoklassniki|escape}','_blank');" class="ok sprite"></div>{/if}
-								{if $settings->telegram}<div title="Telegram" onclick="window.open('{$settings->telegram|escape}','_blank');" class="telegram sprite"></div>{/if}
+		<div class="container">
+			<div class="footer__logo-wrap">
+				<a href="/" class="footer__logo">
+					<img class="logo" onclick="window.location='{$config->root_url}/'" src="files/logo/logo.svg?v={filemtime('files/logo/logo.svg')}" title="{$settings->site_name|escape}" alt="{$settings->site_name|escape}" />
+				</a>
+			</div>
+			<div class="footer__info flex">
+				<div class="footer__column">
+					<div class="footer__column-title">О нас</div>
+					<p>Ещё больше возможностей</p>
+					<a class="btn npk" href="//zoloto-rezerv.ru" onclick="window.open('//zoloto-rezerv.ru'); return false;" target="_blank">
+						<img src="/design/Zolotomania/images/zoloto-rezerv.png" alt="zoloto-rezerv">
+						<span class="color">Ваш Золотой РезервЪ</span>
+					</a>
+					<a class="btn au-ag" href="//скупка-золото.рф" onclick="window.open('//скупка-золото.рф'); return false;" target="_blank">
+						<span class="color">Скупка</span><span style="margin-left: 4px; font-size: 12px; color: #6D6E71;">Золото / Серебро</span>
+					</a>
+					<div class="text-bold">Юридическая информация</div>
+					<a href="/policy">Политика конфиденциальности</a>
+					<a href="/">Пользовательское соглашение</a>
+					<a href="/" class="text-bold">Наши магазины</a>
+					<a href="/" class="text-bold">Мы в картинках</a>
+				</div>
+				<div class="footer__column">
+					<div class="footer__column-title">Служба клиентов</div>
+					<div class="text-bold">Способы оплаты</div>
+					<a href="/oplata">Карта</a>
+					<a href="/pokupaj-so-sberom">Покупай со Сбером</a>
+					<a href="/">Наличные</a>
+					<a href="/">Обмен</a>
+					<div class="text-bold">Доставка</div>
+					<a href="/">Адресная</a>
+					<a href="/">Магазин</a>
+					<a href="/" class="text-bold">Условия обмена</a>
+					<a href="/" class="text-bold">Бонусная программа</a>
+					<a href="/" class="text-bold">Ремонт и изготовление</a>
+					<a href="/" class="text-bold">Уход за изделиями</a>
+				</div>
+				<div class="footer__column">
+					<div class="footer__column-title">Мы Online</div>
+					<div class="text-bold">Присоединяйся</div>
+					<div class="contact-profiles">
+						{if $settings->twitter}
+							<div title="Twitter" onclick="window.open('{$settings->twitter|escape}','_blank');" class="twitter sprite">
 							</div>
+						{/if}
+						{if $settings->google}
+							<div title="Google+" onclick="window.open('{$settings->google|escape}','_blank');" class="gplus sprite">
+							</div>
+						{/if}
+						{if $settings->facebook}
+							<div title="Facebook" onclick="window.open('{$settings->facebook|escape}','_blank');" class="facebook sprite">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30.5 28.75"><path class="cls-1" d="M27.48,6.19a4.21,4.21,0,0,0-4.06-4.06H7.18A4.21,4.21,0,0,0,3.12,6.19V22.43a4.21,4.21,0,0,0,4.06,4.06H15.3V17.28h-3V13.23h3V11.65c0-2.73,2.05-5.19,4.57-5.19h3.28v4.06H19.87a1,1,0,0,0-.78,1.09v1.62h4.06v4.05H19.09v9.21h4.33a4.21,4.21,0,0,0,4.06-4.06Zm0,0"/></svg>
+							</div>
+						{/if}
+						{if $settings->youtube}
+							<div title="Youtube" onclick="window.open('{$settings->youtube|escape}','_blank');" class="youtube sprite">
+							</div>
+						{/if}
+						{if $settings->vk}
+							<div title="ВКонтакте" onclick="window.open('{$settings->vk|escape}','_blank');" class="vk sprite">
+								<img src="design/{$settings->theme|escape}/images/free-icon-vk.svg" alt="vk">
+							</div>
+						{/if}
+						{if $settings->insta}
+							<div title="Instagram" onclick="window.open('{$settings->insta|escape}','_blank');" class="insta sprite">
+								<img src="design/{$settings->theme|escape}/images/free-icon-instagram.svg"
+									 alt="instagram">
+							</div>
+						{/if}
+						{if $settings->odnoklassniki}
+							<div title="Одноклассники" onclick="window.open('{$settings->odnoklassniki|escape}','_blank');" class="ok sprite">
+								<img src="design/{$settings->theme|escape}/images/free-icon-odnoklassniki.svg" alt="odnoklassniki">
+							</div>
+						{/if}
+					</div>
+					<div class="text-bold">Напиши в чате</div>
+					<div id="footer#6">
+						<div class="contact-profiles">
+							{if $settings->viber}
+								<div title="Viber" onclick="window.open('viber://chat?number={$settings->viber}','_blank');" class="viber sprite">
+									<img src="design/{$settings->theme|escape}/images/free-icon-viber.svg" alt="viber">
+								</div>
+							{/if}
+							{if $settings->whatsapp}
+								<div title="Whatsapp" onclick="window.open('https://api.whatsapp.com/send?phone={$settings->whatsapp}','_blank');" class="whatsapp sprite">
+									<img src="design/{$settings->theme|escape}/images/free-icon-whatsapp.svg" alt="whatsapp">
+								</div>
+							{/if}
+							{if $settings->telegram}
+								<div title="Telegram" onclick="window.open('{$settings->telegram|escape}','_blank');" class="telegram sprite">
+									<img src="design/{$settings->theme|escape}/images/free-icon-telegram.svg" alt="telegram">
+								</div>
+							{/if}
 						</div>
 					</div>
-					<div class="footer__column">
-
-						<ul class="footer__list footer__adress">
-							<li class="footer__adress--item">Курск, Красная площадь, 2\4</li>
-
-						</ul>
-						<a class="footer__adress--all button" href="/adresa-magazinov">Все магазины</a>
-					</div>
-
-
-
-		<div class="footer__bottom">
-  			{if $menus[17]->enabled}
-							{get_pages var="menu_1" menu_id=17}
-							{if $menu_1}
-							<ul class="footer__list footer__menu flex">
-								{foreach $menu_1 as $p}
-								<li {if $page && $page->id == $p->id}class="selected"{/if} class="footer__menu">
-									<a data-page="{$p->id}" href="{$p->url}" title="{$p->name|escape}">{$p->name|escape}</a>
-								</li>
-								{/foreach}
-							</ul>
-							{/if}
+					<div class="text-bold">Обратный звонок</div>
+					<div>
+						{if $settings->phone && $settings->tel}
+							<span class="second-level font first_phone text-bold"
+								  onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'"
+								  style="cursor:pointer;">{$settings->phone|escape}</span>
+							<span class="second-level font text-bold"
+								  onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'"
+								  style="cursor:pointer;">{$settings->tel|escape}</span>
+						{elseif $settings->phone}
+							<span class="second-level font text-bold"
+								  onClick="window.location='tel:{$settings->phone|escape|replace:' ' :''}'"
+								  style="cursor:pointer;">{$settings->phone|escape}</span>
+						{elseif $settings->tel}
+							<span class="second-level font text-bold"
+								  onClick="window.location='tel:{$settings->tel|escape|replace:' ' :''}'"
+								  style="cursor:pointer;margin-bottom:3px;margin-left:10px;">{$settings->tel|escape}</span>
 						{/if}
-  		</div>
-		</div>
+					</div>
+					<a href="/" class="text-bold">Отзывы</a>
+				</div>
+			</div>
 
+			<div class="flex footer__bottom" style="flex-direction: column; align-items: flex-end;">
+				{$settings->rekvizites}
+			</div>
+		</div>
 	</footer>
 
 	<div id="topcontrol" title="Вверх" style="display:none;"></div>
 
 	<div style="display:none;">{include file='backcall.tpl'}</div>
-
-	{if $module == 'MainView'}
-		<script async src="design/{$settings->theme|escape}/js/slick191.min.js"></script>
-		<script>
-			$(window).load(function(){
-					{if $settings->mainhits}
-					{* hits *}
-							$('#hitcarusel').slick({
-							  {if $settings->addfield2}arrows:false,{/if}
-							  infinite: true,
-							  speed: 900,
-							  slidesToShow: 6,
-							  slidesToScroll: 1,
-							  autoplay: true,
-							  autoplaySpeed: 4000,
-							  draggable: false,
-							  //touchThreshold: 40,
-							  arrows: false,
-							  responsive: [
-								{
-								  breakpoint: 1590,
-								  settings: {
-									slidesToShow: 5,
-									slidesToScroll: 1
-								  }
-								},
-								{
-								  breakpoint: 1226,
-								  settings: {
-									slidesToShow: 4,
-									slidesToScroll: 1
-								  }
-								}
-							  ]
-							});
-							$('.hits_carousel .arrow_left').on('click',function(){ $('#hitcarusel').slick('slickPrev') });
-							$('.hits_carousel .arrow_right').on('click',function(){ $('#hitcarusel').slick('slickNext') });
-					{* hits end *}
-					{/if}
-
-					{if $settings->mainnew}
-					{* new *}
-							$('#newcarusel').slick({
-							  {if $settings->mainnew || $settings->addfield2}arrows:false,{/if}
-							  infinite: true,
-							  speed: 900,
-							  slidesToShow: 6,
-							  slidesToScroll: 1,
-							  autoplay: true,
-							  autoplaySpeed: 4000,
-							  draggable: false,
-							  //touchThreshold: 40,
-							  arrows: false,
-							  responsive: [
-							  {
-								  breakpoint: 1590,
-								  settings: {
-									slidesToShow: 5,
-									slidesToScroll: 1
-								  }
-								},
-								{
-								  breakpoint: 1226,
-								  settings: {
-									slidesToShow: 4,
-									slidesToScroll: 1
-								  }
-								}
-							  ]
-							});
-							$('.new_carousel .arrow_left').on('click',function(){ $('#newcarusel').slick('slickPrev') });
-							$('.new_carousel .arrow_right').on('click',function(){ $('#newcarusel').slick('slickNext') });
-					{* new end *}
-					{/if}
-
-					{if $settings->mainsale}
-					{* discounted *}
-							$('#disccarusel').slick({
-							  infinite: true,
-							  speed: 900,
-							  slidesToShow: 6,
-							  slidesToScroll: 1,
-							  autoplay: true,
-							  autoplaySpeed: 4000,
-							  draggable: false,
-							  //touchThreshold: 40,
-							  arrows: false,
-							  responsive: [
-							  {
-								  breakpoint: 1590,
-								  settings: {
-									slidesToShow: 5,
-									slidesToScroll: 1
-								  }
-								},
-								{
-								  breakpoint: 1226,
-								  settings: {
-									slidesToShow: 4,
-									slidesToScroll: 1
-								  }
-								}
-							  ]
-							});
-							$('.discounted_carousel .arrow_left').on('click',function(){ $('#disccarusel').slick('slickPrev') });
-							$('.discounted_carousel .arrow_right').on('click',function(){ $('#disccarusel').slick('slickNext') });
-					{* discounted end *}
-					{/if}
-
-					{if $settings->main_blog == 0}
-					{* blog *}
-							$('#blog_carousel .blogline').slick({
-							  infinite: true,
-							  speed: 900,
-							  slidesToShow: 4,
-							  slidesToScroll: 4,
-							  draggable: false,
-							  //touchThreshold: 40,
-							  arrows: false
-							});
-							$('.blog_carousel .arrow_left').on('click',function(){ $('#blog_carousel .blogline').slick('slickPrev') });
-							$('.blog_carousel .arrow_right').on('click',function(){ $('#blog_carousel .blogline').slick('slickNext') });
-					{* blog end *}
-					{/if}
-
-					{if $settings->main_articles == 0}
-					{* articles *}
-							$('#articles_carousel .blogline').slick({
-							  infinite: true,
-							  speed: 900,
-							  slidesToShow: 4,
-							  slidesToScroll: 4,
-							  draggable: false,
-							  //touchThreshold: 40,
-							  arrows: false
-							});
-							$('.articles_carousel .arrow_left').on('click',function(){ $('#articles_carousel .blogline').slick('slickPrev') });
-							$('.articles_carousel .arrow_right').on('click',function(){ $('#articles_carousel .blogline').slick('slickNext') });
-					{* articles end *}
-					{/if}
-
-			});
-		</script>
-	{/if}
-
 
 	{if $settings->popup_cart == 1}
 		<script>var popup_cart = true;</script>
@@ -707,6 +466,9 @@
 
 	{* svg sprite *}
 	<svg style="display:none;">
+		<symbol id="arrow_left" viewBox="0 0 60.75 51.33">
+			<g id="Слой_2" data-name="Слой 2"><g id="Слой_1-2" data-name="Слой 1"><line class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" x1="4.82" y1="25.66" x2="58.25" y2="25.66"/><polyline class="cls-1" fill="none" stroke="#414042" stroke-linecap="round" stroke-linejoin="round" stroke-width="5px" points="33.83 48.83 2.5 25.66 33.83 2.5"/></g></g>
+		</symbol>
 		<symbol id="arrow" viewBox="0 0 24 24">
 			<path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
 			<path d="M0-.25h24v24H0z" fill="none"/>
@@ -800,10 +562,6 @@
 		</script>
 	{/if}
 	{* OnlineChat end *}
-
-
-
-
 
 	{if !empty($settings->script_footer)}{$settings->script_footer}{/if}
 

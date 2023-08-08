@@ -4,7 +4,7 @@ require_once('View.php');
 
 class RegisterView extends View
 {
-    const DEFAULT_STATUS = 0; // Активен ли пользователь сразу после регистрации (0 или 1)
+    const DEFAULT_STATUS = 1; // Активен ли пользователь сразу после регистрации (0 или 1)
 
     private $template = 'register.tpl';
 
@@ -94,7 +94,7 @@ class RegisterView extends View
             $this->design->assign('error', 'captcha');
         elseif (!empty($btfalse))
             $this->design->assign('error', 'captcha');
-        elseif ($user_id = $this->users->add_user(['name' => $name, 'email' => $email, 'password' => $password, 'phone' => $phone, 'enabled' => self::DEFAULT_STATUS, 'last_ip' => $_SERVER['REMOTE_ADDR'], 'external_id' => $phone])) {
+        elseif ($user_id = $this->users->add_user(['name' => $name, 'email' => $email ?: '', 'password' => $password, 'phone' => $phone, 'enabled' => self::DEFAULT_STATUS, 'last_ip' => $_SERVER['REMOTE_ADDR'], 'external_id' => $phone])) {
             $this->notify->email_user_registration($user_id, $password);
 
             if ($this->settings->auto_subscribe == 1)
@@ -133,9 +133,6 @@ class RegisterView extends View
 
     private function activate()
     {
-        require_once 'sms/stream_telecom.php';
-        $sms = new StreamTelecom();
-
         // Если запостили телефон
         if ($this->request->method('post') && $this->request->post('phone')) {
             $phone = $this->request->post('phone');
@@ -161,8 +158,8 @@ class RegisterView extends View
             $this->design->assign('send_code', true);
             $this->design->assign('phone', $phone);
 
-            if (!$sms->check_sms_send($phone, $save_user->id)) {
-                $res = $sms->send_sms_code($save_user);
+            if (!$this->notify->check_sms_send($phone, $save_user->id)) {
+                $res = $this->notify->send_sms_code($save_user);
                 if (!is_numeric($res)) $this->design->assign('error', $res);
             } else {
                 $this->design->assign('error', 'sms_send');
@@ -173,7 +170,7 @@ class RegisterView extends View
             $code = $this->request->post('sms_code');
             $this->design->assign('send_code', true);
 
-            if (!$sms->check_sms_code($code)) {
+            if (!$this->notify->check_sms_code($code)) {
                 $this->design->assign('error', 'error_code');
                 return;
             }
@@ -183,7 +180,7 @@ class RegisterView extends View
                 return;
             }
 
-            $sms->activate_confirm();
+            $this->notify->activate_confirm();
             $this->users->update_user($_SESSION['user_id'], ['enabled' => 1]);
 
             header('Location: ' . $this->config->root_url . '/user/login');

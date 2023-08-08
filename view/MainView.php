@@ -13,6 +13,16 @@ class MainView extends View
 			$this->design->assign('meta_description', $this->page->meta_description);
 			$this->setHeaderLastModify($this->page->last_modify, 432000);  // main page expires 604800 - 5 days
 		}
+
+		$main_categories = [];
+		$all_categories = $this->categories->get_categories();
+		foreach ($all_categories as $category) {
+		    if ($category->parent_id == 0 && $category->visible) {
+                $main_categories[] = $category;
+            }
+        }
+        $this->design->assign('main_categories', $main_categories);
+
 		return $this->design->fetch('main.tpl');
 	}
 }

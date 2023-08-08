@@ -17,7 +17,9 @@ class Dictionary
     // Свойства товара
     private $all_sections = [];
     private $size = ['is_variant' => 1];
-    private $weight = ['not_property' => 1];
+    private $weight = ['is_variant' => 1];
+    private $width_product = ['name' => 'Ширина, мм'];
+    private $height_product = ['name' => 'Высота, см'];
     private $shops = ['shops' => [], 'not_property' => 1];
 
     public $categories = [];
@@ -63,7 +65,11 @@ class Dictionary
 
         $values = [];
         foreach ($value['Значения'] ?? [] as $val) {
-            $values[(string)$val['id']] = (string)$val['name'];
+            if (isset($val['id']) && isset($val['name'])) {
+                $values[(string)$val['id']] = (string)$val['name'];
+            } else {
+                Exchange::add_warning("Некоректный формат характеристики: {$name}");
+            }
         }
 
         // Привязка свойств к категориям
@@ -78,12 +84,14 @@ class Dictionary
         }
 
         $property = [
-            'external_id' => (string)($value['id'] ?? ''),
-            'name' => (string)($value['name'] ?? ''),
+            'external_id' => (string)$value['id'],
+            'name' => (string)$value['name'],
+            'in_filter' => $value['in_filter'] ?? '',
             'values' => $values,
+            'binding_categories' => $binding_categories
         ];
 
-        $this->$name = is_array($this->$name) ? array_merge($this->$name, $property) : $property;
+        $this->$name = is_array($this->$name) ? array_merge($property, $this->$name) : $property;
 
         $this->all_sections[(string)$value['id']] = (string)$name;
     }

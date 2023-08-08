@@ -1,13 +1,13 @@
 <!-- incl. conf -->
 <!--noindex-->
 <div class="confcheck">
-	<svg style="display:none;" class="uncheckedconf" onClick="$(this).parent().find('.checkedconf').show();$(this).hide();$(this).parent().siblings('.hideablebutton').fadeIn();">
-		<use xlink:href='#uncheckedconf' />
-	</svg>
-	<svg class="checkedconf" onClick="$(this).parent().find('.uncheckedconf').show();$(this).hide();$(this).parent().siblings('.hideablebutton').fadeOut();">
-		<use xlink:href='#checkedconf' />
-	</svg>
 	<div class="policywrapper">
+		<svg style="display:none;" class="uncheckedconf" onClick="$(this).parent().find('.checkedconf').show();$(this).hide();$(this).parent().siblings('.hideablebutton').fadeIn();">
+			<use xlink:href='#uncheckedconf' />
+		</svg>
+		<svg class="checkedconf" onClick="$(this).parent().find('.uncheckedconf').show();$(this).hide();$(this).parent().siblings('.hideablebutton').fadeOut();">
+			<use xlink:href='#checkedconf' />
+		</svg>
 		<div class="labeltxt">Настоящим подтверждаю, что я ознакомлен и согласен с <span onclick="window.open('/policy','_blank');" class="personaldata">условиями</span> политики конфиденциальности.
 		{*<span class="showpolicy" onClick="$(this).parents().next('.confpolicy').show();$(this).next('.hidepolicy').show();$(this).hide();">Узнать больше</span>
 		<span style="display:none;" class="hidepolicy" onClick="$('.confpolicy, .hidepolicy').hide();$('.showpolicy').show();">Скрыть</span>*}

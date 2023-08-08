@@ -1,263 +1,226 @@
 <!-- incl. cfeatures -->
 <form method="get" action="{url page=null}">
-    <div class="features-wrap" style="flex:0 1 auto;">
-        {if !empty($features_variants)}
-            <div class="feature_column">
+
+    {*  price slider  *}
+    {if $minCost<$maxCost}
+        <script>
+            minCost={$minCost};
+            maxCost={$maxCost};
+            minCurr={if isset($minCurr)}{$minCurr}{else}0{/if};
+            maxCurr={$maxCurr};
+            // priceslider
+            {literal}
+                $(document).ready(function(){
+                    if(minCurr>=0 && maxCurr>0){
+                        $("#cslider").slider({min:minCost,max:maxCost,values:[minCurr,maxCurr],range:true,stop:function(event,ui){
+                                var mncurr = $("#cslider").slider("values",0);
+                                var mxcurr = $("#cslider").slider("values",1);
+                                $("input#minCurr").val(mncurr);$("input#maxCurr").val(mxcurr);
+                            },slide:function(event,ui){$("input#minCurr").val(ui.values[0]);$("input#maxCurr").val(ui.values[1]);}});$("input#minCurr").change(function(){var value1=$("input#minCurr").val();var value2=$("input#maxCurr").val();if(parseInt(value1)>parseInt(value2)){value1=value2;$("input#minCurr").val(value1);}$("#cslider").slider("values",0,value1);});$("input#maxCurr").change(function(){var value1=$("input#minCurr").val();var value2=$("input#maxCurr").val();if(value2>maxCost){value2=maxCost;$("input#maxCurr").val(maxCost)}if(parseInt(value1)>parseInt(value2)){value2=value1;$("input#maxCurr").val(value2);}$("#cslider").slider("values",1,value2);});$('input.curr').keypress(function(event){var key,keyChar;if(!event)var event=window.event;if(event.keyCode)key=event.keyCode;else if(event.which)key=event.which;if(key==null||key==0||key==8||key==13||key==9||key==46||key==37||key==39)return true;keyChar=String.fromCharCode(key);if(!/\d/.test(keyChar))return false;});
+                    }
+                });
+            {/literal}
+            // priceslider end
+        </script>
+        <div class="filter-column price">
+            <div class="column-head">
+                <span>Цена</span>
+                <svg><use xlink:href="#arrow-rounded-right-7x11"></use></svg>
+            </div>
+            <div class="column-body">
+                <div class="column-body-title">Цена</div>
+                <div class="mpriceslider" style="width: 390px; height: 174px;">
+                    <div class="formCost">
+                        <label>
+                            <input type="text" name="minCurr" id="minCurr" value="{$minCurr}"/>
+                            {$currency->sign|escape}
+                        </label>
+                        <label>
+                            <input type="text" name="maxCurr" id="maxCurr" value="{$maxCurr}"/>
+                            {$currency->sign|escape}
+                        </label>
+                    </div>
+                    <div class="sliderCont">
+                        <div id="cslider"></div>
+                    </div>
+                    <div class="column-action">
+                        <input type="submit" value="Ok" class="buttonblue">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {else}
+        <a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="clear_filter">Сбросить фильтр</a>
+    {/if}
+    {*  price slider end  *}
+
+    {if !empty($features_variants1)}
+        <div class="filter-column">
+            <div class="column-head">
+                <span>Размер</span>
+                <svg><use xlink:href="#arrow-rounded-right-7x11"></use></svg>
+            </div>
+            <div class="column-body">
+                <div class="column-body-title">Размер</div>
                 <div class="feature_values">
                     <ul>
-                        {foreach $features_variants as $o }
+                        {foreach $features_variants1 as $o}
+                            {$is_checked = !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1}
                             <li>
-                                <label for="feature1 ">
-                                    <input type="checkbox" name="v[]"
-                                           value="{$o}"{if !empty($smarty.get.v) && $o|in_array:$smarty.get.v} checked{/if} />
-                                    <span>{$o|escape}</span>
+                                <label{if $is_checked} class="checked-active"{/if}>
+                                    <input type="checkbox"
+                                           name="v1[]"
+                                           value="{$o}"
+                                            {if $is_checked} checked{/if} />
+                                    <span class="chbox-value">{$o|escape}</span>
                                 </label>
                             </li>
                         {/foreach}
                     </ul>
                 </div>
-            </div>
-        {/if}
-        {if !empty($features_variants1)}
-            <div class="feature_column">
-                <div class="feature_name">Размер</div>
-                <div class="feature_values">
-                    <ul>
-                        {foreach $features_variants1 as $o  }
-                            <li>
-                                <label{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} class="checked-active"{/if}>
-                                    <input type="checkbox" name="v1[]"
-                                           value="{$o}"{if !empty($smarty.get.v1) && $o|in_array:$smarty.get.v1} checked{/if} />{$o|escape}
-                                </label>
-                            </li>
-                        {/foreach}
-                    </ul>
+                <div class="column-action">
+                    <input type="submit" value="Ok" class="buttonblue">
                 </div>
             </div>
-        {/if}
-        {if !empty($features_variants2)}
-            <div class="feature_column">
+        </div>
+    {/if}
+
+    {if !empty($features_variants2)}
+        <div class="filter-column">
+            <div class="column-head">
+                <span>Вес</span>
+                <svg><use xlink:href="#arrow-rounded-right-7x11"></use></svg>
+            </div>
+            <div class="column-body">
+                <div class="column-body-title">Вес, г</div>
                 <div class="feature_values">
                     <ul>
                         {foreach $features_variants2 as $o}
+                            {$is_checked = !empty($smarty.get.v2) && $o|in_array:$smarty.get.v2}
                             <li>
-                                <input type="checkbox" id="feature3" name="v2[]"
-                                       value="{$o}"{if !empty($smarty.get.v2) && $o|in_array:$smarty.get.v2} checked{/if} />
-                                <label for="feature3">{$o|escape}</label>
+                                <label{if $is_checked} class="checked-active"{/if}>
+                                    <input type="checkbox"
+                                           name="v2[]"
+                                           value="{$o}"
+                                            {if $is_checked} checked{/if}/>
+                                    <span class="chbox-value">{$o|escape}</span>
+                                </label>
                             </li>
                         {/foreach}
                     </ul>
                 </div>
+                <div class="column-action">
+                    <input type="submit" value="Ok" class="buttonblue">
+                </div>
             </div>
-        {/if}
-    </div>
+        </div>
 
-    <script>
-        $(window).load(function () {
-            // Отключаю стандартное событие плагина
-            $(document).off("click", '#cfeatures input[type="checkbox"]');
-            // Новое поведение submit формы
-            $(document).on("click", '#cfeatures input[type="checkbox"]', function () {
-                const input = this,
-                    filter_form = $('#cfeatures form');
-
-                if ($(input).hasClass('checked-active')) {
-                    $(input).removeAttr('checked');
-                }
-
-                // $('input[type="checkbox"]', filter_form).each(function (index, item) {
-                //     if (input !== item) {
-                //         $(item).removeAttr('checked');
-                //     }
-                // });
-
-                filter_form.submit();
-            });
-
-            $(document).off("change", '#cfeatures input[type="text"]');
-            $(document).on("change", '#cfeatures input[type="text"]', function () {
-                $('#cfeatures form').submit();
-            });
-        });
-
-        {*
-        // Пока не использую
-        function mod_ajax_filter(current_input) {
-            if (ajax_process) return false;
-
-            ajax_process = true;
-
-            const cfeatures = $('#cfeatures'),
-                filter_form = $('#cfeatures form'),
-                price_min = filter_form.find('#minCurr'),
-                price_max = filter_form.find('#maxCurr'),
-                inputs = filter_form.find(current_input);
-
-            filter_form.find('input[type="checkbox"]').each(function (index, item) {
-                if (current_input !== item) {
-                    $(item).removeAttr('checked');
-                } else {
-                    $(current_input).attr('checked', '');
-                }
-            });
-
-            let url = current_url + '?aj_f=true',
-                params = '&';
-
-            cfeatures.css('opacity', '0.5');
-
-            debugger;
-
-            inputs.each(function () {
-                params += $(this).attr('name') + "=" + encodeURIComponent($(this).val()) + "&";
-            });
-
-            const diaps = filter_form.find('input.diaps');
-            diaps.each(function () {
-                params += $(this).attr('name') + "=" + encodeURIComponent($(this).val()) + "&";
-            });
-
-            if (!$(price_min).is(":disabled")) {
-                params += 'minCurr=' + encodeURIComponent(price_min.val()) + "&";
-            }
-
-            if (!$(price_max).is(":disabled")) {
-                params += 'maxCurr=' + encodeURIComponent(price_max.val()) + "&";
-            }
-
-            url += params;
-
-            $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-                options.async = true;
-            });
-
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                success: function (data) {
-                    if (!data.filter_block) return false;
-                    cfeatures.html(data.filter_block);
-                    ajax_process = false;
-                    cfeatures.css('opacity', '1');
-                    //$('input.buttonblue').click();
-                },
-                error: function (jqXHR, exception) {
-                    ajax_process = false;
-                    $('#cfeatures').css('opacity', '1');
-                }
-            });
-        }
-        *}
-    </script>
+    {/if}
 
     {* Features *}
     {if !empty($features)}
         {foreach $features as $f}
-            <div class="feature_column">
-                <div class="feature_name" data-feature="{$f->id}">{$f->name}</div>
-                <div class="feature_values">
-                    {if $f->in_filter==2}
-                        {$f_min="min[`$f->id`]"}
-                        {$f_max="max[`$f->id`]"}
-                        <select {if !empty($smarty.get.min.{$f->id}) || !empty($smarty.get.max.{$f->id})}id="choosenf"{/if}
-                                onchange="clickerdiapmin(this);">
-                            <option label="от" value="{url params=[$f_min=>null]}"></option>
-                            {$i=0}
-                            {foreach $f->options as $o}
-                                {$i=$i+1}{if $i==1}{$omin=$o->value}{/if}
-                                <option value="{url params=[$f_min=>$o->value]}"
-                                        {if !empty($smarty.get.min.{$f->id}) && $smarty.get.min.{$f->id} == $o->value}selected{/if}>{$o->value|escape}</option>
-                            {/foreach}
-                        </select>
-                        -
-                        <select onchange="clickerdiapmax(this)">
-                            <option label="до" value="{url params=[$f_max=>null]}"></option>
-                            {foreach $f->options as $o}
-                                <option value="{url params=[$f_max=>$o->value]}"
-                                        {if !empty($smarty.get.max.{$f->id}) && $smarty.get.max.{$f->id} == $o->value}selected{/if}>{$o->value|escape}</option>
-                            {/foreach}
-                        </select>
-                        <input class="diapmin diaps" type="hidden" name="{$f_min}"
-                               value="{if !empty($smarty.get.min.{$f->id})}{$smarty.get.min.{$f->id}}{/if}"
-                               {if empty($smarty.get.min.{$f->id})}disabled{/if}/>
-                        <input class="diapmax diaps" type="hidden" name="{$f_max}"
-                               value="{if !empty($smarty.get.max.{$f->id})}{$smarty.get.max.{$f->id}}{/if}"
-                               {if empty($smarty.get.max.{$f->id})}disabled{/if}/>
-                    {else}
-                        <ul>
-                            {foreach $f->options as $k=>$o}
-                                <li>
-                                    <label{if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})} class="checked-active"{/if}>
-                                        <input type="checkbox" name="{$f->id}[]"
-                                               {if !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}checked="checked"{/if} value="{$o->value|escape}"/>
-                                        {$o->value|escape}
-                                    </label>
-                                </li>
-                            {/foreach}
-                        </ul>
-                    {/if}
+            <div class="filter-column">
+                <div class="column-head">
+                    <span>{$f->name}</span>
+                    <svg><use xlink:href="#arrow-rounded-right-7x11"></use></svg>
+                </div>
+                <div class="column-body">
+                    <div class="column-body-title">{$f->name}</div>
+                    <div class="feature_values">
+                        {if $f->in_filter==2}
+                            {$f_min="min[`$f->id`]"}
+                            {$f_max="max[`$f->id`]"}
+                            <select {if !empty($smarty.get.min.{$f->id}) || !empty($smarty.get.max.{$f->id})}id="choosenf"{/if}
+                                    onchange="clickerdiapmin(this);">
+                                <option label="от" value="{url params=[$f_min=>null]}"></option>
+                                {$i=0}
+                                {foreach $f->options as $o}
+                                    {$i=$i+1}{if $i==1}{$omin=$o->value}{/if}
+                                    <option value="{url params=[$f_min=>$o->value]}"
+                                            {if !empty($smarty.get.min.{$f->id}) && $smarty.get.min.{$f->id} == $o->value}selected{/if}>{$o->value|escape}</option>
+                                {/foreach}
+                            </select>
+                            -
+                            <select onchange="clickerdiapmax(this)">
+                                <option label="до" value="{url params=[$f_max=>null]}"></option>
+                                {foreach $f->options as $o}
+                                    <option value="{url params=[$f_max=>$o->value]}"
+                                            {if !empty($smarty.get.max.{$f->id}) && $smarty.get.max.{$f->id} == $o->value}selected{/if}>{$o->value|escape}</option>
+                                {/foreach}
+                            </select>
+                            <input class="diapmin diaps" type="hidden" name="{$f_min}"
+                                   value="{if !empty($smarty.get.min.{$f->id})}{$smarty.get.min.{$f->id}}{/if}"
+                                   {if empty($smarty.get.min.{$f->id})}disabled{/if}/>
+                            <input class="diapmax diaps" type="hidden" name="{$f_max}"
+                                   value="{if !empty($smarty.get.max.{$f->id})}{$smarty.get.max.{$f->id}}{/if}"
+                                   {if empty($smarty.get.max.{$f->id})}disabled{/if}/>
+                        {else}
+                            <ul>
+                                {foreach $f->options as $k=>$o}
+                                    {$is_checked = !empty($filter_features.{$f->id}) && in_array($o->value,$filter_features.{$f->id})}
+                                    <li>
+                                        <label{if $is_checked} class="checked-active"{/if}>
+                                            <input type="checkbox"
+                                                   name="{$f->id}[]"
+                                                   value="{$o->value|escape}"
+                                                    {if $is_checked} checked{/if}/>
+                                            <span class="chbox-value">{$o->value|escape}</span>
+                                        </label>
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        {/if}
+                    </div>
+                    <div class="column-action">
+                        <input type="submit" value="Ok" class="buttonblue">
+                    </div>
                 </div>
             </div>
         {/foreach}
     {/if}
-
-    <div class="price-brands">
-        {if !empty($category->brands) && $category->brands|count>1 && empty($brand)}
-            {* Brands *}
-            <div class="feature_column brandcol">
-                <div class="feature_name">Бренд</div>
-                <div class="hide_feat">
-                    <svg>
-                        <use xlink:href='#b_plus'/>
-                    </svg>
-                </div>
-                <div class="feature_values">
-                    <ul>
-                        {foreach name=brands item=b from=$category->brands}
-                            <li>
-                                <label>
-		                            <span class="chbox">
-										<input type="checkbox" name="b[]"
-                                               value="{$b->id}" {if !empty($smarty.get.b) && $b->id|in_array:$smarty.get.b} checked{/if} />
-									</span>
-                                    <span>{$b->name|escape}</span>
-                                </label>
-                            </li>
-                        {/foreach}
-                    </ul>
-                </div>
-            </div>
-            {* Brands end *}
-        {/if}
-
-        {*  price slider  *}
-        <div class="mpriceslider">
-            <div class="formCost">
-                <span class="pr-cost">Цена:</span><input type="text" name="minCurr" id="minCurr"
-                                                         onchange="ajax_filter();" value="{$minCurr}"/>
-                <label for="maxCurr">-</label> <input type="text" name="maxCurr" id="maxCurr"
-                                                      onchange="ajax_filter();" value="{$maxCurr}"/>
-            </div>
-            <div class="sliderCont">
-                <div id="cslider"></div>
-            </div>
-            <a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="clear_filter">Сбросить фильтр</a>
-        </div>
-
-        {if !empty($keyword)}
-            <div style="display:none;">
-                <input type="checkbox" name="keyword" value="{$keyword}" checked="checked"/>
-            </div>
-        {/if}
-        {*  price slider end  *}
-    </div>
     {* Features end *}
+
+    <script>
+        $(window).load(function () {
+            $(document).on('click', '.column-head', function () {
+                $('.filter-column').removeClass('show-body');
+                $(this).closest('.filter-column').toggleClass('show-body');
+            });
+
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.show-body').length) {
+                    $('.filter-column').removeClass('show-body');
+                }
+            });
+
+            // Отключаю стандартное событие плагина
+            $(document).off("click", '#cfeatures input[type="checkbox"]');
+            $(document).on("change", '#cfeatures input[type="checkbox"]', function () {
+                $(this).parent().toggleClass('checked-active');
+            });
+
+            $(document).off("change", '#cfeatures input[type="text"]');
+        });
+    </script>
+
 </form>
 
 <script>
     // expand used feature column
-    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_column').find('.hide_feat').addClass('show');
-    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_values').fadeIn('normal');
+    $("#cfeatures input:checked, #cfeatures select#choosenf").closest('#content .feature_column').addClass('active');
+
+    $('#content .feature_column').each(function () {
+        const inputs = $('input:checked', this);
+        let selected = '';
+        inputs.each(function (index) {
+            selected += $(this).val();
+            if (inputs.length !== ++index) {
+                selected += ', ';
+            }
+        });
+        $('.feature_selected', this).html(selected)
+    });
     // expand used feature column end
 </script>
 

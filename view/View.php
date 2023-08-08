@@ -45,7 +45,8 @@ class View extends Fivecms
 			//возвращаем  текущую валюту
 			$this->currency = $this->money->get_current();
 			// multicurrency end
-	
+
+            unset($_SESSION['user_id']);
 			if(isset($_SESSION['user_id']))
 			{
 				$u = $this->users->get_user(intval($_SESSION['user_id']));
@@ -323,17 +324,40 @@ class View extends Fivecms
 			$params['visible'] = 1;
 		if(!isset($params['in_stock']))
 			$params['in_stock'] = 1;
-		if(!empty($params['var']))
-		{
+		if (isset($params['discounted_temp'])) {
+            $params['maxCurr'] = 4000;
+            $all_categories = $this->categories->get_categories();
+            foreach ($all_categories as $category) {
+                if ($category->id == 1) {
+                    $params['category_id'] = $category->children;
+                    break;
+                }
+            }
+        }
+        if (isset($params['is_new_temp'])) {
+            $params['sort'] = 'pricedown';
+            $params['category_id'] = [];
+            $all_categories = $this->categories->get_categories();
+            foreach ($all_categories as $category) {
+                if (!in_array($category->id, [11, 20])) {
+                    $params['category_id'][] = $category->id;
+                }
+            }
+        }
+        $params['reservation'] = 0;
+        $params['is_images'] = 1;
+		if(!empty($params['var'])) {
+            $products = [];
 			foreach($this->products->get_products($params) as $p)
 				$products[$p->id] = $p;
-			if(!empty($products))
-			{
+			if(!empty($products)) {
 				$products_ids = array_keys($products);
 				$variants = $this->variants->get_variants(array('product_id'=>$products_ids, 'in_stock'=>true));
 				
-				foreach($variants as &$variant)
-				{
+				foreach($variants as &$variant) {
+                    if (isset($params['discounted_temp'])) {
+                        $variant->compare_price = $variant->price * 2;
+                    }
 					$products[$variant->product_id]->variants[] = $variant;
 				}
 				
@@ -341,8 +365,7 @@ class View extends Fivecms
 				foreach($images as $image)
 					$products[$image->product_id]->images[] = $image;
 	
-				foreach($products as &$product)
-				{
+				foreach($products as &$product) {
 					//$product->category = reset($this->categories->get_categories(array('product_id'=>$product->id)));
 					if(isset($product->variants[0]))
 						$product->variant = $product->variants[0];
@@ -364,8 +387,8 @@ class View extends Fivecms
 					$product->vproperties = $classes;
 				}				
 			}
-			if(isset($products))
-				$smarty->assign($params['var'], $products);
+            shuffle($products);
+            $smarty->assign($params['var'], $products);
 		}
 	}
 

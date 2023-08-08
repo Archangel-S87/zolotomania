@@ -128,9 +128,10 @@
 
 {* subcat start *}
 {if !empty($category->subcategories)}
-<ul class="relcontent tiny_products parentscat" style="margin-bottom: 0px !important;">
+	<h1><span>{$category->name|escape}</span></h1>
+<ul class="relcontent tiny_products parentscat" style="margin: 40px 0 0 !important;">
 	{foreach name=cats from=$category->subcategories item=c}
-	{if $c->visible}
+	{if $c->visible && $c->products_count > 0}
 	<li class="product" onClick="window.location='/catalog/{$c->url}'" style="cursor:pointer;">
 		<div class="image">
 		{if $c->image}
@@ -150,7 +151,6 @@
 {* subcat end *}
 
 <div {if !isset($keyword) && !empty($brand->description) && !empty($category->description)}style="margin-bottom: 18px;"{/if}>
-
 	{* schema *}
 		<div class="catdescription" itemscope itemtype="http://schema.org/Article">
 			<meta content="{$meta_title|escape}" itemprop="name" />
@@ -210,53 +210,7 @@
 			{/if}
 		</div>
 	{* schema end *}
-	
-	
-	
 </div>
-
-{* Категории в бренде *}
-{if !empty($brand) && !empty($brand_cat) && $brand_cat|count > 1}
-	<div class="brand_cat">
-		<div class="brand_disc">Категории:</div>
-		<a class="various {if ($smarty.server.REQUEST_URI|strstr:'brands')}buttonred{/if}" href="brands/{$brand->url}">Все категории</a>
-		{foreach $brand_cat as $bc}
-		<a class="various {if !empty($category->url) && $category->url == $bc->url}buttonred{/if}" href="catalog/{$bc->url}/{$brand->url}">{$bc->name}</a>
-		{/foreach}
-		
-		{* Вывод категорий 2-го уровня вложенности *}
-		{*{foreach $brand_cat as $bc}
-			{function name=categories_tree_brand level=0}
-				{if !empty($categories)}
-					{foreach $categories as $c}
-						{if $c->visible}
-							{if in_array($bc->id, $c->children)}
-								{if $level == 2}
-									<a class="various {if !empty($category->url) && $category->url == $bc->url}buttonred{/if}" href="catalog/{$bc->url}/{$brand->url}">{$bc->name}</a>
-								{/if}
-								{if !empty($c->subcategories)}{categories_tree_brand categories=$c->subcategories level=$level+1}{/if}
-							{/if}
-						{/if}
-					{/foreach}
-				{/if}
-			{/function}
-			{categories_tree_brand categories=$categories}
-		{/foreach}*}
-		
-		{* Или добавить к категории название родительской*}
-		{*{foreach $brand_cat as $bc}
-			{if !empty($categories)}
-				{foreach $categories as $c}
-					{if in_array($bc->id, $c->children)}
-						{$parent = $c->name}
-					{/if}
-				{/foreach}
-			{/if}
-			<a class="various {if !empty($category->url) && $category->url == $bc->url}buttonred{/if}" href="catalog/{$bc->url}/{$brand->url}">{$bc->name} {if $parent != $bc->name}{$parent|lower}{/if}</a>
-		{/foreach}*}
-		
-	</div>
-{/if}
 
 {* Вывод товаров *}
 {if !empty($products)}
@@ -290,29 +244,32 @@
 	</div>
 
 	{if !empty($smarty.cookies.view) && $smarty.cookies.view == 'table'}
-	<div class="products">
+		<div class="products">
 	{else}
-	<div class="tiny_products hoverable" style="margin-top: 20px">
+		<div class="tiny_products hoverable" style="margin-top: 20px">
 	{/if}
 		{foreach $products as $product}
-		<div class="product_wrap">
-			{include file='products_item.tpl'}
-		</div>
+			<div class="product_wrap">
+				{include file='products_item.tpl'}
+			</div>
 		{/foreach}
 	</div>
 
-	{include file='pagination.tpl'}	
+	{include file='pagination.tpl'}
 
-	
 {else}
-	<p>Товары не найдены</p>
-	<br />
-	<div class="prod-back">
-		<a href="javascript:history.go(-1)" class="buttonblue">Назад</a>
+
+	<div class="products-not-found">
+		<p>Товары не найдены</p>
+		<br />
+		<div class="prod-back">
+			<a href="javascript:history.go(-1)" class="buttonblue">Назад</a>
+		</div>
+		<div class="filter-back">
+			<a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="buttonblue">Сбросить фильтр</a>
+		</div>
 	</div>
-	<div class="filter-back">
-		<a href="{strtok($smarty.server.REQUEST_URI,'?')}" class="buttonblue">Сбросить фильтр</a>
-	</div>
+
 {/if}	
 
 {* SEO-текст *}

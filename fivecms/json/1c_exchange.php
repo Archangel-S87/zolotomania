@@ -9,8 +9,11 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-define('JSON_DIR', __DIR__ . '/');
-define('JSON_READER', JSON_DIR . 'JsonReader/vendor/');
+//error_reporting(E_ALL);
+//ini_set("display_errors", 1);
+
+const JSON_DIR = __DIR__ . '/';
+const JSON_READER = JSON_DIR . 'JsonReader/vendor/';
 
 chdir('../..');
 require_once JSON_DIR . 'classes/Exchange.php';

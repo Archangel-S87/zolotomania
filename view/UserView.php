@@ -25,7 +25,10 @@ class UserView extends View
 			$email			= $this->request->post('email');
             $tel			= $this->request->post('tel');
 			$password		= $this->request->post('password');
-			$address			= $this->request->post('address');
+			$address		= $this->request->post('address');
+
+            $user_data = $this->request->post('user_data');
+            $user_data['birthday'] = date('Y-m-d', strtotime($user_data['birthday']));
 			
 			$this->design->assign('name', $name);
 			$this->design->assign('email', $email);
@@ -58,6 +61,8 @@ class UserView extends View
 			elseif($user_id = $this->users->update_user($this->user->id, array('name'=>$name, 'email'=>$email, 'phone'=>$phone, 'address'=>$address)))
 			{
 				$this->user = $this->users->get_user(intval($user_id));
+                $this->users->update_user_data($this->user->id, $user_data);
+
 				$this->design->assign('name', $this->user->name);
 				$this->design->assign('user', $this->user);
 				$this->design->assign('email', $this->user->email);			
@@ -81,7 +86,10 @@ class UserView extends View
 			$this->design->assign('phone', $this->user->phone);	
 			$this->design->assign('address', $this->user->address);
 		}
-	
+
+        $user_data = $this->users->get_user_data($this->user->id);
+        $this->design->assign('user_data', $user_data);
+
 		$orders = $this->orders->get_orders(array('user_id'=>$this->user->id));
 		$this->design->assign('orders', $orders);
 		

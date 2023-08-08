@@ -1,11 +1,12 @@
 /.idea
 _temp/**/*.zip
-compiled/adaptive_wide/*
-compiled/mobile/*
-compiled/mail/*
-compiled/Zolotomania/*
-cache/**/*.*
-fivecms/design/compiled*
+/compiled
+/cache
+/fivecms/design/compiled
+/fivecms/json/strace
+fivecms/cml/temp
+fivecms/json/temp
+payment/Sberbank/log
 !files/originals/*
 files/**/*.jpg
 files/**/*.jpeg
@@ -14,5 +15,3 @@ files/**/*.png
 !files/gold.jpg
 !files/delete.png
 !files/silver.jpg
-fivecms/cml/temp/
-fivecms/json/temp/*

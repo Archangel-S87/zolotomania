@@ -15,15 +15,14 @@
 			<div class="big_middle">
 				{if $product->image}
 					{if $product->images|count==1}
-					<a href="{$product->image->filename|resize:800:600:w}" class="zoom cloud-zoom" id="zoom1" title="{$product->name|escape}" data-rel="{if !empty($product->image->color)}{$product->image->color}{else}gallery{/if}">
+					<a href="{$product->image->filename|resize:500:500:w}" class="zoom cloud-zoom" id="zoom1" title="{$product->name|escape}" data-rel="{if !empty($product->image->color)}{$product->image->color}{else}gallery{/if}">
 					{/if}
-						<div onClick="$('.imagesmall a:visible:first').click();" class="image"><img src="{$product->image->filename|resize:800:600:w}" alt="{$product->name|escape}" title="{$product->name|escape}" class="imglenss" /></div>
+						<div onClick="$('.imagesmall a:visible:first').click();" class="image"><img src="{$product->image->filename|resize:500:500:w}" alt="{$product->name|escape}" title="{$product->name|escape}" class="imglenss" /></div>
 					{if $product->images|count==1}</a>{/if}	
 				{else}
 					<div class="image">
-						<svg fill="#dadada" style="width:50%;height:50%;" viewBox="0 0 24 24">
-							<use xlink:href='#no_photo' />
-						</svg>
+						<img loading="lazy" src="/design/Zolotomania/images/no-photo.png" alt="{$product->name|escape}"
+								 title="{$product->name|escape}"/>
 					</div>
 				{/if}
 			</div>
@@ -33,8 +32,8 @@
 		{if $product->images|count>1}
 			<div class="images">
 				{foreach $product->images as $i=>$image}
-					<div class="{if !$image->color}imgvisible{/if} cloud-zoom-gallery imagesmall" data-imcolor="{$image->color}" data-sm="{$image->filename|resize:800:600:w}">
-						<a class="zoom" href="{$image->filename|resize:800:600:w}" title="{$product->name|escape}" data-rel="{if !empty($image->color)}{$image->color}{else}gallery{/if}">
+					<div class="{if !$image->color}imgvisible{/if} cloud-zoom-gallery imagesmall" data-imcolor="{$image->color}" data-sm="{$image->filename|resize:500:500:w}">
+						<a class="zoom" href="{$image->filename|resize:500:500:w}" title="{$product->name|escape}" data-rel="{if !empty($image->color)}{$image->color}{else}gallery{/if}">
 							<img src="{$image->filename|resize:100:100}" alt="{$product->name|escape}" title="{$product->name|escape}"/>
 						</a>
 					</div>
@@ -91,24 +90,32 @@
 
 	{* Описание товара *}
 	<div class="description {if empty($notinstock)}border_wrapper{/if}">
+
+		<h1 class="product__title" data-product="{$product->id}">{$product->name|escape}</h1>
+
      	{if empty($notinstock)}
-     		{if $settings->showsku == 1}
+            {$sku = $product->variant->sku|default:''}
+            {if !empty($product->variant->shop->name)}
+                {$sku = "{$product->variant->shop->name}-$sku"}
+            {/if}
+
+     		{if $settings->showsku == 1 && $sku}
 				{* Расположение товара - склад *}
 				<p class="sku">
-					{if $group && $group->name == 'Магазины'}
-						{if $product->variant->sku && !empty($product->variant->shop->name)}
-							<span>{$product->variant->shop->name}-{$product->variant->sku}</span>
-						{/if}
-					{else}
-						{if $product->variant->sku}
-							<span>Артикул: {$product->variant->sku}</span>
-						{/if}
-					{/if}
+                   Артикул: <span>{$sku}</span>
+{*					{if $group && $group->name == 'Магазины'}*}
+{*						{if $product->variant->sku && !empty($product->variant->shop->name)}*}
+{*							<span>{$product->variant->shop->name}-{$product->variant->sku}</span>*}
+{*						{/if}*}
+{*					{else}*}
+{*						{if $product->variant->sku}*}
+{*							<span>Артикул: {$product->variant->sku}</span>*}
+{*						{/if}*}
+{*					{/if}*}
 				</p>
 			{/if}
      	{/if}
 
-		<h1 class="product__title" data-product="{$product->id}">{$product->name|escape}</h1>
 		{* schema *}
 		{if $product->annotation}{$descr = $product->annotation|strip_tags:true}{elseif $product->body}{$descr = $product->body|strip_tags:true}{elseif !empty($seo_description)}{$descr = $seo_description}{elseif $meta_description}{$descr = $meta_description|escape}{else}{$descr = $product->name|escape}{/if}
 		<div itemscope itemtype="http://schema.org/Product">
@@ -170,7 +177,7 @@
 						<span class="pricelist" style="display:none;">
 							{foreach $product->variants as $v}
 								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<span class="c{$v->id}" data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $v->sku}Артикул: {$v->sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
+								<span class="c{$v->id}" data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $sku}Артикул: {$sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
 								{if $v->name1}{$cntname1 = 1}{/if}
 							{/foreach}
 						</span>
@@ -185,27 +192,40 @@
 					
 						<input class="vhidden 1clk" name="variant" value="" type="hidden" />
 					
-						{if $settings->showsku == 1}<!--p class="sku">{if $product->variant->sku}Артикул: {$product->variant->sku}{/if}</p-->{/if}
+						{if $settings->showsku == 1}<!--p class="sku">{if $sku}Артикул: {$sku}{/if}</p-->{/if}
 						{if $settings->showstock == 1}<span class="stockblock">На складе: <span class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span></span>{/if}
 
-						<div class="variants-wrap flex" style=" margin-bottom: 15px; display: none;">
-							<select name="variant1" class="p0"{if $cntname1 == 0} style="display:none;"{/if}>
-								{foreach $product->vproperties[0] as $pname => $pclass}
-									{assign var="size" value="c"|explode:$pclass}
-									<option {if $cntname1 == 0}label="size"{/if} value="{$pclass}" class="{$pclass}"
-										{foreach $size as $sz}{if $product->variant->id == $sz|intval}selected{/if}{/foreach}
-									>{$pname}</option>
-								{/foreach}
-							</select>
-							<select name="variant2" id="bigimagep1" class="p1"{if $cntname2 == 0} style="display:none;"{/if}>
-								{foreach $product->vproperties[1] as $pname => $pclass}
-									{assign var="color" value="c"|explode:$pclass}
-									<option value="{$pclass}" class="{$pclass}"
-										{foreach $color as $cl}{if $product->variant->id == $cl|intval}selected{/if}{/foreach}
-									>{$pname}</option>
-								{/foreach}
-							</select>
+						<div style="font-style: italic;margin: 10px 0 4px;">(Варианты: <strong id="count_variant"></strong>)</div>
+						<div class="variants-wrap flex" style=" margin-bottom: 15px;">
+							<label class="flex" {if $cntname1 == 0} style="display:none;"{/if}><span>Размер</span>
+								<select name="variant1" class="p0">
+									{foreach $product->vproperties[0] as $pname => $pclass}
+										{assign var="size" value="c"|explode:$pclass}
+										<option {if $cntname1 == 0}label="size"{/if} value="{$pclass}" class="{$pclass}"
+												{foreach $size as $sz}{if $product->variant->id == $sz|intval}selected{/if}{/foreach}
+										>{$pname}</option>
+									{/foreach}
+								</select>
+							</label>
+							<label class="flex" {if $cntname2 == 0} style="display:none;"{/if}><span>Вес, г</span>
+								<select name="variant2" id="bigimagep1" class="p1">
+									{foreach $product->vproperties[1] as $pname => $pclass}
+										{assign var="color" value="c"|explode:$pclass}
+										<option value="{$pclass}" class="{$pclass}"
+												{foreach $color as $cl}{if $product->variant->id == $cl|intval}selected{/if}{/foreach}
+										>{$pname}</option>
+									{/foreach}
+								</select>
+							</label>
 						</div>
+						<ul class="features">
+							{foreach $product->features as $f}
+								<li>
+									<span class="featurename"><strong>{$f->name|escape}:</strong></span>
+									<span class="lfeature">{$f->value|escape}</span>
+								</li>
+							{/foreach}
+						</ul>
 						<div class="colorpriceseparator">
 							<div id="amount">
 								<input type="button" class="minus" value="-" />
@@ -220,20 +240,61 @@
 							</span>
 							{if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}<span class="bonus">+ <span class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span></span>{/if}
 						</div>
+
+                        <div class="additional-information-title">Кредит без переплат</div>
+                        <div class="additional-information">
+                            <label for="number_months">Период, мес.
+                                <select id="number_months">
+                                    <option value="6">6</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="12">12</option>
+                                    <option value="18">18</option>
+                                    <option value="24">24</option>
+                                </select>
+                            </label>
+                            <div id="in_months" data-currency="{$currency->sign|escape}">Ежемесячный платеж <strong>{($product->variant->price / 6)|convert} {$currency->sign|escape}</strong></div>
+                            </div>
+                        </div>
+                        <script>
+                            $(window).load(function () {
+                                $('#number_months').on('change', update_number_months);
+                            });
+                        </script>
+
 					{else}
 						{if $product->variants|count==1  && !$product->variant->name}{else}<span class="b1c_caption" style="display: none;"> </span>{/if}
-						
-						
+
 						{if $settings->showstock == 1}<span class="stockblock">На складе: <span class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span></span>{/if}
 
-						<select class="b1c_option" name="variant" {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}>
-							{foreach $product->variants as $v}
-								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<option {if $product->variant->id==$v->id}selected{/if} data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $v->sku}Артикул: {$v->sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}" value="{$v->id}" {if $v->compare_price > 0}data-cprice="{$v->compare_price|convert}"{/if} data-varprice="{$v->price|convert}">
-									{$v->name|escape}&nbsp;
-								</option>
+                        <label class="flex" {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}><span>{$product->variant->name|escape}</span>
+                        	<select class="b1c_option" name="variant">
+                                {foreach $product->variants as $v}
+                                    {$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
+                                    <option {if $product->variant->id==$v->id}selected{/if}
+                                            data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
+                                            data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
+                                            data-sku="{if $v->sku}Артикул: {$v->sku}{/if}"
+                                            data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}"
+                                            value="{$v->id}"
+                                            {if $v->compare_price > 0}
+                                                data-cprice="{$v->compare_price|convert}"
+                                            {/if}
+                                            data-varprice="{$v->price|convert}">
+                                        {$v->name|escape}&nbsp;
+                                    </option>
+                                {/foreach}
+                            </select>
+                        </label>
+
+						<ul class="features">
+							{foreach $product->features as $f}
+								<li>
+									<span class="featurename"><strong>{$f->name|escape}:</strong></span>
+									<span class="lfeature">{$f->value|escape}</span>
+								</li>
 							{/foreach}
-						</select>
+						</ul>
 					
 						<div class="price noncolor">
 							<div id="amount">
@@ -266,7 +327,66 @@
 							</span>
 							{if $settings->bonus_limit && $settings->bonus_order}{$ballov = ($product->variant->price * $settings->bonus_order/100)|convert|replace:' ':''|round}<span class="bonus">+ <span class="bonusnum">{$ballov} {$ballov|plural:'балл':'баллов':'балла'}</span></span>{/if}
 						</div>
+
+                        <div class="additional-information-title">Кредит без переплат</div>
+                        <div class="additional-information">
+                            <label for="number_months">Период, мес.
+                                <select id="number_months">
+                                    <option value="6">6</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="12">12</option>
+                                    <option value="18">18</option>
+                                    <option value="24">24</option>
+                                </select>
+                            </label>
+                            <div id="in_months" data-currency="{$currency->sign|escape}">Ежемесячный платеж <strong>{($product->variant->price / 6)|convert} {$currency->sign|escape}</strong></div>
+                            </div>
+                        </div>
+                        <script>
+                            $(window).load(function () {
+                                $('#number_months').on('change', update_number_months);
+                            });
+                        </script>
+
 					{/if}
+
+					<style>
+						#content ul li {
+							list-style: none;
+						}
+					</style>
+					<p style="font-weight: bold;">При получении в наших магазинах:</p>
+					<ul class="product__add-info" style="margin: 10px 0 20px;">
+						<li class="product__add-info--item disc">
+							<span>Бесплатная доставка: 48 часов (Курск, Курская область)</span>
+						</li>
+						<li class="product__add-info--item disc">
+							<span>Заказ до трёх украшений</span>
+						</li>
+						<li class="product__add-info--item disc">
+							<span>Возможность поменять на новое изделие (30 дней)</span>
+						</li>
+						<li class="product__add-info--item disc">
+							<span>Удобные способы оплаты</span>
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							<span>Кредит без переплат (6, 9, 10, 12, 18, 24 месяцев)</span>
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							<span>Наличные/терминал</span>
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							<span>Обмен старого золота на новое</span>
+						</li>
+						<li class="product__add-info--item" style="padding-left: 20px;">
+							<span>Оплата маннингами (бонусами) до 100% покупки</span>
+						</li>
+						<li class="product__add-info--item disc">
+							<span>Ремонт наших украшения - с 50% скидкой</span>
+						</li>
+					</ul>
+
 					<div class="buy uk-flex">
 						{if !$product->variant->reservation}
 							<div class="wishprod">
@@ -363,30 +483,8 @@
 				{$product->annotation}
 			</div>
 		{/if}
-		{if $product->features}
-			<div id="tab2" class="tab_content">
-				<ul class="features">
-				{foreach $product->features as $f}
-				<li>
-					<label class="featurename"><span>{$f->name|escape}:</span></label>
-					<label class="lfeature">{$f->value|escape}</label>
-				</li>
-				{/foreach}
-				</ul>
-			</div>
-			{/if}
-		{* Add info *}	
-			<ul class="product__add-info">
-				<li class="product__add-info--item">
-					Бесплатная доставка
-				</li>
-				<li class="product__add-info--item">
-					Примерка до 3 украшений
-				</li>	
-				<li class="product__add-info--item">	
-					Удобные способы оплаты
-				</li>	
-			</ul>
+		{* Add info *}
+
 		{* Add info @ *}
 		{* Share *}
 		<div class="annot-brand share_wrapper">
@@ -404,14 +502,6 @@
 	</div>
 	
 	<div class="container">
-
-		<!--ul class="tabs">
-			{if $product->body}<li><a href="#tab1" title="Описание">Описание</a></li>{/if}
-			{if $product->features}<li><a href="#tab2" title="Характеристики">Характеристики</a></li>{/if}
-			{if $cms_files}<li><a href="#tab4" title="Файлы">Файлы</a></li>{/if}
-			<li class="coments_tab"><a href="#tab3" title="Отзывы">Отзывы{if $comments} ({$comments|count}){/if}</a></li>
-			{if $settings->youtube_product == 1}<li class="find_video" onClick="findVideo('обзор+{$product->name|escape}');"><a href="#tab5" title="Видео">Видео</a></li>{/if}
-		</ul-->
 
 		<div class="tab_container">
 
@@ -634,7 +724,7 @@
 
 {* featured products *}
 {* available sort (or remove): position, name, date, views, rating, rand *}
-{get_products var=featured_products featured=1 category_id=$category->id sort=rand limit=4}
+{*{get_products var=featured_products featured=1 category_id=$category->id sort=rand limit=4}*}
 {if !empty($featured_products)}
 	<div class="mainproduct blue">Вас также могут заинтересовать</div>
 	<div id="hitcontent" class="tiny_products hoverable">

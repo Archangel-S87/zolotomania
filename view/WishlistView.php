@@ -6,14 +6,6 @@ class WishlistView extends View
 {
     var $limit = 150;
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    //////////////////////////////////////////
-    // Основная функция
-    //////////////////////////////////////////
     function fetch()
     {
         $limit = 150;
@@ -23,16 +15,15 @@ class WishlistView extends View
         if(!empty($_COOKIE['wished_products'])) {
             $products_ids = explode(',', $_COOKIE['wished_products']);
             $products_ids = array_reverse($products_ids);
-        }
-        else
+        } else {
             $products_ids = array();
-            
+        }
+
         if($this->request->get('action', 'string') == 'delete') {
             $key = array_search($id, $products_ids);
             unset($products_ids[$key]);    
 			header('Location: /wishlist');
-        }   
-        elseif($id > 0) {
+        } elseif($id > 0) {
             array_push($products_ids, $id);
             $products_ids = array_unique($products_ids);        
         }
@@ -60,7 +51,6 @@ class WishlistView extends View
         
         if(count($products_ids)) {
 
-            
             foreach($this->products->get_products(array('id'=>$products_ids)) as $p)
                 $products[$p->id] = $p;
 
@@ -71,10 +61,11 @@ class WishlistView extends View
                 $products[$variant->product_id]->variants[] = $variant;
             }
             
-            foreach($this->products->get_images(array('product_id'=>$products_ids)) as $image)
-            if(isset($products[$image->product_id]))
-                $products[$image->product_id]->images[] = $image;
-          
+            foreach($this->products->get_images(array('product_id'=>$products_ids)) as $image) {
+                if(isset($products[$image->product_id]))
+                    $products[$image->product_id]->images[] = $image;
+            }
+
             foreach($products_ids as $id)
             {  
                 if(isset($products[$id]))

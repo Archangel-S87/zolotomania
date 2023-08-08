@@ -5,7 +5,8 @@ license = rKCeoKagn5KgmpNflZKmlKGVYKOnVFw;
 [database]
 
 ;Сервер базы данных
-db_server = "localhost";
+;db_server = "localhost";
+db_server = "db";
 
 ;Пользователь базы данных
 db_user = "root";

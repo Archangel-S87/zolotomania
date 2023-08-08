@@ -42,11 +42,15 @@ class ExchangeCatalog extends Exchange
         $unloaded_categories = []; // Не загруженные категории
 
         foreach ($this->dictionary->categories as $category) {
+            // Очищаю кэш всегда нужна
+            if ($this->settings->cached == 1) $this->cache->clearall();
             $this->import_category($category, $is_update, $unloaded_categories);
         }
 
         // Загрузка категорий которые не были загружены
         foreach ($unloaded_categories as $category) {
+            // Очищаю кэш всегда нужна
+            if ($this->settings->cached == 1) $this->cache->clearall();
             $this->import_category($category, $is_update, $unloaded_categories, true);
         }
 
@@ -63,6 +67,10 @@ class ExchangeCatalog extends Exchange
             'meta_keywords' => $category['name'],
             'meta_description' => $category['description']
         ];
+
+        if (isset($category['position'])) {
+            $new_category['position'] = $category['position'];
+        }
 
         // Есть ли родительская категория?
         if ($category['parent_id']) {
@@ -96,17 +104,10 @@ class ExchangeCatalog extends Exchange
 
             if ($is_update && $category_id = $this->find_category_id($category['external_id'])) {
                 // Обновление категории
-                if (!empty($category['position'])) {
-                    $new_category['position'] = $category['position'];
-                }
                 $this->categories->update_category($category_id, $new_category);
             } else {
                 $new_category['external_id'] = $category['external_id'];
                 $category_id = $this->categories->add_category($new_category);
-                if (!empty($category['position'])) {
-                    $new_category['position'] = $category['position'];
-                    $this->categories->update_category($category_id, $new_category);
-                }
             }
 
             $this->dictionary->categories[$category['external_id']]['id'] = $category_id;
@@ -117,7 +118,7 @@ class ExchangeCatalog extends Exchange
             ];
 
         } elseif ($finish) {
-            Exchange::add_warning("Category {$new_category['name']} not import");
+            Exchange::add_warning("Для категории {$category['external_id']} не найдена родительская");
         } else {
             // откладываю импорт на потом
             $unloaded_categories[$category['external_id']] = $category;
@@ -141,6 +142,7 @@ class ExchangeCatalog extends Exchange
             $this->db->query('TRUNCATE TABLE __options');
             $this->db->query('TRUNCATE TABLE __images');
             $this->db->query('TRUNCATE TABLE __related_products');
+            $this->db->query('TRUNCATE TABLE __variants');
 
             $originals_dir = $this->config->root_dir . 'files/originals/';
             $products_dir = $this->config->root_dir . 'files/products/';
@@ -161,6 +163,7 @@ class ExchangeCatalog extends Exchange
                 $depth = $reader->depth();
                 $reader->read();
                 do {
+                    if (!$reader->value()) continue;
                     $this->import_product($reader->value(), $is_update);
                 } while ($reader->next() && $reader->depth() > $depth);
             } else {
@@ -171,6 +174,8 @@ class ExchangeCatalog extends Exchange
         }
 
         $reader->close();
+
+        unlink($this->temp_dir . $filename);
 
         Exchange::response();
     }
@@ -192,9 +197,17 @@ class ExchangeCatalog extends Exchange
         }
 
         // Ид категории
-        $category_id = $this->find_category_id($json_product['category_id']);
+        if (empty($json_product['category_id'])) {
+            Exchange::add_warning("Товар с id {$json_product['id']}, Категория не определена");
+        }
+        $category_id = $this->find_category_id($json_product['category_id'] ?? '');
 
         $description = $json_product['description'] ?? '';
+
+        if (empty($json_product['name'])) {
+            Exchange::add_warning("Товар с id {$json_product['id']}, Название товара не определена");
+            return;
+        }
 
         $new_product = [
             'name' => $json_product['name'],
@@ -203,7 +216,8 @@ class ExchangeCatalog extends Exchange
             'meta_description' => $description,
             'annotation' => $description,
             'body' => $description,
-            'brand_id' => 0
+            'brand_id' => 0,
+            'is_new' => $json_product['is_new'] ?? 0
         ];
 
         if (!$product_id) {
@@ -261,7 +275,7 @@ class ExchangeCatalog extends Exchange
         }
 
         // Свойства товара
-        foreach ($json_product['properties'] as $property) {
+        foreach ($json_product['properties'] ?? [] as $property) {
 
             if (!$property['Раздел'] ?? null) {
                 Exchange::add_warning("Товар с id {$json_product['id']}, Раздел свойства не опредён");
@@ -303,7 +317,7 @@ class ExchangeCatalog extends Exchange
     }
 
     /**
-     * Возвращает id характеристики по переданому названию
+     * Возвращает id характеристики по переданному названию
      * Если не найдено добавляет новую характеристику
      * @param $property_name string
      * @param $section array
@@ -311,19 +325,33 @@ class ExchangeCatalog extends Exchange
      */
     private function get_feature_id($property_name, $section)
     {
-        if ($feature_id = $_SESSION['features_mapping'][$property_name] ?? '') return $feature_id;
+        $feature_id = $_SESSION['features_mapping'][$property_name] ?? null;
+        if ($feature_id) {
+            if (empty($section['updated'])) {
+                // Обновляю свойство
+                $new_feature = [
+                    'name' => (string)$section['name'],
+                    'in_filter' => (int)$section['in_filter']
+                ];
+                if (!empty($section['position'])) {
+                    $new_feature['position'] = $section['position'];
+                }
+                $this->features->update_feature($feature_id, $new_feature);
+                $section['updated'] = 1;
+            }
+            return $feature_id;
+        }
 
         $this->db->query('SELECT id FROM __features WHERE name=?', (string)$section['name']);
         if (!$feature_id = $this->db->result('id')) {
             $new_feature = [
                 'name' => (string)$section['name'],
-                'in_filter' => $section['in_filter'] ?? 0
+                'in_filter' => (int)$section['in_filter']
             ];
-            $feature_id = $this->features->add_feature($new_feature);
             if (!empty($section['position'])) {
                 $new_feature['position'] = $section['position'];
-                $this->features->update_feature($feature_id, $new_feature);
             }
+            $feature_id = $this->features->add_feature($new_feature);
         }
 
         $_SESSION['features_mapping'][$property_name] = $feature_id;
@@ -431,10 +459,8 @@ class ExchangeCatalog extends Exchange
                 $depth = $reader->depth();
                 $reader->read();
 
-                $old_product_id = null;
-
                 do {
-                    $this->import_variant($reader->value(), $old_product_id, $is_update);
+                    $this->import_variant($reader->value(), $is_update);
                 } while ($reader->next() && $reader->depth() > $depth);
 
             } else {
@@ -446,27 +472,28 @@ class ExchangeCatalog extends Exchange
 
         $reader->close();
 
+        unlink($this->temp_dir . $filename);
+
         Exchange::response();
     }
 
-    private function import_variant($json_variant, &$old_product_id, $is_update)
+    private function import_variant($json_variant, $is_update)
     {
         $product_1c_id = $json_variant['product_id'] ?? '';
         if (!$product_1c_id) {
-            Exchange::add_warning('Empty product product_id');
+            Exchange::add_warning('Пустое поле product_id');
+            return;
+        }
+
+        if (isset($json_variant['status']) && $json_variant['status'] = 'DELETE') {
+            $this->db->query('DELETE FROM __variants WHERE external_id=?', $product_1c_id);
             return;
         }
 
         $this->db->query('SELECT id FROM __products WHERE external_id=?', $product_1c_id);
         if (!$product_id = $this->db->result('id')) {
-            Exchange::add_warning("Product with product_id {$product_1c_id} not found");
+            Exchange::add_warning("Не найден товар с id {$product_1c_id}");
             return;
-        }
-
-        if ($is_update && $old_product_id != $product_id) {
-            // Удаляю все варианты товара
-            $this->db->query('DELETE FROM __variants WHERE product_id=?', $product_id);
-            $old_product_id = $product_id;
         }
 
         // Значения и имя варианта
@@ -480,6 +507,14 @@ class ExchangeCatalog extends Exchange
             $name[] = $name1;
         }
 
+        $weight = $this->dictionary->get_section_by_name('weight');
+        $name2 = $this->dictionary->get_property_value_by_id($weight['external_id'], $json_variant['weight'] ?? null);
+        if ($name2) {
+            $name2 = ($weight['prefix'] ?? '') . " {$name2} " . ($weight['suffix'] ?? '');
+            $name2 = trim($name2);
+            $name[] = $name2;
+        }
+
         $variant = [
             'product_id' => $product_id,
             'sku' => $json_variant['vendor_code'],
@@ -488,6 +523,7 @@ class ExchangeCatalog extends Exchange
             'stock' => $json_variant['count'] ? (int)$json_variant['count'] : NULL,
             'external_id' => $json_variant['variant_id'],
             'name1' => $name1,
+            'name2' => $name2,
             'unit' => 'шт',
             'shop_id' => $this->find_shop_id($json_variant['shop'] ?? ''),
             'reservation' => $json_variant['reservation'] ?? 0
@@ -498,7 +534,7 @@ class ExchangeCatalog extends Exchange
     }
 
     /**
-     * Обновляет список магащинов если они есть
+     * Обновляет список магазинов если они есть
      */
     private function update_shops()
     {

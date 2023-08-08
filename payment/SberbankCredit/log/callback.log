@@ -1,0 +1,1133 @@
+---------------------04-06-2021 20:09:06-------------------
+warning=Не найден ордер
+---------------------05-06-2021 05:02:01-------------------
+warning=Оплата не удалась
+amount=2859000
+initialAmount=2859000
+mdOrder=40258d20-91ca-7291-bc8f-354a02567803
+operation=declinedByTimeout
+orderNumber=22193_ref_credit_0
+status=0
+---------------------05-06-2021 08:39:02-------------------
+warning=Оплата не удалась
+amount=3247000
+initialAmount=3247000
+mdOrder=45e5c1c4-b61b-739b-96b8-7e6902567803
+operation=declinedByTimeout
+orderNumber=22194_ref_credit_0
+status=0
+---------------------05-06-2021 11:06:02-------------------
+warning=Оплата не удалась
+mdOrder=7431f26a-f1bb-7a45-809d-95df02567803
+operation=declinedByTimeout
+orderNumber=22196_ref_credit_1
+status=0
+---------------------05-06-2021 22:19:55-------------------
+warning=Ордер оплачен 22202
+amount=641236
+initialAmount=669000
+mdOrder=c51df133-484d-759d-a1c1-938502567803
+operation=deposited
+orderNumber=22202_ref_credit_0
+status=1
+---------------------07-06-2021 09:49:02-------------------
+warning=Оплата не удалась
+mdOrder=99591457-b5f9-7e8b-bda7-7e5802567803
+operation=declinedByTimeout
+orderNumber=22203_ref_credit_0
+status=0
+---------------------07-06-2021 09:49:02-------------------
+warning=Оплата не удалась
+amount=7055000
+initialAmount=7055000
+mdOrder=4ae2a5bc-3ffb-7e3b-b0d2-af6402567803
+operation=declinedByTimeout
+orderNumber=22204_ref_credit_0
+status=0
+---------------------17-06-2021 15:01:07-------------------
+warning=Не найден ордер
+---------------------17-06-2021 15:01:23-------------------
+warning=Не найден ордер
+---------------------17-06-2021 15:01:34-------------------
+warning=Не найден ордер
+---------------------17-06-2021 15:02:18-------------------
+warning=Не найден ордер
+---------------------17-06-2021 15:02:19-------------------
+warning=Не найден ордер
+---------------------17-06-2021 16:47:06-------------------
+warning=Ордер оплачен 22242
+amount=4999000
+initialAmount=4999000
+mdOrder=8e59d46e-f96d-76da-9eed-daec0274fbc8
+operation=deposited
+orderNumber=22242_ref_credit_0
+status=0
+---------------------17-06-2021 16:47:16-------------------
+warning=Этот заказ уже оплачен
+amount=4999000
+orderNumber=22242_ref_credit_1
+initialAmount=4999000
+checksum=E73991CAAEF7043E0809039EBCD26E34EEADFE748D61336F492C5232149C731B
+mdOrder=ab588577-e5cd-74cd-80ad-2b6b0274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 16:49:35-------------------
+warning=Ордер оплачен 22243
+amount=5089000
+initialAmount=5089000
+mdOrder=545abea3-981a-75dc-a58e-13760274fbc8
+operation=deposited
+orderNumber=22243_ref_credit_0
+status=0
+---------------------17-06-2021 16:56:30-------------------
+warning=Не найден ордер
+amount=5848000
+orderNumber=13966_ref_credit_0
+initialAmount=5848000
+checksum=2233C87B97A430E20C29466CD82DFE202E0798B09601C41F1E4ACEBCDD777E76
+mdOrder=d51f480e-d564-71f6-bad0-ed6a0274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:00:01-------------------
+warning=Не найден ордер
+amount=1599000
+orderNumber=13967_ref_credit_0
+initialAmount=1599000
+checksum=B0687B40868B1D0B4E1FEB475A85A74CB486AA4ACE2826A78F54E71E12A4E148
+mdOrder=e2113a2b-1530-7ca3-a824-054a0274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:12:14-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13968_ref_credit_0
+initialAmount=2939000
+checksum=3314451FADF2E23F7D58CE7E1F5E01091E018016A4AAAEAF40028218243CB5FC
+mdOrder=d735a4d6-bd9f-7d98-aea2-f27c0274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:17:07-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_0
+initialAmount=2939000
+checksum=FF6F43B5FCCC7EEBE26299C01C8BE8124FCC1E1D24F5EE0AE7B668CCA2E033DC
+mdOrder=6f0ca159-1196-76a5-a319-f6710274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:20:14-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_1
+initialAmount=2939000
+checksum=499CB7F53CC9CD137EBE179FF5263649B2B4B6E53ED910C21052F60EB1E0656F
+mdOrder=7849ccb8-be0b-74e7-b5e4-12360274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:21:02-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_2
+initialAmount=2939000
+checksum=AA0CDCD128A1FEDECD6F48B150691C26BBB59F5D5B6714B7E7B5E16833AC84CE
+mdOrder=89e691bb-633f-7e38-8638-74270274fbc8
+operation=deposited
+status=0
+---------------------17-06-2021 17:27:08-------------------
+warning=Ордер оплачен 22244
+amount=4999000
+initialAmount=4999000
+mdOrder=a2b30d72-c562-75be-98c6-27aa0274fbc8
+operation=deposited
+orderNumber=22244_ref_credit_0
+status=0
+---------------------17-06-2021 19:34:00-------------------
+warning=bad sign
+amount=3909000
+initialAmount=3909000
+mdOrder=1a2e00ed-2471-7742-a2f7-e60502567803
+operation=declinedByTimeout
+orderNumber=22239_ref_credit_0
+status=0
+---------------------18-06-2021 13:56:49-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_3
+initialAmount=2939000
+checksum=F738BED1333C28F4456267AB2BB001AB2D85588288FBB5D651BDE82A4D84C04A
+mdOrder=60486add-7f2f-7827-89ce-b60c0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 13:57:16-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_4
+initialAmount=2939000
+checksum=9DFA13CEAE691AED8252A464C64D4E594F002CC16DF0DBD70B3998C76C440FD6
+mdOrder=2f6c354e-4a07-70e1-bd15-7d4e0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 14:03:41-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_5
+initialAmount=2939000
+checksum=36B9968FED88313D7525DF9617315199D9A0B8EFFB704B3599837D298FDE2556
+mdOrder=261c72d1-c428-7a0f-95d3-c7de0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 16:15:18-------------------
+warning=Не найден ордер
+amount=1599000
+orderNumber=13970_ref_credit_0
+initialAmount=1599000
+checksum=04937068F0CCB646CC0E209D3402E9A033E8B99FFA60D916AC808D64F8C3A872
+mdOrder=3bcdc7d4-7ca4-769b-999e-30eb0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 16:17:35-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13969_ref_credit_6
+initialAmount=2939000
+checksum=1D6614A67D778793744C3473DDCED707C4F289FB0B1C2A0C31C8D0C3705E2F9D
+mdOrder=2bf62810-9658-70fe-996f-56eb0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 16:18:57-------------------
+warning=Не найден ордер
+amount=2939000
+orderNumber=13971_ref_credit_0
+initialAmount=2939000
+checksum=82BEF72B0F9F58484169F253C777BA667914CF1518ADBC0F100CCA9158B5499E
+mdOrder=bd4dbcba-ffbc-7200-80f4-058f0274fbc8
+operation=deposited
+status=0
+---------------------18-06-2021 16:19:06-------------------
+warning=Не найден ордер
+checksum=71549F9C9F0908545AEDD5866C8B44CF4352E85097092BF81ED492D6F82D480A
+orderNumber=13969_ref_credit_7
+mdOrder=8f1b84fc-0b70-7292-ac9c-cbe40274fbc8
+operation=declinedByTimeout
+status=0
+---------------------18-06-2021 16:50:01-------------------
+warning=Этот заказ уже оплачен
+checksum=5255CE7DE8B7CD7E33943522C572EF93B6D0ED69641A8F964748D170F1AFFB88
+orderNumber=22243_ref_credit_1
+mdOrder=ceeaa119-b155-715f-8d95-74870274fbc8
+operation=declinedByTimeout
+status=0
+---------------------18-06-2021 17:28:01-------------------
+warning=Этот заказ уже оплачен
+checksum=16F53D5276B833C8911F6D68584EA5C4216DE3C5DACF86C5F566BC05F5F5FAA3
+orderNumber=22244_ref_credit_1
+mdOrder=831b8c57-331e-7f01-ab08-b9ac0274fbc8
+operation=declinedByTimeout
+status=0
+---------------------21-06-2021 17:46:15-------------------
+warning=bad sign
+amount=789000
+initialAmount=789000
+mdOrder=e0c9a445-385b-7025-91bd-c0e80274fbc8
+operation=deposited
+orderNumber=22253_ref_credit_0
+status=0
+---------------------21-06-2021 17:46:37-------------------
+warning=bad sign
+amount=789000
+initialAmount=789000
+mdOrder=2f374fb9-42e9-7235-b63f-433d0274fbc8
+operation=deposited
+orderNumber=22253_ref_credit_1
+status=0
+---------------------21-06-2021 17:55:50-------------------
+warning=bad sign
+amount=1289000
+initialAmount=1289000
+mdOrder=985d1fef-cb36-72fc-a188-118c0274fbc8
+operation=deposited
+orderNumber=22254_ref_credit_0
+status=0
+---------------------22-06-2021 17:47:01-------------------
+warning=bad sign
+mdOrder=3b89e146-4fba-7970-9ad2-981c0274fbc8
+operation=declinedByTimeout
+orderNumber=22253_ref_credit_2
+status=0
+---------------------22-06-2021 17:56:02-------------------
+warning=bad sign
+mdOrder=0955b17b-ada1-7e84-8467-5f8b0274fbc8
+operation=declinedByTimeout
+orderNumber=22254_ref_credit_1
+status=0
+---------------------23-06-2021 17:59:22-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=c7687a47-7799-7db2-99fc-0c020274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_0
+status=0
+---------------------23-06-2021 17:59:40-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=742f25a7-0777-7893-bde9-81220274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_1
+status=0
+---------------------23-06-2021 18:00:36-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=15655b2c-3fb6-75f9-962a-23d70274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_2
+status=0
+---------------------23-06-2021 18:00:56-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=4728be3c-eb15-70ad-888d-0cf50274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_3
+status=0
+---------------------23-06-2021 18:01:46-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=b05dea78-272f-7a32-96b7-e01a0274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_4
+status=0
+---------------------23-06-2021 18:03:43-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=67fc99c9-e9a7-727d-8a36-92020274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_0
+status=0
+---------------------23-06-2021 18:04:25-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=8ebe3d5d-0551-73dd-a616-6bd60274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_1
+status=0
+---------------------23-06-2021 18:07:02-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=489cfafc-e1ca-7fbd-a42e-b0d30274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_5
+status=0
+---------------------23-06-2021 18:09:10-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=8d4d949a-729e-759c-a335-d8d20274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_2
+status=0
+---------------------23-06-2021 18:10:22-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=5bb30678-062a-75ed-b0b1-06690274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_3
+status=0
+---------------------23-06-2021 18:11:42-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=e44f2b20-d9b7-701c-a4d2-9a420274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_4
+status=0
+---------------------23-06-2021 18:13:00-------------------
+warning=bad sign
+amount=2109000
+initialAmount=2109000
+mdOrder=3a4464e6-10e0-723a-924c-23080274fbc8
+operation=deposited
+orderNumber=22261_ref_credit_5
+status=0
+---------------------23-06-2021 18:16:59-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=2a923037-fa98-780a-9cc0-a9330274fbc8
+operation=deposited
+orderNumber=22260_ref_credit_6
+status=0
+---------------------23-06-2021 20:41:01-------------------
+warning=Не найден ордер
+checksum=DCA4897441B79548DEA89A8A2DDD8E46C4B069C542C96E8316613902A50798D0
+orderNumber=13969_ref_credit_8
+mdOrder=df9edb77-b684-7ee4-8370-40860274fbc8
+operation=declinedByTimeout
+status=0
+---------------------24-06-2021 11:50:03-------------------
+warning=bad sign
+amount=2439000
+initialAmount=2439000
+mdOrder=26089330-8f28-7954-a002-7ced0274fbc8
+operation=deposited
+orderNumber=22263_ref_credit_0
+status=0
+---------------------24-06-2021 18:14:01-------------------
+warning=bad sign
+mdOrder=5e5d25e9-fa82-7ae3-aed2-5ea00274fbc8
+operation=declinedByTimeout
+orderNumber=22261_ref_credit_6
+status=0
+---------------------24-06-2021 18:17:00-------------------
+warning=bad sign
+mdOrder=cf4e2c23-5ba5-70b4-9976-dce20274fbc8
+operation=declinedByTimeout
+orderNumber=22260_ref_credit_7
+status=0
+---------------------25-06-2021 11:51:02-------------------
+warning=bad sign
+mdOrder=293059bc-025e-7f95-83b4-d1df0274fbc8
+operation=declinedByTimeout
+orderNumber=22263_ref_credit_1
+status=0
+---------------------26-06-2021 14:09:40-------------------
+warning=bad sign
+amount=5049000
+initialAmount=5049000
+mdOrder=febe8c8f-efa1-7444-bd5a-2b750274fbc8
+operation=deposited
+orderNumber=22271_ref_credit_0
+status=0
+---------------------26-06-2021 14:13:33-------------------
+warning=bad sign
+amount=2689000
+initialAmount=2689000
+mdOrder=50acb66d-7686-74b5-b132-fe500274fbc8
+operation=deposited
+orderNumber=22272_ref_credit_0
+status=0
+---------------------27-06-2021 11:06:02-------------------
+warning=bad sign
+amount=349000
+initialAmount=349000
+mdOrder=7c101684-28a9-7ea8-8814-45460274fbc8
+operation=declinedByTimeout
+orderNumber=22268_ref_credit_0
+status=0
+---------------------13-07-2021 01:07:02-------------------
+warning=bad sign
+amount=959000
+initialAmount=959000
+mdOrder=33a32c74-d2d6-73b1-abee-67ab0274fbc8
+operation=declinedByTimeout
+orderNumber=22315_ref_credit_0
+status=0
+---------------------17-07-2021 16:05:29-------------------
+warning=bad sign
+amount=3331230
+initialAmount=3829000
+mdOrder=8afb416f-0299-73cc-8a25-602b0274fbc8
+operation=deposited
+orderNumber=22335_ref_credit_0
+status=1
+---------------------18-07-2021 15:01:25-------------------
+warning=bad sign
+amount=989000
+initialAmount=989000
+mdOrder=c9467c2b-379d-7a0a-9e4b-391f0274fbc8
+operation=deposited
+orderNumber=22340_ref_credit_0
+status=0
+---------------------22-07-2021 17:17:03-------------------
+warning=bad sign
+mdOrder=2d687a1c-b8aa-7e7e-ba9c-1dd70274fbc8
+operation=declinedByTimeout
+orderNumber=22350_ref_credit_0
+status=0
+---------------------27-07-2021 18:31:12-------------------
+warning=bad sign
+amount=5209000
+initialAmount=5209000
+mdOrder=64b11e5f-c4cd-7d08-a0cc-f5110274fbc8
+operation=deposited
+orderNumber=22382_ref_credit_0
+status=0
+---------------------10-08-2021 10:51:31-------------------
+warning=bad sign
+amount=1165664
+initialAmount=1309000
+mdOrder=d35d5e84-2aad-7420-b78b-e5990274fbc8
+operation=deposited
+orderNumber=22436_ref_credit_0
+status=1
+---------------------11-08-2021 10:39:03-------------------
+warning=bad sign
+mdOrder=19ba0f85-2bf4-7b8e-885f-41df0274fbc8
+operation=declinedByTimeout
+orderNumber=22433_ref_credit_0
+status=0
+---------------------11-08-2021 10:42:03-------------------
+warning=bad sign
+mdOrder=bae5b7b2-ea2b-7593-8124-eec10274fbc8
+operation=declinedByTimeout
+orderNumber=22435_ref_credit_0
+status=0
+---------------------28-09-2021 12:57:00-------------------
+warning=bad sign
+mdOrder=4ef1b364-b3fd-7ff8-afcd-890b0274fbc8
+operation=declinedByTimeout
+orderNumber=22339_ref_credit_1
+status=0
+---------------------28-09-2021 20:49:13-------------------
+warning=bad sign
+amount=247000
+initialAmount=247000
+mdOrder=805abbce-6e85-731e-b568-1ba50274fbc8
+operation=deposited
+orderNumber=22838_ref_credit_0
+status=0
+---------------------29-09-2021 20:50:02-------------------
+warning=bad sign
+mdOrder=6786cfab-3fef-73ed-8cba-14760274fbc8
+operation=declinedByTimeout
+orderNumber=22838_ref_credit_1
+status=0
+---------------------04-11-2021 15:53:50-------------------
+warning=bad sign
+amount=8455000
+initialAmount=8455000
+mdOrder=edaa6d9a-cac3-704b-bbce-79cd0274fbc8
+operation=deposited
+orderNumber=23010_ref_credit_0
+status=0
+---------------------04-11-2021 16:05:28-------------------
+warning=bad sign
+amount=5876000
+initialAmount=5876000
+mdOrder=c3afc57b-7d50-72bf-b3ea-7d0a0274fbc8
+operation=deposited
+orderNumber=23011_ref_credit_0
+status=0
+---------------------05-11-2021 07:48:41-------------------
+warning=bad sign
+amount=1009000
+initialAmount=1009000
+mdOrder=105b10b6-c610-7c8a-a75d-fc300274fbc8
+operation=deposited
+orderNumber=23014_ref_credit_0
+status=0
+---------------------05-11-2021 09:53:49-------------------
+warning=bad sign
+amount=4238000
+initialAmount=4238000
+mdOrder=544c5e56-b800-7967-91bc-44a80274fbc8
+operation=deposited
+orderNumber=23015_ref_credit_0
+status=0
+---------------------05-11-2021 09:57:53-------------------
+warning=bad sign
+amount=2609000
+initialAmount=2609000
+mdOrder=4e69cb35-1591-77d9-b295-b9ca0274fbc8
+operation=deposited
+orderNumber=23016_ref_credit_0
+status=0
+---------------------05-11-2021 15:55:01-------------------
+warning=bad sign
+mdOrder=c0bbd45f-137f-7653-abaa-367e0274fbc8
+operation=declinedByTimeout
+orderNumber=23010_ref_credit_1
+status=0
+---------------------06-11-2021 09:55:01-------------------
+warning=bad sign
+mdOrder=e248bfd7-6922-7ea5-801f-ed910274fbc8
+operation=declinedByTimeout
+orderNumber=23015_ref_credit_1
+status=0
+---------------------08-11-2021 13:16:01-------------------
+warning=bad sign
+amount=1769000
+initialAmount=1769000
+mdOrder=11462575-2ad1-78cd-b888-66b20274fbc8
+operation=declinedByTimeout
+orderNumber=23026_ref_credit_0
+status=0
+---------------------10-12-2021 00:55:37-------------------
+warning=bad sign
+amount=2497000
+initialAmount=2497000
+mdOrder=86c3b765-1115-770f-8489-a5d40274fbc8
+operation=deposited
+orderNumber=23188_ref_credit_0
+status=0
+---------------------15-12-2021 19:42:30-------------------
+warning=bad sign
+amount=1689000
+initialAmount=1689000
+mdOrder=9fafc412-bb59-77f8-874a-de110274fbc8
+operation=deposited
+orderNumber=23218_ref_credit_0
+status=0
+---------------------16-12-2021 19:29:12-------------------
+warning=bad sign
+mdOrder=efef69e2-33d5-70b4-8a6c-6c500274fbc8
+operation=declinedByTimeout
+orderNumber=23217_ref_credit_0
+status=1
+---------------------25-12-2021 14:01:47-------------------
+warning=bad sign
+amount=939000
+initialAmount=939000
+mdOrder=e8272826-11dd-7245-9c5e-15f90274fbc8
+operation=deposited
+orderNumber=23274_ref_credit_0
+status=0
+---------------------09-01-2022 13:54:01-------------------
+warning=bad sign
+mdOrder=fb51382c-d461-797c-a937-911e0274fbc8
+operation=declinedByTimeout
+orderNumber=23323_ref_credit_1
+status=1
+---------------------12-01-2022 20:21:40-------------------
+warning=bad sign
+amount=1247159
+initialAmount=1369000
+mdOrder=bc28dfb7-5ff3-702e-9335-c4c40274fbc8
+operation=deposited
+orderNumber=23352_ref_credit_0
+status=1
+---------------------20-01-2022 00:49:29-------------------
+warning=bad sign
+amount=1668000
+initialAmount=1668000
+mdOrder=d445744c-f492-72cb-918d-b78a0274fbc8
+operation=deposited
+orderNumber=23400_ref_credit_0
+status=0
+---------------------26-01-2022 10:50:15-------------------
+warning=bad sign
+amount=569000
+initialAmount=569000
+mdOrder=3c055e14-00dc-771c-9731-e73e0274fbc8
+operation=deposited
+orderNumber=23451_ref_credit_0
+status=0
+---------------------27-01-2022 00:02:48-------------------
+warning=bad sign
+amount=2547000
+initialAmount=2547000
+mdOrder=8f13b80b-3442-78d9-a742-e67a0274fbc8
+operation=deposited
+orderNumber=23461_ref_credit_0
+status=0
+---------------------28-01-2022 12:07:49-------------------
+warning=bad sign
+amount=5399000
+initialAmount=5399000
+mdOrder=bbc5f8a4-34fa-755b-b9e9-18a40274fbc8
+operation=deposited
+orderNumber=23476_ref_credit_0
+status=0
+---------------------18-02-2022 09:45:03-------------------
+warning=bad sign
+amount=2569000
+initialAmount=2569000
+mdOrder=10862d10-f6df-77b4-9e8e-8fab0274fbc8
+operation=declinedByTimeout
+orderNumber=23579_ref_credit_0
+status=1
+---------------------01-03-2022 06:37:52-------------------
+warning=bad sign
+amount=6739000
+initialAmount=6739000
+mdOrder=0c9596f6-3788-7e06-9dba-fb070274fbc8
+operation=deposited
+orderNumber=23631_ref_credit_0
+status=0
+---------------------01-03-2022 06:43:07-------------------
+warning=bad sign
+amount=4209000
+initialAmount=4209000
+mdOrder=daf7cdc3-b0ed-75d5-9fbd-6bb90274fbc8
+operation=deposited
+orderNumber=23632_ref_credit_0
+status=0
+---------------------05-03-2022 10:08:47-------------------
+warning=bad sign
+amount=3718000
+initialAmount=3718000
+mdOrder=86995dbc-53c0-7fd8-aea8-1c260274fbc8
+operation=deposited
+orderNumber=23643_ref_credit_0
+status=0
+---------------------05-03-2022 10:09:29-------------------
+warning=bad sign
+amount=3718000
+initialAmount=3718000
+mdOrder=eb0d6f48-5912-72a2-a873-f9760274fbc8
+operation=deposited
+orderNumber=23643_ref_credit_1
+status=0
+---------------------05-03-2022 10:11:15-------------------
+warning=bad sign
+amount=3718000
+initialAmount=3718000
+mdOrder=c58361d3-9191-7ee2-9ff7-55250274fbc8
+operation=deposited
+orderNumber=23644_ref_credit_0
+status=0
+---------------------06-03-2022 10:10:01-------------------
+warning=bad sign
+mdOrder=ecd6280e-c676-724b-8942-1cbe0274fbc8
+operation=declinedByTimeout
+orderNumber=23643_ref_credit_2
+status=1
+---------------------06-03-2022 10:12:01-------------------
+warning=bad sign
+mdOrder=6b24a3c2-f304-75fc-877b-e9520274fbc8
+operation=declinedByTimeout
+orderNumber=23644_ref_credit_1
+status=1
+---------------------16-04-2022 16:23:58-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=429612b5-392d-7f01-b819-d9c90274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_0
+status=0
+---------------------16-04-2022 16:24:08-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=4991acf7-8513-74cd-bb6e-5f520274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_1
+status=0
+---------------------16-04-2022 16:24:23-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=6777e25b-39b4-7d6d-8d3d-616e0274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_2
+status=0
+---------------------16-04-2022 16:24:36-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=ed9f5323-7a32-71a8-952f-4c230274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_3
+status=0
+---------------------16-04-2022 16:24:55-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=440c54b2-f855-720b-afae-52d30274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_4
+status=0
+---------------------16-04-2022 16:25:26-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=3645d6f4-be11-7713-86c6-1ca00274fbc8
+operation=deposited
+orderNumber=23737_ref_credit_5
+status=0
+---------------------16-04-2022 16:26:56-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=6d5d2901-d3dc-7f6b-9d0f-0bad0274fbc8
+operation=deposited
+orderNumber=23738_ref_credit_0
+status=0
+---------------------16-04-2022 16:27:06-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=40c2ae45-523b-76d0-970f-e1070274fbc8
+operation=deposited
+orderNumber=23738_ref_credit_1
+status=0
+---------------------16-04-2022 16:27:27-------------------
+warning=bad sign
+amount=2519000
+initialAmount=2519000
+mdOrder=f190cde3-004b-794c-8fae-a52b0274fbc8
+operation=deposited
+orderNumber=23738_ref_credit_2
+status=0
+---------------------17-04-2022 16:26:01-------------------
+warning=bad sign
+mdOrder=b7e82cb1-6a3b-7283-bac5-25820274fbc8
+operation=declinedByTimeout
+orderNumber=23737_ref_credit_6
+status=1
+---------------------17-04-2022 16:28:01-------------------
+warning=bad sign
+mdOrder=afe2e7f5-b373-7c40-a43a-91ef0274fbc8
+operation=declinedByTimeout
+orderNumber=23738_ref_credit_3
+status=1
+---------------------21-04-2022 20:44:18-------------------
+warning=bad sign
+amount=3339000
+initialAmount=3339000
+mdOrder=2198cb84-64b6-7830-90c5-82440274fbc8
+operation=deposited
+orderNumber=23746_ref_credit_0
+status=0
+---------------------22-04-2022 20:45:01-------------------
+warning=bad sign
+mdOrder=d171751a-2b26-78cd-aeea-06380274fbc8
+operation=declinedByTimeout
+orderNumber=23746_ref_credit_1
+status=1
+---------------------23-04-2022 11:55:01-------------------
+warning=bad sign
+amount=659000
+initialAmount=659000
+mdOrder=0d1673fb-c49b-73c6-89ac-c16a0274fbc8
+operation=declinedByTimeout
+orderNumber=23747_ref_credit_0
+status=1
+---------------------19-05-2022 00:57:01-------------------
+warning=bad sign
+amount=2129000
+initialAmount=2129000
+mdOrder=bb34e430-06f7-7461-82b9-57050274fbc8
+operation=deposited
+orderNumber=23837_ref_credit_0
+status=0
+---------------------19-05-2022 17:45:09-------------------
+warning=bad sign
+amount=2469000
+initialAmount=2469000
+mdOrder=f7fda282-3a81-7902-b149-59f80274fbc8
+operation=deposited
+orderNumber=23842_ref_credit_0
+status=0
+---------------------15-06-2022 14:09:17-------------------
+warning=bad sign
+amount=1159000
+initialAmount=1159000
+mdOrder=db2413a4-fcdf-7003-b38a-33840274fbc8
+operation=deposited
+orderNumber=23925_ref_credit_0
+status=0
+---------------------17-06-2022 17:59:46-------------------
+warning=bad sign
+amount=1905455
+initialAmount=2129000
+mdOrder=c4239083-563b-7a77-b752-8cb00274fbc8
+operation=deposited
+orderNumber=23943_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:04-------------------
+warning=bad sign
+mdOrder=604a8d22-d9f4-7b7a-afb3-f64f0274fbc8
+operation=declinedByTimeout
+orderNumber=23935_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=b8a71578-ddf2-7c79-8f27-d5460274fbc8
+operation=declinedByTimeout
+orderNumber=23933_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=da1a1e7c-ac51-7c40-b071-cecb0274fbc8
+operation=declinedByTimeout
+orderNumber=23936_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=1b49e918-0dce-7718-b72f-b4140274fbc8
+operation=declinedByTimeout
+orderNumber=23938_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=82ce5a65-d349-7bb7-88ec-94cc0274fbc8
+operation=declinedByTimeout
+orderNumber=23931_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=6e7678ad-918a-78bd-8c31-964d0274fbc8
+operation=declinedByTimeout
+orderNumber=23939_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=04f05970-1e21-79ef-aa78-ed530274fbc8
+operation=declinedByTimeout
+orderNumber=23934_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=173c940d-d999-72f3-ab00-4b0c0274fbc8
+operation=declinedByTimeout
+orderNumber=23932_ref_credit_0
+status=1
+---------------------18-06-2022 17:49:05-------------------
+warning=bad sign
+mdOrder=f1a402da-ab5c-7952-8a7f-ed660274fbc8
+operation=declinedByTimeout
+orderNumber=23937_ref_credit_0
+status=1
+---------------------18-06-2022 17:54:03-------------------
+warning=bad sign
+mdOrder=32be0f9d-6069-73d7-8a9c-22860274fbc8
+operation=declinedByTimeout
+orderNumber=23941_ref_credit_0
+status=1
+---------------------19-06-2022 16:20:05-------------------
+warning=bad sign
+mdOrder=745b28bb-d8c2-78e4-a689-c4e10274fbc8
+operation=declinedByTimeout
+orderNumber=23942_ref_credit_1
+status=1
+---------------------19-06-2022 16:20:05-------------------
+warning=bad sign
+mdOrder=9a01dda4-5cf1-743b-bdf9-41890274fbc8
+operation=declinedByTimeout
+orderNumber=23940_ref_credit_1
+status=1
+---------------------19-06-2022 18:32:04-------------------
+warning=bad sign
+amount=2129000
+initialAmount=2129000
+mdOrder=6bec8de1-d709-7aef-ade3-847f0274fbc8
+operation=declinedByTimeout
+orderNumber=23932_ref_credit_1
+status=1
+---------------------19-06-2022 18:33:01-------------------
+warning=bad sign
+mdOrder=d4681308-605c-7a6e-af62-38a90274fbc8
+operation=declinedByTimeout
+orderNumber=23933_ref_credit_1
+status=1
+---------------------19-06-2022 18:33:01-------------------
+warning=bad sign
+mdOrder=f91a4651-074d-7132-8594-6e5e0274fbc8
+operation=declinedByTimeout
+orderNumber=23936_ref_credit_1
+status=1
+---------------------19-06-2022 18:33:02-------------------
+warning=bad sign
+mdOrder=bd17367f-f724-71df-8b15-cbf50274fbc8
+operation=declinedByTimeout
+orderNumber=23934_ref_credit_1
+status=1
+---------------------19-06-2022 18:34:03-------------------
+warning=bad sign
+mdOrder=04c7c0fa-c50e-7147-a3fb-c9810274fbc8
+operation=declinedByTimeout
+orderNumber=23937_ref_credit_1
+status=1
+---------------------19-06-2022 18:34:03-------------------
+warning=bad sign
+mdOrder=d862c294-9665-78e2-af0a-ead20274fbc8
+operation=declinedByTimeout
+orderNumber=23938_ref_credit_1
+status=1
+---------------------19-06-2022 18:34:03-------------------
+warning=bad sign
+mdOrder=b087a316-72fb-79cf-a9d8-88f60274fbc8
+operation=declinedByTimeout
+orderNumber=23941_ref_credit_1
+status=1
+---------------------19-06-2022 18:34:03-------------------
+warning=bad sign
+mdOrder=3b3e297a-0e04-7ebe-a53c-12510274fbc8
+operation=declinedByTimeout
+orderNumber=23939_ref_credit_1
+status=1
+---------------------13-07-2022 15:44:01-------------------
+warning=bad sign
+amount=2998000
+initialAmount=2998000
+mdOrder=ae0ff8b7-aa14-7296-b8a3-d5610274fbc8
+operation=declinedByTimeout
+orderNumber=24032_ref_credit_0
+status=1
+---------------------23-07-2022 12:05:00-------------------
+warning=bad sign
+amount=4489000
+initialAmount=4489000
+mdOrder=68f7e089-0618-7702-86ad-7bf50274fbc8
+operation=deposited
+orderNumber=24085_ref_credit_0
+status=0
+---------------------21-08-2022 12:29:01-------------------
+warning=bad sign
+amount=2009000
+initialAmount=2009000
+mdOrder=f5171044-7b05-7e02-afa8-4e7e0274fbc8
+operation=declinedByTimeout
+orderNumber=24144_ref_credit_0
+status=1
+---------------------21-08-2022 15:21:00-------------------
+warning=bad sign
+amount=2529000
+initialAmount=2529000
+mdOrder=b9a840af-d47d-7e0b-8cb9-d5fe0274fbc8
+operation=declinedByTimeout
+orderNumber=24149_ref_credit_0
+status=1
+---------------------03-09-2022 07:26:00-------------------
+warning=bad sign
+mdOrder=664817c6-9ec6-72ad-b1de-5b600274fbc8
+operation=declinedByTimeout
+orderNumber=24213_ref_credit_0
+status=1
+---------------------24-09-2022 12:13:39-------------------
+warning=bad sign
+amount=2248000
+initialAmount=2248000
+mdOrder=c3354139-7ff7-7496-a3c3-03720274fbc8
+operation=deposited
+orderNumber=24312_ref_credit_0
+status=0
+---------------------24-09-2022 15:52:50-------------------
+warning=bad sign
+amount=1599000
+initialAmount=1599000
+mdOrder=6b16195d-96af-7bbb-b727-09ca0274fbc8
+operation=deposited
+orderNumber=24315_ref_credit_0
+status=0
+---------------------24-09-2022 16:04:20-------------------
+warning=bad sign
+amount=1039000
+initialAmount=1039000
+mdOrder=b7aead7b-d7e0-7782-8eda-1c4b0274fbc8
+operation=deposited
+orderNumber=24316_ref_credit_0
+status=0
+---------------------25-09-2022 12:09:46-------------------
+warning=bad sign
+amount=169000
+initialAmount=169000
+mdOrder=ec1c4744-7d26-7ef0-bec5-7b790274fbc8
+operation=deposited
+orderNumber=24323_ref_credit_0
+status=0
+---------------------25-09-2022 12:14:00-------------------
+warning=bad sign
+mdOrder=7a6b6afa-d103-7e08-a5f4-97060274fbc8
+operation=declinedByTimeout
+orderNumber=24312_ref_credit_1
+status=1
+---------------------25-09-2022 12:16:01-------------------
+warning=bad sign
+amount=889000
+initialAmount=889000
+mdOrder=2d5b0df4-6e31-7fa9-95fc-e0ad0274fbc8
+operation=declinedByTimeout
+orderNumber=24313_ref_credit_0
+status=1
+---------------------25-09-2022 15:49:00-------------------
+warning=bad sign
+mdOrder=24db52bf-b5d1-7211-b419-b97f0274fbc8
+operation=declinedByTimeout
+orderNumber=24314_ref_credit_0
+status=1
+---------------------25-09-2022 18:11:03-------------------
+warning=bad sign
+amount=259000
+initialAmount=259000
+mdOrder=2341cd49-0f39-7b88-9580-788e0274fbc8
+operation=deposited
+orderNumber=24326_ref_credit_0
+status=0
+---------------------25-09-2022 18:11:15-------------------
+warning=bad sign
+amount=259000
+initialAmount=259000
+mdOrder=70cff674-ce69-716e-94df-6dcf0274fbc8
+operation=deposited
+orderNumber=24326_ref_credit_1
+status=0
+---------------------26-09-2022 12:10:00-------------------
+warning=bad sign
+mdOrder=16e84785-5682-715a-bc7f-446a0274fbc8
+operation=declinedByTimeout
+orderNumber=24323_ref_credit_1
+status=1
+---------------------26-09-2022 16:07:01-------------------
+warning=bad sign
+amount=3439000
+initialAmount=3439000
+mdOrder=287187d4-a30c-751d-b5af-e8d50274fbc8
+operation=declinedByTimeout
+orderNumber=24324_ref_credit_0
+status=1
+---------------------13-10-2022 05:49:01-------------------
+warning=bad sign
+amount=2979000
+initialAmount=2979000
+mdOrder=57f2c1c6-392a-7147-86a9-460c0274fbc8
+operation=declinedByTimeout
+orderNumber=24392_ref_credit_0
+status=1
+---------------------27-10-2022 09:05:27-------------------
+warning=bad sign
+amount=1959000
+initialAmount=1959000
+mdOrder=4a944afb-6203-7329-9a16-30000274fbc8
+operation=deposited
+orderNumber=24460_ref_credit_0
+status=0
+---------------------30-10-2022 02:23:01-------------------
+warning=bad sign
+amount=709000
+initialAmount=709000
+mdOrder=d8629a5c-2cb1-779c-a30f-350d0274fbc8
+operation=declinedByTimeout
+orderNumber=24467_ref_credit_0
+status=1
+---------------------29-11-2022 23:34:48-------------------
+warning=bad sign
+amount=768345
+initialAmount=849000
+mdOrder=a4d51ef8-5ba8-73cd-8dfc-610d0274fbc8
+operation=deposited
+orderNumber=24605_ref_credit_0
+status=1
+---------------------30-11-2022 23:23:00-------------------
+warning=bad sign
+amount=849000
+initialAmount=849000
+mdOrder=f7cb033b-31f0-7e21-952a-2ab10274fbc8
+operation=declinedByTimeout
+orderNumber=24604_ref_credit_0
+status=1
+---------------------01-01-2023 19:10:51-------------------
+warning=bad sign
+amount=2399000
+initialAmount=2399000
+mdOrder=5a09f76e-5256-7980-8701-83cd0274fbc8
+operation=deposited
+orderNumber=24733_ref_credit_0
+status=0
+---------------------02-01-2023 19:19:00-------------------
+warning=bad sign
+amount=759000
+initialAmount=759000
+mdOrder=431916a4-c900-74c1-b8e1-1a7f0274fbc8
+operation=declinedByTimeout
+orderNumber=24735_ref_credit_0
+status=1

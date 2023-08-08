@@ -5,8 +5,18 @@
 	</name>
 
 	<settings>
-		<variable>token_sber</variable>
-		<name>Токен</name>
+		<variable>login</variable>
+		<name>Логин</name>
+	</settings>
+
+	<settings>
+		<variable>pass</variable>
+		<name>Пароль</name>
+	</settings>
+
+	<settings>
+		<variable>key_sber</variable>
+		<name>Сикретный ключ</name>
 	</settings>
 
 	<settings>
@@ -24,7 +34,7 @@
 
 	<settings>
 		<variable>payment_method</variable>
-		<name>Метов оплаты</name>
+		<name>Метод оплаты</name>
 		<options>
 			<name>Регистрация заказа</name>
 			<value>register</value>

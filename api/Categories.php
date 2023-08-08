@@ -89,7 +89,10 @@ class Categories extends Fivecms
 
 		$this->db->query("INSERT INTO __categories SET ?%", $category);
 		$id = $this->db->insert_id();
-		$this->db->query("UPDATE __categories SET position=id WHERE id=?", $id);	
+
+        if (empty($category['position'])) {
+            $this->db->query("UPDATE __categories SET position=id WHERE id=?", $id);
+        }
 
 		if ($copy_features && $category['parent_id'] > 0) {
 			$query = $this->db->placehold("INSERT INTO __categories_features SELECT ?, f.feature_id FROM __categories_features f WHERE f.category_id = ?", $id, $category['parent_id']);
@@ -186,11 +189,10 @@ class Categories extends Fivecms
 		$pointers[0]->level = 0;
 		
 		// Выбираем все категории
-		$query = $this->db->placehold("SELECT * FROM __categories c ORDER BY c.parent_id, c.position");
+		//$query = $this->db->placehold("SELECT * FROM __categories c ORDER BY c.parent_id, c.position");
 											
 		// Выбор категорий с подсчетом количества товаров для каждой. Может тормозить при большом количестве товаров.
-		//$query = $this->db->placehold("SELECT c.id, c.parent_id, c.name, c.description, c.description_seo, c.url, c.meta_title, c.meta_keywords, c.meta_description, c.image, c.visible, c.position, COUNT(p.id) as products_count
-		//                               FROM __categories c LEFT JOIN __products_categories pc ON pc.category_id=c.id LEFT JOIN __products p ON p.id=pc.product_id AND p.visible GROUP BY c.id ORDER BY c.parent_id, c.position");
+		$query = $this->db->placehold("SELECT c.id, c.parent_id, c.name, c.description, c.description_seo, c.url, c.meta_title, c.meta_keywords, c.meta_description, c.image, c.visible, c.position, c.last_modify, c.seo_type, COUNT(p.id) as products_count FROM __categories c LEFT JOIN __products_categories pc ON pc.category_id=c.id LEFT JOIN __products p ON p.id=pc.product_id AND p.visible GROUP BY c.id ORDER BY c.parent_id, c.position");
 		
 		if($this->settings->cached == 1 && empty($_SESSION['admin'])){
 			if($result = $this->cache->get($query)) {

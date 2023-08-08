@@ -50,10 +50,15 @@ $(function () {
 
 // Cfeatures
 function hideShow1(el) {
+    $('.feature_column .feature_name').each(function () {
+        if (el === this) return true;
+        $(this).removeClass('show').siblings('div.feature_values').slideUp('fast');
+        $('.feat-block').removeClass('show');
+    });
     $(el).toggleClass('show').siblings('div.feature_values').slideToggle('fast');
     $('.feat-block').toggleClass('show');
     return false;
-};
+}
 $("#features input:checked, #features select#choosenf").closest('#content .feature_column').find('.hideBtn').toggleClass('show');
 $("#features input:checked, #features select#choosenf").closest('#content .feature_values').slideToggle('normal');
 
@@ -198,7 +203,15 @@ function chpr(el, num) {
             oldamount = parseInt($('.productview #amount .amount').val());
             if (oldamount > maxamount) $('.productview #amount .amount').val(maxamount);
         }
+        update_number_months();
     }
+}
+// Select Loan term
+function update_number_months() {
+    const months = + $('#number_months').val(),
+        price = + $('form span.price').html().replace(/\s/ig, ''),
+        currency = $('#in_months').attr('data-currency');
+    $('#in_months strong').html(Math.round(price / months).toLocaleString('ru-RU') + ' ' + currency);
 }
 
 // Wish Compare
@@ -260,37 +273,35 @@ $(function () {
 // cart
 $(document).on('submit', 'form.variants', function (e) {
     e.preventDefault();
-    button = $(this).find('input[type="submit"]');
+    const button = $(this).find('input[type="submit"]');
+    let variant, amount;
     if ($(this).find('input[name=variant]:checked').length > 0)
         variant = $(this).find('input[name=variant]:checked').val();
     else if ($(this).find('input[name=variant]').length > 0)
         variant = $(this).find('input[name=variant]').val();
     if ($(this).find('select[name=variant]').length > 0)
         variant = $(this).find('select').val();
-    var amnt = $(this).find('input[name="amount"]').val();
-    if (amnt < 1) {
-        amnt = 1
-    }
-    ;
-    $('.mainloader').attr('style', "display:block;");
-    cartload();
+    amount = Number($(this).find('input[name="amount"]').val());
+    if (amount < 1) amount = 1;
 
-    function cartload() {
-        $.ajax({
-            url: "ajax/cart.php",
-            data: {variant: variant, 'mode': 'add', amount: amnt},
-            dataType: 'json',
-            success: function (data) {
-                $('#cart_informer').html(data);
-                if (button.attr('data-result-text'))
-                    button.val(button.attr('data-result-text'));
-                button.addClass('hover');
-                $('.mainloader').attr('style', "display:none;");
-            }, error: function (xhr, ajaxOptions, thrownError) {
-                setTimeout(cartload, 2000)
-            }
-        });
-    };
+    $('.mainloader').show();
+
+    $.ajax({
+        url: "ajax/cart.php",
+        data: {variant: variant, 'mode': 'add', amount: amount},
+        dataType: 'json',
+        success: function (data) {
+            $('#cart_informer').html(data);
+            if (button.attr('data-result-text'))
+                button.val(button.attr('data-result-text'));
+            button.addClass('hover');
+            $('.mainloader').hide();
+            $.fancybox({href: '#data', modal: true, showCloseButton: false, width: 400, scrolling: 'no', autoScale: false});
+        }, error: function (xhr, ajaxOptions, thrownError) {
+            setTimeout(cartload, 2000)
+        }
+    });
+
     return false;
 });
 // comments pagination
@@ -1114,3 +1125,39 @@ $(window).load(function () {
         b.fancybox.init()
     })
 })(jQuery);
+
+// Выставление курсора вполе на позицию pos
+$.fn.setCursorPosition = function(pos) {
+    if ($(this).get(0).setSelectionRange) {
+        $(this).get(0).setSelectionRange(pos, pos);
+    } else if ($(this).get(0).createTextRange) {
+        let range = $(this).get(0).createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
+};
+// Автоматическая высота textarea
+jQuery.fn.extend({
+    autoHeightTextarea: function () {
+        function autoHeight_(element) {
+            element = $(element);
+
+            element.css({
+                'height': 'auto',
+                'overflow-y': 'hidden'
+            });
+            if (element.val()) {
+                element.height(element[0].scrollHeight);
+            }
+            return element;
+        }
+        return this.each(function() {
+            autoHeight_(this).on('input', function() {
+                autoHeight_(this);
+            });
+        });
+    }
+});
+$('textarea').autoHeightTextarea();
