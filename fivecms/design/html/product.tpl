@@ -568,7 +568,7 @@ function translit(str)
 			</ul>
 		
 			<input class="button_green button_save" type="submit" name="" value="{$tr->save|escape}" />
-			<span class="add" id="add_variant"><i class="dash_link">{$tr->add_variant|escape}</i></span>
+{*			<span class="add" id="add_variant"><i class="dash_link">{$tr->add_variant|escape}</i></span>*}
 			<p style="font-size: 13px; margin: 15px 0 15px 15px; font-weight:700;">{$tr->variant_helper}</p>
 	 	</div>
 		<!-- Варианты товара (The End)--> 

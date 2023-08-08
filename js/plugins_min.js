@@ -121,7 +121,6 @@ function ajax_filter(){
 						$('#cfeatures').html(data.filter_block);
 						ajax_process=false;
 						$('#cfeatures').css('opacity','1');
-						console.log('checked');
 						$('.sliderButton').click();
 					}},error:function(jqXHR,exception){
 						ajax_process=false;$('#cfeatures').css('opacity','1');
@@ -142,6 +141,9 @@ function initSearch(){if (type=="products"){$(".newsearch").autocomplete({servic
 function clickerdiapmin(that){var pick=that.options[that.selectedIndex].text;if(pick){$(that).closest(".feature_values").find(".diapmin").val(pick).prop('disabled',false);}else{$(that).closest(".feature_values").find(".diapmin").val(pick).prop('disabled',true);}ajax_filter();};
 function clickerdiapmax(that){var pick=that.options[that.selectedIndex].text;if(pick){$(that).closest(".feature_values").find(".diapmax").val(pick).prop('disabled',false);}else{$(that).closest(".feature_values").find(".diapmax").val(pick).prop('disabled',true);}ajax_filter();};
 $(document).on('click','.hide_feat',function(){$(this).toggleClass('show').siblings('.feature_values').fadeToggle('normal');return false;});
+$(document).on('click', function () {
+	$('.hide_feat.show').removeClass('show').siblings('.feature_values').fadeToggle('normal');
+});
 // Cookie handler
 function createCookie(name,value,days){if(days){var date=new Date();date.setTime(date.getTime()+(days*24*60*60*1000));var expires="; expires="+date.toGMTString();}else var expires="";document.cookie=name+"="+value+expires+"; path=/";}
 function readCookie(name){var nameEQ=name+"=";var ca=document.cookie.split(';');for(var i=0;i<ca.length;i++){var c=ca[i];while(c.charAt(0)==' ')c=c.substring(1,c.length);if(c.indexOf(nameEQ)==0)return c.substring(nameEQ.length,c.length);}return null;}
@@ -268,9 +270,16 @@ $.fn.setCursorPosition = function(pos) {
 jQuery.fn.extend({
 	autoHeightTextarea: function () {
 		function autoHeight_(element) {
-			return jQuery(element)
-				.css({ 'height': 'auto', 'overflow-y': 'hidden' })
-				.height(element.scrollHeight);
+			element = $(element);
+
+			element.css({
+				'height': 'auto',
+				'overflow-y': 'hidden'
+			});
+			if (element.val()) {
+				element.height(element[0].scrollHeight);
+			}
+			return element;
 		}
 		return this.each(function() {
 			autoHeight_(this).on('input', function() {

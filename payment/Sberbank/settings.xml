@@ -20,6 +20,11 @@
 	</settings>
 
 	<settings>
+		<variable>key_sber</variable>
+		<name>Сикретный ключ</name>
+	</settings>
+
+	<settings>
 		<variable>test_server</variable>
 		<name>Тестовый</name>
 		<options>

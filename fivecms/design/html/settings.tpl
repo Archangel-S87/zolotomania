@@ -210,11 +210,17 @@
 				<h2>SMS</h2>
 				<a class="hideBtn" href="javascript://" onclick="hideShow(this);return false;">{$tr->more}</a>
 				<div id="hideCont">
-					<p style="margin-top: 10px;font-weight:700;font-size:15px;">* {$tr->register_on_website} <a href="http://cmssend.sms.ru/" target=_blank>CMSSEND.SMS.RU</a></p>
 					<ul>
-						<li><label style="min-width:400px;" class=property>API ID</label><input placeholder="00000000-0000-0000-0000-0000000000" name="apiid" class="fivecms_inp" type="text" value="{$settings->apiid}" /></li>
-						<li><label style="min-width:400px;" class="property" style="width: 190px; margin-right: 10px;">{$tr->sms_name}</label><input placeholder="79811234567" name="apifrom" class="fivecms_inp" type="text" value="{$settings->apifrom}" /></li>
-						<li><label style="min-width:400px;" class="property" style="width: 190px; margin-right: 10px;">{$tr->sms_phone}</label><input placeholder="79811234567" name="smsadmin" class="fivecms_inp" type="text" value="{$settings->smsadmin}" /></li>
+						<li><label style="min-width:400px;" class=property>API ID</label>
+							<input name="apiid" class="fivecms_inp" type="text" value="{$settings->apiid}" />
+						</li>
+						<li><label style="min-width:400px;" class=property>Пароль</label>
+							<input name="apipass" class="fivecms_inp" type="text" value="{$settings->apipass}" />
+						</li>
+						<li><label style="min-width:400px;" class="property" style="width: 190px; margin-right: 10px;">Имя отправителя</label>
+							<input name="apifrom" class="fivecms_inp" type="text" value="{$settings->apifrom}" />
+						</li>
+						<li><label style="min-width:400px;" class="property" style="width: 190px; margin-right: 10px;">{$tr->sms_phone}</label><input placeholder="+79811234567" name="smsadmin" class="fivecms_inp" type="text" value="{$settings->smsadmin}" /></li>
 					</ul>
 					
 					<ul>

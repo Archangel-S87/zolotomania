@@ -177,7 +177,7 @@ RewriteRule ^turbo_articles.xml?$ turbo_articles.php  [L,QSA]
 RewriteRule ^contacts/?$	index.php?module=FeedbackView  [L,QSA]
 
 # Downloads
-RewriteRule ^order/([^/]+)/([^/]+)/?$	index.php?module=OrderView&url=$1&file=$2  [L,QSA]
+RewriteRule ^order/([^/]+)/([^/]+)/?$ index.php?module=OrderView&url=$1&file=$2  [L,QSA]
 
 # Статические страницы
 RewriteCond %{REQUEST_FILENAME} !-f

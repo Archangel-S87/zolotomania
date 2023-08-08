@@ -19,6 +19,9 @@ class UserAdmin extends Fivecms
 			$user->group_id = $this->request->post('group_id');
             $user->phone = str_replace(['(', ')', ' ', '-'], '', $this->request->post('phone'));
 			$user->comment = $this->request->post('comment');
+
+            $user_data = $this->request->post('user_data');
+            $user_data['birthday'] = date('Y-m-d', strtotime($user_data['birthday']));
 	
 			## Не допустить одинаковые телефоны пользователей.
 			if(empty($user->name))
@@ -36,6 +39,7 @@ class UserAdmin extends Fivecms
 			else
 			{
 				$user->id = $this->users->update_user($user->id, $user);
+				$this->users->update_user_data($user->id, $user_data);
   				
    	    		$user = $this->users->get_user(intval($user->id));
    	    		if($change_balance > 0 && $user->balance > 0) {
@@ -87,7 +91,7 @@ class UserAdmin extends Fivecms
 		{
 			$this->design->assign('user', $user);
 			
-			$orders = $this->orders->get_orders(array('user_id'=>$user->id));
+			$orders = $this->orders->get_orders(['user_external_id' => $user->external_id]);
 			$this->design->assign('orders', $orders);
 
 			$filter = array();
@@ -119,7 +123,9 @@ class UserAdmin extends Fivecms
 			}
 			
 			$this->design->assign('surveys', $surveys);
-			
+
+			$user_data = $this->users->get_user_data($user->id);
+            $this->design->assign('user_data', $user_data);
 		}
 		
  	  	$groups = $this->users->get_groups();

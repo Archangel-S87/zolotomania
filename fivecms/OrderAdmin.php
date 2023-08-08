@@ -209,39 +209,43 @@ class OrderAdmin extends Fivecms
 		if($order && $purchases = $this->orders->get_purchases(array('order_id'=>$order->id)))
 		{
 			// Покупки
-			$products_ids = array();
-			$variants_ids = array();
-			foreach($purchases as $purchase)
-			{
-				$products_ids[] = $purchase->product_id;
-				$variants_ids[] = $purchase->variant_id;
-			}
-			
-			$products = array();
-			//foreach($this->products->get_products(array('id'=>$products_ids)) as $p)
-			foreach($this->products->get_products(array('id'=>$products_ids, 'limit'=>count($products_ids))) as $p)
-				$products[$p->id] = $p;
-	
-			$images = $this->products->get_images(array('product_id'=>$products_ids));		
-			foreach($images as $image)
-				$products[$image->product_id]->images[] = $image;
-			
-			$variants = array();
-			foreach($this->variants->get_variants(array('product_id'=>$products_ids)) as $v)
-				$variants[$v->id] = $v;
-			
-			foreach($variants as $variant)
-				if(!empty($products[$variant->product_id]))
-					$products[$variant->product_id]->variants[] = $variant;
+            $product_external_ids = [];
+            $variant_external_id = [];
+
+            foreach ($purchases as $purchase) {
+                $product_external_ids[] = $purchase->product_external_id;
+                $variant_external_id[] = $purchase->variant_external_id;
+            }
+
+            $products_temp = $this->products->get_products(['external_id' => $product_external_ids, 'limit' => count($product_external_ids)]);
+            $products = [];
+            foreach ($products_temp as $p) {
+                $products[$p->external_id] = $p;
+            }
+
+            $images = $this->products->get_images(['product_external_id' => $product_external_ids]);
+            foreach ($images as $image) {
+                $products[$image->product_external_id]->images[] = $image;
+            }
+
+            $variants = [];
+            foreach ($this->variants->get_variants(['external_id' => $variant_external_id]) as $v) {
+                $variants[$v->external_id] = $v;
+            }
+
+            foreach ($variants as $variant) {
+                if(empty($products[$variant->external_id])) continue;
+                $products[$variant->external_id]->variants[] = $variant;
+            }
 			
 			$total_weight = 0;
 			$total_volume = 0;
 			foreach($purchases as &$purchase)
 			{
-				if(!empty($products[$purchase->product_id]))
-					$purchase->product = $products[$purchase->product_id];
-				if(!empty($variants[$purchase->variant_id]))
-					$purchase->variant = $variants[$purchase->variant_id];
+                if (!empty($products[$purchase->product_external_id]))
+                    $purchase->product = $products[$purchase->product_external_id];
+                if (!empty($variants[$purchase->variant_external_id]))
+                    $purchase->variant = $variants[$purchase->variant_external_id];
 				$subtotal += $purchase->price*$purchase->amount;
 				$total_weight += $purchase->amount*$this->features->get_product_option_weight($purchase->product_id);
 				$total_volume += $purchase->amount*$this->features->get_product_option_volume($purchase->product_id);

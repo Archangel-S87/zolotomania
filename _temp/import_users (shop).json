@@ -1,0 +1,124 @@
+{
+ "groups": [
+  {
+   "id": "Магазины",
+   "name": "Магазины",
+   "discount": ""
+  },
+  {
+   "id": "Покупатели",
+   "name": "Покупатели",
+   "discount": ""
+  }
+ ],
+ "users": [
+  {
+   "id": "b26d8574-6686-11ea-a213-00155d036796",
+   "name": "Курск",
+   "email": "",
+   "password": "519544ee35e8d35959d159e98c94fcb1",
+   "phone": "+79107310083",
+   "address_full": "305000, Курская обл., г. Курск, Красная площадь, 2/4",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "a0019eee-c7b1-11e8-8da4-309c238e77e2",
+   "name": "Суджа",
+   "email": "kotletta@list.ru",
+   "password": "b19881b641f47fe54b92b9018851ac59",
+   "phone": "+79606806484",
+   "address_full": "307800, Курская обл, Суджанский р-н, Суджа г, Комсомольская ул, дом № 38",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "f7d81914-d441-11e8-8da6-309c238e77e2",
+   "name": "Обоянь",
+   "email": "zoloto.oboyan@mail.ru",
+   "password": "90ed128d1a779b7a62c70166fc5a86a3",
+   "phone": "+79192768336",
+   "address_full": "306230, Курская обл, Обоянский р-н, Обоянь г, Ленина ул, дом № 37",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "ddf8ea83-ff70-11e8-a1ff-00155d036786",
+   "name": "Щигры",
+   "email": "zolotomaniyashchigry@mail.ru",
+   "password": "ad3fc505eb2ad4b9e02b35dc3e42c545",
+   "phone": "+79107311060",
+   "address_full": "306530, Курская обл, Щигры г, Красная ул, дом № 1д",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "ddf8ea82-ff70-11e8-a1ff-00155d036786",
+   "name": "Белая",
+   "email": "zoloto.bel@mail.ru",
+   "password": "d301c75c197c5d7136c72e24200ad2c3",
+   "phone": "+79100225077",
+   "address_full": "307910, Курская обл, Беловский р-н, Белая сл, Советская пл, Здание 49",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "ddf8ea84-ff70-11e8-a1ff-00155d036786",
+   "name": "Черемисиново",
+   "email": "zoloto.cher@mail.ru",
+   "password": "2e976e10e6f30ab2604689083351847e",
+   "phone": "+79107312060",
+   "address_full": "306440, Курская обл, Черемисиновский р-н, Черемисиново пгт, Советская ул, дом № 1",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "74e7b42a-5119-11e9-a203-00155d32680f",
+   "name": "Курчатов",
+   "email": "zolotomaniya.kurchatov@mail.ru",
+   "password": "e1798e711051fa768ab460691f0f63b9",
+   "phone": "+79100225034",
+   "address_full": "307250, Курская обл, Курчатов г, Энергетиков ул, владение № 46",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "c9ade1e0-a21d-11e9-a208-00155d036796",
+   "name": "Кшенский",
+   "email": "zoloto.kshen@mail.ru",
+   "password": "178e176eb5711f1abfe8bee3e9d433e5",
+   "phone": "+79100225007",
+   "address_full": "306600, Курская обл, Советский р-н, Кшенский рп, Ленина ул, дом № 41",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "17fe4668-f16f-11e9-a20d-00155d036796",
+   "name": "Льгов",
+   "email": "zoloto.lgov@mail.ru",
+   "password": "74b300276763c0536216c45d3b3c1631",
+   "phone": "+79107310181",
+   "address_full": "307750, Курская обл, Льгов г, Черняховского ул, домовладение № 25/32",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "e748e7ce-f258-11e9-a20d-00155d036796",
+   "name": "Дмитриев",
+   "email": "zolotomaniya.dmitriyev@mail.ru",
+   "password": "e8c23da3522f7100cc2431f3fbd30953",
+   "phone": "+79107310028",
+   "address_full": "307500, Курская обл, Дмитриевский р-н, Дмитриев г, Ленина ул, дом № 62",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "4779edc0-9e6c-11ea-a21b-00155d036796",
+   "name": "Wildberries",
+   "email": "mr.zolotomaniya@mail.ru",
+   "password": "badb8d8923f829dd49bc52dcb7932323",
+   "phone": "+79611938382",
+   "address_full": "",
+   "group_id": "Магазины"
+  },
+  {
+   "id": "4eaaa8e3-9e6c-11ea-a21b-00155d036796",
+   "name": "Ozon",
+   "email": "artem.shevkunov@mail.ru",
+   "password": "3c9b5616639d698c39c89f929440a6ed",
+   "phone": "+79611686666",
+   "address_full": "",
+   "group_id": "Магазины"
+  }
+ ]
+}

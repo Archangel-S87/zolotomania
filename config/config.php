@@ -116,3 +116,9 @@ cms_files_dir = files/files/;
 
 [debug]
 debug = true;
+
+;Локалка
+is_localhost = true;
+
+;Переключиться в мобильную версию
+;is_mobile = true;
