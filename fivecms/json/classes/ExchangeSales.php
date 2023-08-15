@@ -269,6 +269,7 @@ class ExchangeSales extends Exchange
             $item = [
                 'id' => $order->id,
                 'external_id' => $order->external_id,
+                'referar_shop' => $order->referar_shop,
                 'date' => date(self::DATE_FORMAT, strtotime($order->date)),
                 'status' => $order->status,
                 'total_price' => $order->total_price,

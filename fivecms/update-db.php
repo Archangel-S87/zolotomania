@@ -71,28 +71,34 @@ class UpdateDB extends Fivecms
 
     private function update_table_orders()
     {
-        if ($this->check_column('shop_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders DROP shop_id");
+        $table_name = 'orders';
+
+        if ($this->check_column('shop_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name DROP shop_id");
         }
 
-        if (!$this->check_column('shop_external_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders ADD shop_external_id VARCHAR(80) NULL DEFAULT NULL");
+        if (!$this->check_column('shop_external_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name ADD shop_external_id VARCHAR(80) NULL DEFAULT NULL");
         }
 
-        if ($this->check_column('shop_external_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders CHANGE shop_external_id shop_external_id VARCHAR(80) NULL DEFAULT NULL AFTER external_id");
+        if ($this->check_column('shop_external_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name CHANGE shop_external_id shop_external_id VARCHAR(80) NULL DEFAULT NULL AFTER external_id");
         }
 
-        if (!$this->check_column('external_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders ADD external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER `shop_id`, ADD INDEX(`external_id`)");
+        if (!$this->check_column('external_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name ADD external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER `shop_id`, ADD INDEX(`external_id`)");
         }
 
-        if ($this->check_column('external_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders CHANGE external_id external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER id");
+        if ($this->check_column('external_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name CHANGE external_id external_id VARCHAR(80) NULL COMMENT 'ID ордера в базе 1С' AFTER id");
         }
 
-        if (!$this->check_column('user_external_id', 'orders')) {
-            $this->db->query("ALTER TABLE __orders ADD user_external_id VARCHAR(80) NOT NULL AFTER user_id, ADD INDEX (`user_external_id`)");
+        if (!$this->check_column('user_external_id', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name ADD user_external_id VARCHAR(80) NOT NULL AFTER user_id, ADD INDEX (`user_external_id`)");
+        }
+
+        if (!$this->check_column('referar_shop', $table_name)) {
+            $this->db->query("ALTER TABLE __$table_name ADD referar_shop VARCHAR(80) NULL DEFAULT NULL AFTER user_external_id");
         }
 
         // Возможен пустой email

@@ -142,6 +142,25 @@
 
         <div class="del_pay_info" style="{if $cart->total_price < $settings->minorder}display:none;{/if}">
 
+            <style>
+                #error {
+                    padding: 10px;
+                }
+                #check_sms_code {
+                    padding: 2px;
+                    display: block;
+                    background: none !important;
+                    border: 1px solid #d24a46;
+                    line-height: 1;
+                    margin: 0 0 10px 4px;
+                }
+                #check_sms_code svg {
+                    width: 20px;
+                    height: 20px;
+                    cursor: pointer;
+                }
+            </style>
+
             {if $is_shop}
                 {include file='cart_form_shop.tpl'}
             {elseif $user}

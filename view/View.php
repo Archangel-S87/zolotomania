@@ -46,7 +46,8 @@ class View extends Fivecms
 			$this->currency = $this->money->get_current();
 			// multicurrency end
 
-            unset($_SESSION['user_id']);
+//            unset($_SESSION['user_id']);
+//            $_SESSION['user_id'] = 1;
 			if(isset($_SESSION['user_id']))
 			{
 				$u = $this->users->get_user(intval($_SESSION['user_id']));

@@ -5,25 +5,6 @@
     </div>
 {/if}
 
-<style>
-    #error {
-        padding: 10px;
-    }
-    #check_sms_code {
-        padding: 2px;
-        display: block;
-        background: none !important;
-        border: 1px solid #d24a46;
-        line-height: 1;
-        margin: 0 0 10px 4px;
-    }
-    #check_sms_code svg {
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-    }
-</style>
-
 <div class="form cart_form data-block">
     <div class="all-data-actions">
         <div class="row">

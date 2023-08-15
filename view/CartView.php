@@ -96,6 +96,35 @@ class CartView extends View
      */
     private function receipt_order()
     {
+        $user_shop = null;
+
+        // Заказ для магазина?
+        if ($this->is_user_shop()) {
+            $user_id = $this->request->post('user_id', 'integer');
+            if (!$user = $this->users->get_user($user_id)) {
+                $_SESSION['cart']['error'] = 'empty_user';
+                return;
+            }
+
+            // Обновляем данные юзера
+            $user->name = $this->request->post('name');
+            $this->users->update_user($user_id, ['name' => $user->name]);
+
+            $user_data = [];
+            foreach ($this->request->post('user_data') as $key => $value) {
+                if ($key == 'birthday') {
+                    $value = date('Y-m-d', strtotime($value));
+                }
+                if (!$value) continue;
+                $user_data[$key] = $value;
+            }
+            $this->users->update_user_data($user_id, $user_data);
+
+            // Запоминаем наш магазин и оформляем заказ на нашего клиента
+            $user_shop = $this->user;
+            $this->user = $user;
+        }
+
         $order = new stdClass;
         $order->name = $this->request->post('name');
         $order->address = '';
@@ -103,10 +132,8 @@ class CartView extends View
         $order->comment = $this->request->post('comment');
         $order->ip = $_SERVER['REMOTE_ADDR'];
 
-        $_SESSION['cart'] = [
-            'name' => $order->name,
-            'comment' => $order->comment,
-        ];
+        $_SESSION['cart']['name'] = $order->name;
+        $_SESSION['cart']['comment'] = $order->comment;
 
         // Antibot
         if ($this->request->post('bttrue')) {
@@ -185,7 +212,7 @@ class CartView extends View
             $order->address = !$error_address ? implode(', ', $data_address) : '';
 
         } else {
-            // Приветси в магазин
+            // Привезти в магазин
             foreach ($deliveries as $delivery) {
                 if ($delivery->name == 'В магазин') {
                     $order->delivery_id = $delivery->id;
@@ -194,20 +221,26 @@ class CartView extends View
             }
 
             // Получение адреса магазина
-            $shop_id = $this->request->post('shop_id', 'integer');
+            if ($user_shop) {
+                $shop_id = $user_shop->id;
+                $shop_external_id = $user_shop->external_id;
+                $order->referar_shop = $shop_external_id;
+            } else {
+                $shop_id = $this->request->post('shop_id', 'integer');
 
-            $shop_group_id = 0;
-            foreach ($this->users->get_groups() as $group) {
-                if ($group->name != 'Магазины') continue;
-                $shop_group_id = $group->id;
-                break;
-            }
+                $shop_group_id = 0;
+                foreach ($this->users->get_groups() as $group) {
+                    if (!$this->is_user_shop($group)) continue;
+                    $shop_group_id = $group->id;
+                    break;
+                }
 
-            $this->db->query('SELECT external_id FROM __users WHERE id=? AND group_id=? LIMIT 1', (int)$shop_id, (int)$shop_group_id);
-            $shop_external_id = $this->db->result('external_id');
-            if (!$shop_external_id) {
-                $_SESSION['cart']['error'] = 'empty_shop_id';
-                return;
+                $this->db->query('SELECT external_id FROM __users WHERE id=? AND group_id=? LIMIT 1', (int)$shop_id, (int)$shop_group_id);
+                $shop_external_id = $this->db->result('external_id');
+                if (!$shop_external_id) {
+                    $_SESSION['cart']['error'] = 'empty_shop_id';
+                    return;
+                }
             }
 
             $order->shop_external_id = $shop_external_id;
@@ -253,6 +286,11 @@ class CartView extends View
                 $this->user->balance = $this->bonus;
             }
         }
+
+        // Восстанавливаем сохранённый ранее магазин
+        if ($user_shop) {
+            $this->user = $user_shop;
+        }
     }
 
     /**
@@ -269,7 +307,8 @@ class CartView extends View
         unset($_SESSION['cart']);
 
         // Перенаправляем на страницу заказа
-        header('Location: ' . $this->config->root_url . '/order?after_payment=1&orderId=' . $this->order->id);
+        header('Location: /order?after_payment=1&orderId=' . $this->order->id);
+        exit();
     }
 
     /**
@@ -356,15 +395,15 @@ class CartView extends View
     {
         $bonus = $_SESSION['cart']['bonus'];
 
-        if ($bonus && $this->settings->bonus_limit && $this->user->balance) {
+        if (!$this->is_user_shop() && $bonus && $this->settings->bonus_limit && $this->user->balance) {
             $bonus = abs((float)$bonus);
             $_SESSION['cart']['bonus'] = (int)$bonus;
             $this->user->balance = (float)$this->user->balance;
 
-            $bonus = $bonus > $this->user->balance ? $this->user->balance : $bonus;
+            $bonus = min($bonus, $this->user->balance);
             $bonus_limit = $this->basket->total_price * $this->settings->bonus_limit / 100;
 
-            $this->order->bonus_discount = $bonus_limit > $bonus ? $bonus : $bonus_limit;
+            $this->order->bonus_discount = min($bonus_limit, $bonus);
 
             $this->user->balance = $this->user->balance - $this->order->bonus_discount;
             $this->users->update_user($this->user->id, ['balance' => $this->user->balance]);
@@ -407,6 +446,7 @@ class CartView extends View
             $this->orders->delete_order($order_id);
             $this->cart->empty_cart();
             header('Location: /');
+            exit();
         }
 
         $this->order = $this->orders->get_order($order_id);
@@ -449,12 +489,12 @@ class CartView extends View
 
         // У админа все ордера выставляем как удалён
         // Снимаю резерв с вариантов товара
-        if ((int)$this->user->id == 1) {
-            $query = $this->db->placehold("UPDATE __orders SET status=3 WHERE id=? LIMIT 1", $order_id);
-            $this->db->query($query);
-            foreach ($this->orders->get_purchases(['order_id' => $order_id]) as $purchase) {
-                $this->variants->update_variant($purchase->variant_id, ['reservation' => 0]);
-            }
+        if ($this->user->id == 1) {
+//            $query = $this->db->placehold("UPDATE __orders SET status=3 WHERE id=? LIMIT 1", $order_id);
+//            $this->db->query($query);
+//            foreach ($this->orders->get_purchases(['order_id' => $order_id]) as $purchase) {
+//                $this->variants->update_variant($purchase->variant_id, ['reservation' => 0]);
+//            }
         }
     }
 
@@ -464,7 +504,9 @@ class CartView extends View
      */
     private function check_phone()
     {
-        if ($this->user) {
+        $is_shop = $this->is_user_shop();
+
+        if ($this->user && !$is_shop) {
             echo json_encode(['error' => 'Вы уже авторизованы!']);
             exit();
         }
@@ -537,7 +579,9 @@ class CartView extends View
      */
     private function check_sms_code()
     {
-        if ($this->user) {
+        $is_shop = $this->is_user_shop();
+
+        if ($this->user && !$is_shop) {
             echo json_encode(['error' => 'Вы уже авторизованы!']);
             exit();
         }
@@ -555,16 +599,25 @@ class CartView extends View
             exit();
         }
 
-        $_SESSION['user_id'] = $user->id;
-
         $this->notify->activate_confirm();
 
-        if ($this->settings->cart_storage == 2) {
-            $this->cart->base_to_cart($user->id);
-            $this->cart->cart_to_base();
+        $res = [];
+
+        if (!$is_shop) {
+            $_SESSION['user_id'] = $user->id;
+
+            if ($this->settings->cart_storage == 2) {
+                $this->cart->base_to_cart($user->id);
+                $this->cart->cart_to_base();
+            }
+
+            $res['url'] = $this->config->root_url . '/cart';
+        } else {
+            $res['user'] = $user;
+            $res['user_data'] = $this->users->get_user_data($user->id);
         }
 
-        echo json_encode(['url' => $this->config->root_url . '/cart']);
+        echo json_encode($res);
         exit();
     }
 
@@ -608,7 +661,7 @@ class CartView extends View
         $this->design->assign('purchase_method', $_SESSION['cart']['purchase_method'] ?? '');
 
         // Способы доставки для магазинов и клиентов разные
-        $is_shop = $this->group && $this->group->name == 'Магазины';
+        $is_shop = $this->is_user_shop();
         $this->design->assign('is_shop', $is_shop);
 
         if (!$is_shop) {
@@ -621,7 +674,7 @@ class CartView extends View
             // Получение адресов магазинов
             $shop_group_id = 0;
             foreach ($this->users->get_groups() as $group) {
-                if ($group->name != 'Магазины') continue;
+                if (!$this->is_user_shop($group)) continue;
                 $shop_group_id = $group->id;
                 break;
             }
@@ -704,4 +757,13 @@ class CartView extends View
         return $this->design->fetch('cart.tpl');
     }
 
+    private function is_user_shop($group = null): bool
+    {
+        $shop_string = 'Магазины';
+        if ($group) {
+            return $group->name == $shop_string;
+        }
+
+        return $this->group && $this->group->name == $shop_string;
+    }
 }
