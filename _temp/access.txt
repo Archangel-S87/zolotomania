@@ -20,3 +20,7 @@ FTP
 
 СБЕР
 token: atmiumq7192mp5bob3p8u0189o
+
+Для запуска удалённой отладки нужен туннель. Выполнить
+ssh -R 9003:localhost:9003 zmania1_admin@zmania1.beget.tech
+На хосте включить PHP-CGI
