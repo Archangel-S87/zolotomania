@@ -56,7 +56,7 @@
 								<span class="c{$v->id}"
 									  v_stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
 									  v_unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
-									  v_sku="{if $sku}Артикул: {$sku}{/if}"
+									  v_sku="{if $sku}{$v->shop->name}-{$v->sku}{/if}"
 									  v_bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">
 									{$v->price|convert}
 								</span>
@@ -79,7 +79,7 @@
 						<div class="skustock">
 							<div class="skustockleft">
 								{if $settings->showsku == 1 && $sku}
-								    <p class="sku">Артикул: <span> {$sku}</span></p>
+								    <p id="sku_wrap" class="sku">Артикул: <span>{$sku}</span></p>
 								{/if}
 							</div>
 						</div>
@@ -159,7 +159,7 @@
 						<select class="b1c_option" name="variant" {if $product->variants|count==1  && !$product->variant->name}style='display:none;'{/if}>
 							{foreach $product->variants as $v}
 								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<option {if $product->variant->id==$v->id}selected{/if} data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $sku}Артикул: {$sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}" value="{$v->id}" {if $v->compare_price > 0}data-cprice="{$v->compare_price|convert}"{/if} data-varprice="{$v->price|convert}">
+								<option {if $product->variant->id==$v->id}selected{/if} data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $sku}{$v->shop->name}-{$v->sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}" value="{$v->id}" {if $v->compare_price > 0}data-cprice="{$v->compare_price|convert}"{/if} data-varprice="{$v->price|convert}">
 									{$v->name|escape}&nbsp;
 								</option>
 							{/foreach}

@@ -193,7 +193,7 @@ function chpr(el, num) {
         $(elem).find('.price').html($(elem).find('.pricelist .' + z).html())
         $(elem).find('.unit').html($(elem).find('.pricelist .' + z).attr('v_unit'))
         $(elem).find('.bonusnum').html($(elem).find('.pricelist .' + z).attr('v_bonus'))
-        $(elem).find('.sku').html($(elem).find('.pricelist .' + z).attr('v_sku'))
+        $('#sku_wrap span').html($(elem).find('.pricelist .' + z).attr('v_sku'))
         $(elem).find('.stock').html($(elem).find('.pricelist .' + z).attr('v_stock'))
         $(elem).find('.compare_price').html($(elem).find('.pricelist2 .' + z).html())
 

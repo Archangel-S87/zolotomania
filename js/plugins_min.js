@@ -29,7 +29,7 @@ for(i0=0;i0<a0.length;i0++){for(i1=0;i1<a1.length;i1++){if(a0[i0]==a1[i1])z=a0[i
 $(elem).find('.price').html($(elem).find('.pricelist .'+z).html());
 $(elem).find('.unit').html($(elem).find('.pricelist .'+z).attr('data-unit'));
 $(elem).find('.bonusnum').html($(elem).find('.pricelist .'+z).attr('data-bonus'));
-$(elem).find('.sku').html($(elem).find('.pricelist .'+z).attr('data-sku'));
+$('#sku_wrap span').html($(elem).find('.pricelist .'+z).attr('data-sku'));
 $(elem).find('.stock').html($(elem).find('.pricelist .'+z).attr('data-stock'));
 compare_price=$(elem).find('.pricelist2 .'+z).html();if(compare_price==null) compare_price='';
 $(elem).find('.compare_price').html(compare_price);

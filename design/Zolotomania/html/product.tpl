@@ -101,17 +101,8 @@
 
      		{if $settings->showsku == 1 && $sku}
 				{* Расположение товара - склад *}
-				<p class="sku">
+				<p id="sku_wrap" class="sku">
                    Артикул: <span>{$sku}</span>
-{*					{if $group && $group->name == 'Магазины'}*}
-{*						{if $product->variant->sku && !empty($product->variant->shop->name)}*}
-{*							<span>{$product->variant->shop->name}-{$product->variant->sku}</span>*}
-{*						{/if}*}
-{*					{else}*}
-{*						{if $product->variant->sku}*}
-{*							<span>Артикул: {$product->variant->sku}</span>*}
-{*						{/if}*}
-{*					{/if}*}
 				</p>
 			{/if}
      	{/if}
@@ -177,7 +168,13 @@
 						<span class="pricelist" style="display:none;">
 							{foreach $product->variants as $v}
 								{$ballov = ($v->price * $settings->bonus_order/100)|convert|replace:' ':''|round}
-								<span class="c{$v->id}" data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}" data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}" data-sku="{if $sku}Артикул: {$sku}{/if}" data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">{$v->price|convert}</span>
+								<span class="c{$v->id}"
+                                     data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
+                                     data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
+                                     data-sku="{if $v->sku}{$v->shop->name}-{$v->sku}{/if}"
+                                     data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}">
+								    {$v->price|convert}
+								 </span>
 								{if $v->name1}{$cntname1 = 1}{/if}
 							{/foreach}
 						</span>
@@ -185,35 +182,53 @@
 						{$cntname2 = 0}
 						<span class="pricelist2" style="display:none;">
 							{foreach $product->variants as $v}
-								{if $v->compare_price > 0}<span class="c{$v->id}">{$v->compare_price|convert}</span>{/if}
+								{if $v->compare_price > 0}
+								    <span class="c{$v->id}">{$v->compare_price|convert}</span>
+                                {/if}
 								{if $v->name2}{$cntname2 = $cntname2 + 1}{/if}
 							{/foreach}
 						</span>
 					
-						<input class="vhidden 1clk" name="variant" value="" type="hidden" />
-					
-						{if $settings->showsku == 1}<!--p class="sku">{if $sku}Артикул: {$sku}{/if}</p-->{/if}
-						{if $settings->showstock == 1}<span class="stockblock">На складе: <span class="stock">{if $product->variant->stock < $settings->max_order_amount}{$product->variant->stock}{else}много{/if}</span></span>{/if}
+						<input class="vhidden 1clk" name="variant" value="" type="hidden"/>
+
+						{if $settings->showstock == 1}
+						    <span class="stockblock">
+						    На складе: <span class="stock">
+                                    {if $product->variant->stock < $settings->max_order_amount}
+                                        {$product->variant->stock}
+                                    {else}
+                                        много
+                                    {/if}
+                                </span>
+                            </span>
+                        {/if}
 
 						<div style="font-style: italic;margin: 10px 0 4px;">(Варианты: <strong id="count_variant"></strong>)</div>
 						<div class="variants-wrap flex" style=" margin-bottom: 15px;">
-							<label class="flex" {if $cntname1 == 0} style="display:none;"{/if}><span>Размер</span>
+							<label class="flex" {if $cntname1 == 0} style="display:none;"{/if}>
+							<span>Размер</span>
 								<select name="variant1" class="p0">
 									{foreach $product->vproperties[0] as $pname => $pclass}
 										{assign var="size" value="c"|explode:$pclass}
-										<option {if $cntname1 == 0}label="size"{/if} value="{$pclass}" class="{$pclass}"
-												{foreach $size as $sz}{if $product->variant->id == $sz|intval}selected{/if}{/foreach}
-										>{$pname}</option>
+										<option {if $cntname1 == 0}label="size"{/if}
+                                            class="{$pclass}"
+                                            {foreach $size as $sz}{if $product->variant->id == $sz|intval}selected{/if}{/foreach}
+                                            value="{$pclass}">
+										    {$pname}
+										</option>
 									{/foreach}
 								</select>
 							</label>
-							<label class="flex" {if $cntname2 == 0} style="display:none;"{/if}><span>Вес, г</span>
+							<label class="flex" {if $cntname2 == 0} style="display:none;"{/if}>
+							<span>Вес, г</span>
 								<select name="variant2" id="bigimagep1" class="p1">
 									{foreach $product->vproperties[1] as $pname => $pclass}
 										{assign var="color" value="c"|explode:$pclass}
-										<option value="{$pclass}" class="{$pclass}"
-												{foreach $color as $cl}{if $product->variant->id == $cl|intval}selected{/if}{/foreach}
-										>{$pname}</option>
+										<option value="{$pclass}"
+										    {foreach $color as $cl}{if $product->variant->id == $cl|intval}selected{/if}{/foreach}
+										    class="{$pclass}">
+										    {$pname}
+										</option>
 									{/foreach}
 								</select>
 							</label>
@@ -274,7 +289,7 @@
                                     <option {if $product->variant->id==$v->id}selected{/if}
                                             data-stock="{if $v->stock < $settings->max_order_amount}{$v->stock}{else}много{/if}"
                                             data-unit="{if $v->unit}{$v->unit}{else}{$settings->units}{/if}"
-                                            data-sku="{if $v->sku}Артикул: {$v->sku}{/if}"
+                                            data-sku="{if $v->sku}{$v->shop->name}-{$v->sku}{/if}"
                                             data-bonus="{$ballov} {$ballov|plural:'балл':'баллов':'балла'}"
                                             value="{$v->id}"
                                             {if $v->compare_price > 0}
