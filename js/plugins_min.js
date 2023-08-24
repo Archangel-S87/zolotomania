@@ -289,3 +289,11 @@ jQuery.fn.extend({
 	}
 });
 $('textarea').autoHeightTextarea();
+
+// Select Loan term
+function update_number_months() {
+	const months = + $('#number_months').val(),
+		price = + $('form span.price').html().replace(/\s/ig, ''),
+		currency = $('#in_months').attr('data-currency');
+	$('#in_months strong').html(Math.round(price / months).toLocaleString('ru-RU') + ' ' + currency);
+}
